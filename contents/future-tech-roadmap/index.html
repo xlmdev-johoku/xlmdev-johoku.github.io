@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>未来技術ロードマップ | XLM開発会議 城北支部</title>
+  <meta name="description" content="核融合や不老研究など15の未来技術について、達成・計画・予測を時期ごとに並べた工程表。それぞれの技術の実現に言語モデル（LM）がどう関わり、どこまで実現しているかもまとめました。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="未来技術ロードマップ | XLM開発会議 城北支部">
+  <meta property="og:description" content="15の未来技術の工程表と、その実現に言語モデル（LM）がどう関わっているか。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/contents/future-tech-roadmap/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/olm-taizen-postcard.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/contents/future-tech-roadmap/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2326503a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23e2961a' stroke-width='3'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-weight='700' font-size='30' fill='%23fafbf6' text-anchor='middle'%3EX%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="data/roadmap.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <span class="brand-mark" aria-hidden="true">X</span>
+        <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../" aria-current="page">コンテンツ</a>
+        <a href="../../#about">サークルについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section page-head rm-head">
+      <div class="wrap rm-wide">
+        <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">コンテンツ</a><span aria-hidden="true"> / </span>未来技術ロードマップ</p>
+        <h1 class="section-title"><span class="en">Roadmap</span>未来技術ロードマップ</h1>
+        <p class="page-lead">核融合や不老研究など15の技術について、すでに起きたこと、公式に計画されていること、予測にとどまることを時期ごとに並べました。あわせて、それぞれの技術の実現に<strong>言語モデル（LM）</strong>がどう関わり、その関わりがどこまで実現しているかを調べました。年号は発表どおりに載せています。計画はよく遅れるので、<b class="tri">△</b>の付いた項目は特に幅をもって読んでください。</p>
+
+        <section class="rm-keyfigs" aria-label="収録の概要">
+          <div class="rm-fig"><span class="rm-fig-num" id="kfTech">—</span><span class="rm-fig-cap">技術</span></div>
+          <div class="rm-fig"><span class="rm-fig-num" id="kfEv">—</span><span class="rm-fig-cap">工程の項目</span></div>
+          <div class="rm-fig"><span class="rm-fig-num" id="kfLm">—</span><span class="rm-fig-cap">LM の関わりの事例</span></div>
+          <div class="rm-fig"><span class="rm-fig-num" id="kfDelay">—</span><span class="rm-fig-cap">延期の記録</span></div>
+          <div class="rm-fig"><span class="rm-fig-num rm-fig-date" id="kfAsOf">—</span><span class="rm-fig-cap">基準日</span></div>
+        </section>
+
+        <!-- 図1：技術の実現段階 × LM の関わり -->
+        <figure class="rm-figure" aria-labelledby="f1Title">
+          <div>
+            <p class="rm-fig-label">図1</p>
+            <p class="rm-fig-title" id="f1Title">LM が実現の中心にあるのは汎用AIと人型ロボット。多くの技術では、まだ研究段階の試みにとどまる</p>
+            <p class="rm-fig-sub">技術そのものの実現段階（横）と、その実現への LM の関わりの深さ（縦）。技術名を押すと、その技術の年表へ移ります</p>
+          </div>
+          <div class="rm-grid-scroll">
+            <table class="rm-grid" id="lmGrid"></table>
+          </div>
+          <figcaption class="rm-fig-cap-long">段階と関わりの深さは、公開情報をもとにした大まかな位置づけです。「中心」は LM そのものが実現の中心にあるもの、「道具として活用」は開発・運用・規制対応を助ける道具として実際に使われ始めているもの、「研究段階の試み」は論文や試作が中心のものです。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="wrap rm-wide">
+      <div class="key" role="group" aria-label="凡例と種類の絞り込み">
+        <span class="key-title">凡例</span>
+        <button type="button" class="st" data-st="done" aria-pressed="true"><i class="mk done" aria-hidden="true"></i>達成</button>
+        <button type="button" class="st" data-st="plan" aria-pressed="true"><i class="mk plan" aria-hidden="true"></i>計画・目標</button>
+        <button type="button" class="st" data-st="fc" aria-pressed="true"><i class="mk fc" aria-hidden="true"></i>予測・構想</button>
+        <span class="key-note"><b class="tri">△</b>当初の目標年から延期</span>
+        <span class="key-hint">印のボタンを押すと、その種類を表示・非表示にできます</span>
+      </div>
+
+      <section class="panel" aria-labelledby="h-ov">
+        <div class="panel-head">
+          <h2 id="h-ov">工程表</h2>
+          <p>印1つが出来事1件です。「LM」の列は、その技術の実現への言語モデルの関わりの深さです。技術名を押すと、その技術の年表へ移動します。</p>
+        </div>
+        <div class="mx-scroll"><table class="mx" id="mx"></table></div>
+      </section>
+
+      <nav class="bar" id="bar" aria-label="表示の切り替え">
+        <div class="seg" role="group" aria-label="表示">
+          <button type="button" data-view="tech" aria-pressed="true">技術別</button>
+          <button type="button" data-view="year" aria-pressed="false">年表</button>
+        </div>
+        <div class="cats" id="cats" role="group" aria-label="分野"></div>
+        <span class="shown" id="shown" aria-live="polite"></span>
+      </nav>
+
+      <div id="main">
+        <noscript><p class="empty">表示には JavaScript を使っています。ブラウザの設定で JavaScript を有効にしてください。</p></noscript>
+      </div>
+    </div>
+
+    <section class="section section-alt rm-notes" aria-labelledby="h-notes">
+      <div class="wrap rm-wide">
+        <h2 class="section-title" id="h-notes"><span class="en">Notes</span>読み方と注意</h2>
+        <h3 class="sub-title">工程表</h3>
+        <ul class="rm-note-list">
+          <li>「達成」は実際に起きた出来事です。企業の発表だけにもとづくものも含みます。</li>
+          <li>「計画・目標」は政府・企業・研究機関が公式に示した時期、「予測・構想」は個人の発言や予測サイト、調査、長期の構想です。</li>
+          <li><b class="tri">△</b>は当初示されていた時期から遅れた項目で、このページだけで<span id="n-delay">—</span>件あります。「期限経過」は目標の時期を過ぎた計画です。</li>
+          <li>汎用AIの到来時期は「汎用」の定義によって大きく変わります。人の老化を止めたり寿命を延ばしたりできると確かめられた方法は、まだありません。</li>
+          <li>「段階（目安）」は、公開情報をもとにした大まかな位置づけです。</li>
+        </ul>
+        <h3 class="sub-title">LM との関わり</h3>
+        <ul class="rm-note-list">
+          <li>LM には、大規模言語モデル（LLM）のほか、画像も読む視覚言語モデル（VLM）、言語の指示からロボットの動作を出す VLA、化学やタンパク質の言語モデルなど「言語モデル系」のモデルを含めています（<a href="../lm-knowledge-graph/">〇LM知識グラフ</a>で扱う範囲）。</li>
+          <li>LM ではない AI（プラズマ制御の強化学習、AlphaFold 型の構造予測、材料探索のグラフニューラルネット、自動運転の従来型の物体認識など）は数えていません。</li>
+          <li>事例の段階は「実用」＝実運用・製品、「実証」＝実証・臨床試験・試験導入、「研究」＝論文・研究段階、「計画」＝活用の計画の発表です。</li>
+          <li>事例の多くは企業や研究機関自身の発表で、外部の検証を経ていないものも含みます。</li>
+        </ul>
+        <p class="note">2026年11月6日時点で Web 上に公開されていた情報をもとに、Claude（AI）がまとめました。大事な判断に使う前に、各項目の出典で確かめてください。誤りに気付かれた方は、X（<a href="https://x.com/xlm_dev" rel="noopener" target="_blank">@xlm_dev</a>）までお知らせください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

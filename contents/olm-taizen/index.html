@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>〇LM大全 | XLM開発会議 城北支部</title>
+  <meta name="description" content="LLM・SLM・VLM・RAG など、「何かの LM」を表す略語とその仲間57語を、周期表のような一覧と短い解説にまとめました。同じ綴りで別の意味を持つ略語も紹介しています。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="〇LM大全 | XLM開発会議 城北支部">
+  <meta property="og:description" content="「何かの LM」を表す略語とその仲間57語を、周期表のような一覧と解説に。同じ綴り、まるで別物。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/contents/olm-taizen/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/olm-taizen-postcard.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/contents/olm-taizen/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2326503a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23e2961a' stroke-width='3'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-weight='700' font-size='30' fill='%23fafbf6' text-anchor='middle'%3EX%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="data/olm.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <span class="brand-mark" aria-hidden="true">X</span>
+        <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../" aria-current="page">コンテンツ</a>
+        <a href="../../#about">サークルについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section page-head olm-head">
+      <div class="wrap">
+        <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">コンテンツ</a><span aria-hidden="true"> / </span>〇LM大全</p>
+        <h1 class="section-title"><span class="en">Periodic Table of LMs</span>〇LM大全</h1>
+        <p class="olm-catch">同じ綴り、まるで別物。あなたの LM はどれ？</p>
+        <p class="page-lead">サークル名の「XLM」にちなんで、LLM・SLM・VLM・RAG など「何かの LM」を表す略語とその仲間を、周期表のように並べました。マスを選ぶと、下の解説に移ります。略語の右肩の＊は、同じ綴りで別の意味もある略語です。</p>
+        <dl class="olm-figs" aria-label="収録の概要">
+          <div><dt>収録</dt><dd><span id="figTerms">57</span>語</dd></div>
+          <div><dt>分類</dt><dd><span id="figCats">9</span></dd></div>
+          <div><dt>同じ綴りで別の意味＊</dt><dd><span id="figClash">22</span>語</dd></div>
+          <div><dt>一次資料で確認</dt><dd id="figChecked">2026年11月</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section olm-table-section" aria-labelledby="tableH">
+      <div class="wrap olm-wide">
+        <h2 class="visually-hidden" id="tableH">一覧</h2>
+        <div class="olm-tools">
+          <div class="olm-filters" role="group" aria-label="分類で絞り込む" id="olmFilters"></div>
+          <div class="olm-tools-row">
+            <label class="olm-search"><span class="visually-hidden">略語・展開形・訳で探す</span><input type="search" id="olmSearch" placeholder="略語・展開形・訳で探す" autocomplete="off"></label>
+            <label class="olm-toggle"><input type="checkbox" id="olmClashOnly"> ＊ 同じ綴りがあるものだけ</label>
+            <p class="olm-count" id="olmCount" aria-live="polite"></p>
+          </div>
+        </div>
+        <ol class="olm-grid" id="olmGrid" aria-label="〇LM の一覧"></ol>
+        <noscript><p class="olm-noscript">一覧と解説の表示には JavaScript を使っています。</p></noscript>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="glossaryH">
+      <div class="wrap">
+        <h2 class="section-title" id="glossaryH"><span class="en">Glossary</span>〇LM 解説</h2>
+        <p class="olm-lead">一覧の57語を、番号の順に短く解説します。出典は各項目の末尾に示しました。内容は <span id="checkedText">2026年11月</span> に、論文や公式の資料などの一次資料で確認したものです。</p>
+        <h3 class="olm-subhead">分類の意味</h3>
+        <dl class="olm-cats" id="olmCats"></dl>
+        <div class="olm-entries" id="olmEntries"></div>
+      </div>
+    </section>
+
+    <section class="section olm-notes" aria-labelledby="notesH">
+      <div class="wrap">
+        <h2 class="section-title" id="notesH"><span class="en">Notes</span>注記</h2>
+        <ul class="olm-note-list">
+          <li>LM の略語は増え続けています。ここに載せたのは、論文や公式の発表で使われていることを確かめた語のうち、よく見かけるものです。</li>
+          <li>各名称は各権利者に帰属します。この一覧は解説を目的とした非公式の資料で、各社と提携・公認されたものではありません。</li>
+          <li>概念どうしのつながりは「<a href="../lm-knowledge-graph/">〇LM知識グラフ</a>」で図にしています。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

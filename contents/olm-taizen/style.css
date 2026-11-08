@@ -1,0 +1,167 @@
+/*
+  〇LM大全（/contents/olm-taizen/）専用のスタイル。
+  サイト共通の ../../style.css の上に重ねる。地・文字・罫線はサイトの変数を使い、
+  分類の色だけは「色相（--h）を分類ごとに変え、明るさと彩度は共通」にする。
+*/
+:root {
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans JP", monospace;
+  /* 分類の色：明るさ（l）と彩度（c）は共通、色相（--h）は分類ごと */
+  --tint-l: 0.965; --tint-c: 0.03;   /* マスの地 */
+  --band-l: 0.62;  --band-c: 0.13;   /* マス上端の帯・見本 */
+  --tag-l: 0.42;   --tag-c: 0.09;    /* 分類名の文字 */
+  --h: 150;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tint-l: 0.27; --tint-c: 0.035;
+    --band-l: 0.72; --band-c: 0.12;
+    --tag-l: 0.86;  --tag-c: 0.07;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* 分類ごとの色相 */
+[data-cat="規模"]   { --h: 150; }
+[data-cat="学習法"] { --h: 45; }
+[data-cat="入出力"] { --h: 250; }
+[data-cat="科学"]   { --h: 305; }
+[data-cat="検索"]   { --h: 200; }
+[data-cat="多言語"] { --h: 95; }
+[data-cat="古典"]   { --h: 20; }
+[data-cat="固有名"] { --h: 340; }
+[data-cat="親戚"]   { --h: 120; }
+
+/* ---------- 見出し ---------- */
+.olm-head { --sec: var(--bolt-ink); }
+.olm-catch {
+  margin: -4px 0 14px; font-family: var(--serif); font-weight: 600;
+  font-size: clamp(17px, 2.4vw, 20px); color: var(--hot-ink);
+}
+.olm-figs {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; margin: 28px 0 0; max-width: 760px;
+}
+.olm-figs div {
+  margin: 0; padding: 12px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.olm-figs dt { font-size: 12px; color: var(--muted); }
+.olm-figs dd { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.5; }
+
+/* ---------- 一覧 ---------- */
+.olm-table-section { padding-top: 24px; }
+.olm-wide { max-width: 1240px; }
+.olm-tools { display: grid; gap: 14px; margin-bottom: 22px; }
+.olm-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.olm-filter {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 14px; line-height: 1.6;
+  color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+}
+.olm-filter[data-cat]::before {
+  content: ""; width: 10px; height: 10px; border-radius: 50%;
+  background: oklch(var(--band-l) var(--band-c) var(--h));
+}
+.olm-filter:hover { border-color: var(--ink-soft); }
+.olm-filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.olm-filter:focus-visible, .olm-search input:focus-visible, .olm-toggle input:focus-visible,
+.olm-cell a:focus-visible, .olm-ref:focus-visible {
+  outline: 2px solid var(--accent-ink); outline-offset: 2px;
+}
+.olm-tools-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.olm-search input {
+  width: min(320px, 100%); padding: 7px 12px; font: inherit; font-size: 15px;
+  color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px;
+}
+.olm-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+.olm-count { margin: 0 0 0 auto; font-size: 13px; color: var(--muted); }
+
+.olm-grid {
+  scroll-margin-top: 80px;
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px;
+}
+.olm-cell a {
+  position: relative; display: flex; flex-direction: column; height: 100%;
+  padding: 12px 10px 10px; border-radius: 8px; text-decoration: none; color: var(--ink);
+  background: oklch(var(--tint-l) var(--tint-c) var(--h));
+  border: 1px solid color-mix(in oklch, oklch(var(--band-l) var(--band-c) var(--h)) 35%, transparent);
+  border-top: 4px solid oklch(var(--band-l) var(--band-c) var(--h));
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.olm-cell a:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.olm-cell-top { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; line-height: 1.4; }
+.olm-no { font-family: var(--mono); color: var(--muted); }
+.olm-cat { color: oklch(var(--tag-l) var(--tag-c) var(--h)); font-weight: 700; }
+.olm-abbr {
+  margin: 6px 0 2px; font-family: var(--serif); font-weight: 700;
+  font-size: 23px; line-height: 1.2; letter-spacing: .01em; overflow-wrap: anywhere;
+}
+.olm-clash { color: var(--hot-ink); font-size: .7em; vertical-align: super; margin-left: 1px; }
+.olm-en { font-size: 11px; line-height: 1.45; color: var(--ink-soft); overflow-wrap: anywhere; }
+.olm-ja { margin-top: auto; padding-top: 6px; font-size: 12.5px; font-weight: 500; line-height: 1.5; }
+.olm-empty, .olm-noscript { color: var(--ink-soft); }
+
+/* ---------- 解説 ---------- */
+.olm-lead { max-width: 46em; margin: 0 0 28px; }
+.olm-subhead { margin: 0 0 12px; font-size: 16px; }
+.olm-cats {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 20px;
+  margin: 0 0 48px; padding: 18px 20px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.olm-cats div { display: grid; grid-template-columns: 4.5em 1fr; gap: 8px; font-size: 14px; line-height: 1.7; }
+.olm-cats dt { font-weight: 700; color: oklch(var(--tag-l) var(--tag-c) var(--h)); }
+.olm-cats dd { margin: 0; color: var(--ink-soft); }
+
+.olm-entries { display: grid; gap: 16px; }
+.olm-entry {
+  padding: 20px 24px; background: var(--surface); border: 1px solid var(--line);
+  border-left: 5px solid oklch(var(--band-l) var(--band-c) var(--h)); border-radius: var(--radius);
+}
+.olm-entry:target { box-shadow: 0 0 0 3px color-mix(in srgb, var(--bolt) 55%, transparent); }
+.olm-entry-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-bottom: 8px; }
+.olm-entry-head .olm-no { font-size: 13px; }
+.olm-entry h3 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 700; line-height: 1.3; }
+.olm-entry-title { color: var(--ink-soft); font-size: 14px; }
+.olm-entry-cat {
+  margin-left: auto; padding: 1px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  color: oklch(var(--tag-l) var(--tag-c) var(--h)); background: oklch(var(--tint-l) var(--tint-c) var(--h));
+}
+.olm-entry p { margin: 0 0 10px; }
+.olm-same {
+  margin: 12px 0 10px; padding: 10px 14px; border-radius: 8px; font-size: 15px;
+  background: color-mix(in srgb, var(--flame) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--flame) 22%, var(--line));
+}
+.olm-same b { color: var(--hot-ink); margin-right: 4px; }
+.olm-sources { margin: 10px 0 0; font-size: 12.5px; line-height: 1.7; color: var(--muted); }
+.olm-sources ul { display: inline; margin: 0; padding: 0; list-style: none; }
+.olm-sources li { display: inline; }
+.olm-sources li + li::before { content: "／"; }
+.olm-sources-label { font-weight: 700; margin-right: 4px; }
+.olm-ref { color: var(--accent-ink); text-underline-offset: 3px; white-space: nowrap; }
+.olm-back { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--accent-ink); }
+
+/* ---------- 注記 ---------- */
+.olm-notes { --sec: var(--wave-ink); }
+.olm-note-list { margin: 0; padding-left: 1.2em; max-width: 46em; color: var(--ink-soft); }
+.olm-note-list a { color: var(--accent-ink); }
+
+@media (max-width: 560px) {
+  .olm-grid { grid-template-columns: repeat(2, 1fr); }
+  .olm-abbr { font-size: 20px; }
+  .olm-entry { padding: 16px; }
+  .olm-entry-cat { margin-left: 0; }
+  .olm-count { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .olm-cell a { transition: none; }
+  .olm-cell a:hover { transform: none; }
+}
