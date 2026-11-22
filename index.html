@@ -13,18 +13,19 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@xlm_dev">
   <link rel="canonical" href="https://xlmdev-johoku.github.io/">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2326503a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23e2961a' stroke-width='3'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-weight='700' font-size='30' fill='%23fafbf6' text-anchor='middle'%3EX%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
+  <script src="hero-carousel.js" defer></script>
 </head>
 <body>
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="#top" aria-label="XLM開発会議 城北支部 トップへ">
-        <span class="brand-mark" aria-hidden="true">X</span>
-        <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+        <img class="circle-logo" src="images/circle-logo-dark.svg" width="760" height="290" alt="">
       </a>
       <nav class="site-nav" aria-label="サイト内リンク">
         <a href="#event">出展情報</a>
@@ -39,22 +40,43 @@
   <main id="top">
     <section class="hero">
       <div class="wrap">
-        <p class="hero-meta" aria-hidden="true"><span>XLM Development Meeting</span><span>Techbookfest 21 / 2026</span></p>
         <div class="hero-inner">
           <div class="hero-text">
             <p class="hero-kicker">技術同人誌サークル</p>
-            <h1 class="hero-title">XLM開発会議<br><span>城北支部</span></h1>
-            <p class="hero-lead"><span class="x">×</span>LM の可能性を模索する。</p>
-            <a class="next-event" href="#event">
-              <span class="next-label">次回出展</span>
-              <span class="next-body">技術書典21　<strong>配置 あ07</strong></span>
-              <span class="next-date">オフライン 2026年11月23日（月・祝）／ オンライン 11月21日〜12月6日</span>
-            </a>
+            <h1 class="hero-title">AIと開発し、<br><span>AIで探究する。</span></h1>
+            <p class="hero-lead">言語モデルを開発や研究にどう生かせるか。技術同人誌<span class="hero-book-title">『言素 vol.1』</span>と、用語や技術のつながりを調べられるWebコンテンツを作っています。</p>
+            <div class="hero-actions">
+              <a class="hero-primary" href="#books">頒布物を見る</a>
+              <a class="hero-secondary" href="contents/">コンテンツを見る</a>
+            </div>
           </div>
-          <a class="hero-cover" href="#books">
-            <img src="images/genso-vol1-cover.jpg" width="918" height="1297" alt="新刊『言素 vol.1』の表紙">
-            <span>新刊『言素 vol.1』</span>
-          </a>
+          <section class="feature-carousel" aria-label="書籍とWebコンテンツ" data-feature-carousel>
+            <div class="feature-controls" data-carousel-controls hidden>
+              <button type="button" class="feature-rotation" data-carousel-rotation>自動切替を停止</button>
+              <div class="feature-pickers" role="group" aria-label="表示するコンテンツ">
+                <button type="button" aria-controls="feature-book" aria-pressed="true" data-carousel-picker>言素 vol.1</button>
+                <button type="button" aria-controls="feature-olm" aria-pressed="false" data-carousel-picker>〇LM大全</button>
+              </div>
+            </div>
+            <div class="feature-slides" data-carousel-slides>
+              <div class="feature-slide" id="feature-book" role="group" aria-labelledby="feature-book-label">
+                <a href="#books" aria-labelledby="feature-book-label">
+                  <span class="feature-art">
+                    <img src="images/genso-vol1-cover.jpg" width="918" height="1297" alt="緑のウロボロスを描いた『言素 vol.1』の表紙">
+                  </span>
+                  <span id="feature-book-label">言素 vol.1</span>
+                </a>
+              </div>
+              <div class="feature-slide" id="feature-olm" role="group" aria-labelledby="feature-olm-label">
+                <a href="contents/olm-taizen/" aria-labelledby="feature-olm-label">
+                  <span class="feature-art">
+                    <img src="images/olm-taizen-postcard.jpg" width="1200" height="811" alt="言語モデル関連の略語24語を周期表風に並べたポストカード">
+                  </span>
+                  <span id="feature-olm-label">〇LM大全</span>
+                </a>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </section>
