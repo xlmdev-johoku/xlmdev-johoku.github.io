@@ -34,9 +34,7 @@ html { scroll-padding-top: 84px; }
 
 .hero {
   padding-block: clamp(36px, 5.7vw, 66px);
-  background:
-    radial-gradient(540px 440px at 82% 54%, #29563c, transparent 83%),
-    linear-gradient(120deg, var(--bg), #172d21);
+  background: linear-gradient(120deg, var(--bg), #172d21);
 }
 
 .hero-inner { gap: clamp(25px, 5vw, 54px); }
@@ -63,12 +61,23 @@ html { scroll-padding-top: 84px; }
 .hero-actions .hero-secondary { color: var(--accent-ink); padding-inline: 0; text-underline-offset: .25em; }
 
 .feature-carousel {
-  width: min(100%, 410px);
+  --feature-art-height: clamp(212px, 60vw, 352px);
+  position: relative;
+  width: min(100%, 440px);
   justify-self: center;
-  padding: clamp(10px, 2.2vw, 18px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
+}
+
+.feature-carousel::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--feature-art-height) / 2);
+  left: 50%;
+  inline-size: min(180%, 760px);
+  block-size: calc(var(--feature-art-height) * 1.65);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse closest-side, #29563c, transparent);
+  pointer-events: none;
 }
 
 .feature-controls, .feature-dots {
@@ -125,16 +134,12 @@ html { scroll-padding-top: 84px; }
 .feature-art {
   display: block;
   inline-size: 100%;
-  block-size: clamp(172px, 32vw, 292px);
-  padding: 10px;
-  border-radius: 6px;
-  background: #172c21;
+  block-size: var(--feature-art-height);
 }
 .feature-art img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: contain;
-  border-radius: 4px;
 }
 .hero a:focus-visible, .feature-controls button:focus-visible {
   outline: 2px solid var(--logo-mint);
@@ -143,6 +148,7 @@ html { scroll-padding-top: 84px; }
 
 .section { padding-block: clamp(46px, 6vw, 66px); }
 .event-head, .book-body .book-lead { background: #0f4c2f; }
+.book-price { white-space: nowrap; }
 .badge-accent, .booth strong, .chips li:nth-child(4n+1) { color: var(--bg); }
 .chips li:nth-child(4n+2) { background: var(--logo-charcoal); }
 #about { --sec: var(--logo-mint); }
@@ -150,7 +156,7 @@ html { scroll-padding-top: 84px; }
 .site-footer { background: #183b2b; }
 
 @media (min-width: 820px) {
-  .hero-inner { grid-template-columns: minmax(0, 1.18fr) minmax(235px, .82fr); }
+  .hero-inner { grid-template-columns: minmax(0, 1.07fr) minmax(235px, .93fr); }
 }
 
 @media (max-width: 760px), (max-height: 480px) {
@@ -160,6 +166,13 @@ html { scroll-padding-top: 84px; }
 
 @media (max-width: 640px) {
   .circle-logo { width: 146px; }
+}
+
+@media (max-width: 480px) {
+  .book-specs div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
 }
 
 @media (pointer: coarse) {
