@@ -51,13 +51,6 @@
             </div>
           </div>
           <section class="feature-carousel" aria-label="書籍とWebコンテンツ" data-feature-carousel>
-            <div class="feature-controls" data-carousel-controls hidden>
-              <button type="button" class="feature-rotation" data-carousel-rotation>自動切替を停止</button>
-              <div class="feature-pickers" role="group" aria-label="表示するコンテンツ">
-                <button type="button" aria-controls="feature-book" aria-pressed="true" data-carousel-picker>言素 vol.1</button>
-                <button type="button" aria-controls="feature-olm" aria-pressed="false" data-carousel-picker>〇LM大全</button>
-              </div>
-            </div>
             <div class="feature-slides" data-carousel-slides>
               <div class="feature-slide" id="feature-book" role="group" aria-labelledby="feature-book-label">
                 <a href="#books" aria-labelledby="feature-book-label">
@@ -75,6 +68,18 @@
                   <span id="feature-olm-label">〇LM大全</span>
                 </a>
               </div>
+            </div>
+            <div class="feature-controls" data-carousel-controls hidden>
+              <button type="button" class="feature-arrow" aria-label="前の項目を表示" data-carousel-step="-1">
+                <span aria-hidden="true">‹</span>
+              </button>
+              <div class="feature-dots" role="group" aria-label="表示するコンテンツ">
+                <button type="button" aria-label="言素 vol.1を表示" aria-controls="feature-book" aria-pressed="true" data-carousel-picker></button>
+                <button type="button" aria-label="〇LM大全を表示" aria-controls="feature-olm" aria-pressed="false" data-carousel-picker></button>
+              </div>
+              <button type="button" class="feature-arrow" aria-label="次の項目を表示" data-carousel-step="1">
+                <span aria-hidden="true">›</span>
+              </button>
             </div>
           </section>
         </div>

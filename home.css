@@ -71,32 +71,46 @@ html { scroll-padding-top: 84px; }
   background: var(--surface);
 }
 
-.feature-controls, .feature-pickers {
+.feature-controls, .feature-dots {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
 }
-.feature-controls { justify-content: space-between; margin-bottom: 13px; }
+.feature-controls { gap: 8px; margin-top: 4px; }
 .feature-controls button {
-  padding: 6px 9px;
-  border: 1px solid var(--line);
+  padding: 0;
+  border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--ink);
-  font: 600 13px/1.5 var(--sans);
-  min-block-size: 34px;
+  color: var(--logo-mint);
+  block-size: 32px;
   cursor: pointer;
 }
-.feature-controls button:hover { border-color: var(--logo-mint); }
-.feature-controls .feature-rotation { color: var(--accent-ink); }
-.feature-pickers button[aria-pressed="true"] {
-  border-color: var(--logo-mint);
-  background: var(--logo-mint);
-  color: var(--on-accent);
+.feature-dots button {
+  display: grid;
+  place-items: center;
+  inline-size: 24px;
+}
+.feature-dots button::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.feature-dots button[aria-pressed="true"]::before { background: currentColor; }
+.feature-controls button:hover { color: var(--paper); }
+.feature-arrow {
+  display: none;
+  place-items: center;
+  inline-size: 32px;
+  font: 400 24px/1 var(--sans);
 }
 .feature-slides { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.feature-carousel[data-carousel-ready] .feature-slides { grid-template-columns: minmax(0, 1fr); }
+.feature-carousel[data-carousel-ready] .feature-slides {
+  grid-template-columns: minmax(0, 1fr);
+  touch-action: pan-y pinch-zoom;
+}
 .feature-controls[hidden], .feature-slide[hidden] { display: none; }
 .feature-slide a {
   display: grid;
@@ -149,9 +163,12 @@ html { scroll-padding-top: 84px; }
 }
 
 @media (pointer: coarse) {
-  .feature-controls button { min-block-size: 44px; }
+  .feature-controls button { block-size: 44px; }
+  .feature-dots button { inline-size: 30px; }
+  .feature-arrow { inline-size: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .feature-arrow { display: grid; }
 }

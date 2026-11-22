@@ -1,7 +1,6 @@
 {
   const carousel = document.querySelector("[data-feature-carousel]");
   const controls = carousel.querySelector("[data-carousel-controls]");
-  const rotation = carousel.querySelector("[data-carousel-rotation]");
   const slides = carousel.querySelector("[data-carousel-slides]");
   const panels = Array.from(slides.children);
   const pickers = Array.from(carousel.querySelectorAll("[data-carousel-picker]"));
@@ -9,50 +8,69 @@
   const rotationInterval = 7000;
 
   let activeIndex = 0;
-  let rotating = !motionPreference.matches;
   let hovered = window.matchMedia("(hover: hover)").matches && carousel.matches(":hover");
+  let swipeStart;
   let timer;
 
   function showSlide(index) {
-    activeIndex = index;
+    activeIndex = (index + panels.length) % panels.length;
     panels.forEach((panel, position) => {
-      const selected = position === index;
+      const selected = position === activeIndex;
       panel.hidden = !selected;
       pickers[position].setAttribute("aria-pressed", String(selected));
     });
+    scheduleRotation();
   }
 
   function scheduleRotation() {
     window.clearTimeout(timer);
-    if (rotating && !hovered && !document.hidden) {
-      timer = window.setTimeout(() => {
-        showSlide((activeIndex + 1) % panels.length);
-        scheduleRotation();
-      }, rotationInterval);
+    const focus = document.activeElement;
+    const keyboardFocus = carousel.contains(focus) && focus.matches(":focus-visible");
+    if (!motionPreference.matches && !hovered && !swipeStart && !keyboardFocus && !document.hidden) {
+      timer = window.setTimeout(() => showSlide(activeIndex + 1), rotationInterval);
     }
   }
 
-  function setRotation(enabled) {
-    rotating = enabled;
-    rotation.textContent = enabled ? "自動切替を停止" : "自動切替を再開";
-    slides.setAttribute("aria-live", enabled ? "off" : "polite");
+  function applyMotionPreference() {
+    slides.setAttribute("aria-live", motionPreference.matches ? "polite" : "off");
     scheduleRotation();
   }
 
-  rotation.addEventListener("click", () => setRotation(!rotating));
   pickers.forEach((picker, index) => {
-    picker.addEventListener("click", () => {
-      setRotation(false);
-      showSlide(index);
-    });
+    picker.addEventListener("click", () => showSlide(index));
+  });
+  carousel.querySelectorAll("[data-carousel-step]").forEach((arrow) => {
+    arrow.addEventListener("click", () => showSlide(activeIndex + Number(arrow.dataset.carouselStep)));
   });
 
-  carousel.addEventListener("focusin", (event) => {
-    // Let a pointer click use the action the rotation button displayed before it was focused.
-    if (event.target !== rotation || rotation.matches(":focus-visible")) {
-      setRotation(false);
+  slides.addEventListener("touchstart", (event) => {
+    swipeStart = event.touches.length === 1 ? event.touches[0] : undefined;
+    scheduleRotation();
+  }, { passive: true });
+
+  slides.addEventListener("touchend", (event) => {
+    const start = swipeStart;
+    swipeStart = undefined;
+    const end = start && Array.from(event.changedTouches).find((touch) => touch.identifier === start.identifier);
+    if (end && event.cancelable) {
+      const horizontal = end.clientX - start.clientX;
+      const vertical = end.clientY - start.clientY;
+      if (Math.abs(horizontal) >= 45 && Math.abs(horizontal) > Math.abs(vertical)) {
+        event.preventDefault();
+        showSlide(activeIndex + (horizontal < 0 ? 1 : -1));
+        return;
+      }
     }
-  });
+    scheduleRotation();
+  }, { passive: false });
+
+  slides.addEventListener("touchcancel", () => {
+    swipeStart = undefined;
+    scheduleRotation();
+  }, { passive: true });
+
+  carousel.addEventListener("focusin", scheduleRotation);
+  carousel.addEventListener("focusout", () => queueMicrotask(scheduleRotation));
 
   carousel.addEventListener("pointerenter", (event) => {
     if (event.pointerType !== "touch") {
@@ -67,9 +85,7 @@
     }
   });
 
-  motionPreference.addEventListener("change", (event) => {
-    if (event.matches) setRotation(false);
-  });
+  motionPreference.addEventListener("change", applyMotionPreference);
   document.addEventListener("visibilitychange", scheduleRotation);
 
   carousel.setAttribute("aria-roledescription", "カルーセル");
@@ -77,5 +93,5 @@
   carousel.setAttribute("data-carousel-ready", "");
   controls.hidden = false;
   showSlide(0);
-  setRotation(rotating);
+  applyMotionPreference();
 }
