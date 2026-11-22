@@ -1,46 +1,20 @@
-:root {
-  color-scheme: dark;
-  --logo-green: #126038;
-  --logo-charcoal: #413f3e;
-  --logo-mint: #bedcb6;
-  --salmon: #f29a82;
-  --paper: #fff;
-  --serpent: var(--logo-green);
-  --serpent-2: #0e4b2e;
-  --wave: #32695e;
-  --bolt: var(--logo-mint);
-  --bg: #14271e;
-  --bg-alt: #1c3428;
-  --surface: #23382d;
-  --ink: #f5f8f1;
-  --ink-soft: #d8e4d8;
-  --muted: #b8cbbb;
-  --line: #456354;
-  --accent: var(--logo-mint);
-  --accent-ink: var(--logo-mint);
-  --flame-fill: var(--salmon);
-  --on-accent: var(--bg);
-  --green-tint: #22392d;
-  --shadow: 0 12px 30px rgb(4 18 10 / .32);
-}
-
-html { scroll-padding-top: 84px; }
-
-.site-header { background: var(--bg); }
-.site-header::before { height: 3px; background: var(--logo-mint); }
-.header-inner { gap: 6px 28px; min-height: 70px; }
-.site-header .brand { flex: 0 0 auto; }
-.circle-logo { width: 164px; }
-
+/* トップの紹介とカルーセル */
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding-block: clamp(36px, 5.7vw, 66px);
   background: linear-gradient(120deg, var(--bg), #172d21);
 }
 
-.hero-inner { gap: clamp(25px, 5vw, 54px); }
-.hero-kicker { color: var(--salmon); letter-spacing: .09em; }
-.hero-title { font-size: clamp(31px, 5vw, 59px); line-height: 1.3; letter-spacing: .01em; }
-.hero-lead { max-width: 30em; margin-block: 20px; font-size: 16px; text-wrap: pretty; }
+.hero-inner { display: grid; align-items: center; gap: clamp(25px, 5vw, 54px); }
+.hero-kicker { margin: 0 0 10px; color: var(--salmon); font-size: 14px; letter-spacing: .09em; }
+.hero-title {
+  margin: 0; font-family: var(--serif); font-weight: 600;
+  font-size: clamp(31px, 5vw, 59px); line-height: 1.3; letter-spacing: .01em;
+}
+.hero-title span { color: var(--accent-ink); }
+.hero-lead { max-width: 30em; margin: 20px 0; color: var(--ink-soft); font-size: 16px; text-wrap: pretty; }
 .hero-book-title { white-space: nowrap; }
 
 .hero-actions {
@@ -57,7 +31,7 @@ html { scroll-padding-top: 84px; }
   color: var(--on-accent);
   text-decoration: none;
 }
-.hero-actions .hero-primary:hover, .novelty-cta a:hover { background: #d0e9cc; }
+.hero-actions .hero-primary:hover { background: #d0e9cc; }
 .hero-actions .hero-secondary { color: var(--accent-ink); padding-inline: 0; text-underline-offset: .25em; }
 
 .feature-carousel {
@@ -141,38 +115,9 @@ html { scroll-padding-top: 84px; }
   block-size: 100%;
   object-fit: contain;
 }
-.hero a:focus-visible, .feature-controls button:focus-visible {
-  outline: 2px solid var(--logo-mint);
-  outline-offset: 3px;
-}
-
-.section { padding-block: clamp(46px, 6vw, 66px); }
-.event-head, .book-body .book-lead { background: #0f4c2f; }
-.book-price { white-space: nowrap; }
-.badge-accent, .booth strong, .chips li:nth-child(4n+1) { color: var(--bg); }
-.chips li:nth-child(4n+2) { background: var(--logo-charcoal); }
-#about { --sec: var(--logo-mint); }
-.section-band { background: #163b29; }
-.site-footer { background: #183b2b; }
 
 @media (min-width: 820px) {
   .hero-inner { grid-template-columns: minmax(0, 1.07fr) minmax(235px, .93fr); }
-}
-
-@media (max-width: 760px), (max-height: 480px) {
-  html { scroll-padding-top: 12px; }
-  .site-header { position: static; }
-}
-
-@media (max-width: 640px) {
-  .circle-logo { width: 146px; }
-}
-
-@media (max-width: 480px) {
-  .book-specs div {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2px;
-  }
 }
 
 @media (pointer: coarse) {
@@ -182,6 +127,5 @@ html { scroll-padding-top: 84px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   .feature-arrow { display: grid; }
 }

@@ -1,27 +1,21 @@
 /*
   AI・機械学習の歴史年表（/contents/ai-ml-timeline/）専用のスタイル。
-  サイト共通の ../../style.css の上に重ねる。色はサイトの変数だけを使う。
-  ブーム＝炎（--flame）、冬＝波（--wave）。
+  サイト共通の ../../style.css の上に重ねる。波形の色はブームが朱赤、冬が青。
 */
 :root {
   --tl-col: 46rem;        /* 年表の本文の列 */
   --tl-year-w: 3.4rem;
   --tl-mark-w: 1.1rem;
   --tl-gap: .7rem;
-  --site-h: 61px;         /* サイト共通ヘッダーの高さ（script.js が実測して上書き） */
   --bar-h: 54px;          /* 時代の帯の高さ（同上） */
-  --tl-boom: var(--flame);
-  --tl-winter: var(--wave);
-  --tl-hl: #ffe08a;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --tl-boom: #f08c58; --tl-winter: #6cb6db; --tl-hl: #5c4c08; }
+  --tl-boom: var(--hot-ink);
+  --tl-winter: #6cb6db;
+  --tl-hl: #5c4c08;
 }
 @media (min-width: 760px) { :root { --tl-year-w: 4rem; --tl-gap: .9rem; } }
 
-/* サイト共通の scroll-padding（72px）は固定ヘッダー＋時代の帯の高さに合わせて置き換える */
+/* 年表のジャンプ先には、共通ヘッダーと時代の帯を含む scroll-margin を使う */
 html { scroll-padding-top: 0; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 .tl-head { padding-bottom: 56px; }
 .tl-head .page-lead { max-width: 40em; line-height: 2; }
@@ -132,7 +126,7 @@ mark { background: var(--tl-hl); color: inherit; border-radius: 2px; padding: 0 
 
 /* ---------- 時代の帯と絞り込み（上に固定） ---------- */
 .tl-bar {
-  position: sticky; top: var(--site-h); z-index: 9;
+  position: sticky; top: var(--sticky-header-offset); z-index: 9;
   background: color-mix(in srgb, var(--surface) 96%, transparent); backdrop-filter: blur(8px);
   border-block: 1px solid var(--line);
 }
@@ -150,18 +144,18 @@ mark { background: var(--tl-hl); color: inherit; border-radius: 2px; padding: 0 
   color: var(--ink-soft); font-size: 13px; line-height: 1.5; white-space: nowrap; text-decoration: none;
 }
 .tl-era-chip:hover { border-color: var(--muted); }
-.tl-era-chip[aria-current] { background: var(--serpent); border-color: var(--serpent); color: var(--on-accent); }
+.tl-era-chip[aria-current] { background: var(--serpent); border-color: var(--accent-ink); color: var(--paper); }
 .tl-era-chip.off { opacity: .38; pointer-events: none; }
 .tl-t { flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--muted); }
 .tl-t.boom { background: var(--tl-boom); }
 .tl-t.winter { background: var(--tl-winter); }
-.tl-era-chip[aria-current] .tl-t.quiet { background: var(--on-accent); }
+.tl-era-chip[aria-current] .tl-t.quiet { background: var(--paper); }
 .tl-filter-btn {
   flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 5px 14px; cursor: pointer;
   border: 1px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--accent-ink);
   font-size: 13px; font-weight: 700;
 }
-.tl-filter-btn[aria-expanded="true"], .tl-filter-btn.active { background: var(--serpent); border-color: var(--serpent); color: var(--on-accent); }
+.tl-filter-btn[aria-expanded="true"], .tl-filter-btn.active { background: var(--accent); color: var(--on-accent); }
 .tl-filter-btn .n { font-size: 12px; font-variant-numeric: tabular-nums; }
 
 .tl-panel { border-top: 1px solid var(--line); }
@@ -189,7 +183,7 @@ mark { background: var(--tl-hl); color: inherit; border-radius: 2px; padding: 0 
   content: ""; position: absolute; top: 2px; left: 2px; width: calc(1.25rem - 4px); height: calc(1.25rem - 4px);
   border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgb(0 0 0 / .25); transition: transform .15s;
 }
-.tl-tg input:checked { background: var(--serpent); }
+.tl-tg input:checked { background: var(--accent); }
 .tl-tg input:checked::after { transform: translateX(.9rem); }
 @media (prefers-reduced-motion: reduce) { .tl-tg input, .tl-tg input::after { transition: none; } }
 .tl-search input {
@@ -209,7 +203,7 @@ mark { background: var(--tl-hl); color: inherit; border-radius: 2px; padding: 0 
 .tl-era {
   --band: var(--bg);
   background: var(--band); padding-block: 48px 40px; border-top: 1px solid var(--line);
-  scroll-margin-top: calc(var(--site-h) + var(--bar-h));
+  scroll-margin-top: calc(var(--sticky-header-offset) + var(--bar-h));
 }
 .tl-era:first-child { border-top: 0; }
 .tl-era[data-type="boom"] { --band: color-mix(in srgb, var(--tl-boom) 7%, var(--bg)); }

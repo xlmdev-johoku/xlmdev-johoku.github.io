@@ -3,29 +3,20 @@
   サイト共通の ../../style.css の上に重ねる。サイトの変数名（--paper など）は上書きしない。
 */
 :root {
-  --site-h: 61px;   /* サイト共通ヘッダーの高さ（script.js が実測して上書き） */
   --bar-h: 56px;    /* 切り替えバーの高さ（同上） */
   --rm-sheet: var(--surface);
   --rm-ink-2: var(--ink-soft);
   --rm-ink-3: var(--muted);
   --rm-rule: var(--line);
   --rm-grid: color-mix(in srgb, var(--line) 55%, var(--surface));
-  --rm-mark: var(--serpent);
-  --rm-mark-soft: color-mix(in srgb, var(--serpent) 10%, var(--surface));
+  --rm-mark: var(--accent-ink);
+  --rm-mark-soft: color-mix(in srgb, var(--rm-mark) 14%, var(--surface));
   --rm-red: var(--hot-ink);
   --rm-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans JP", monospace;
   /* 分野の色（元データを引き継ぐ） */
-  --c-E: #a66a0b; --c-L: #21805e; --c-I: #5850bf; --c-S: #2873ad; --c-M: #a93a80; --c-R: #586575;
+  --c-E: #e3a64e; --c-L: #5fcba5; --c-I: #a8a2f4; --c-S: #74b9ee; --c-M: #e486c4; --c-R: #a0aebd;
   /* LM の関わりの深さ */
-  --lm-core: #c24e17; --lm-support: #9a630b; --lm-peri: #7d7a72;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --rm-mark: #86c0a0;
-    --rm-mark-soft: color-mix(in srgb, #86c0a0 14%, var(--surface));
-    --c-E: #e3a64e; --c-L: #5fcba5; --c-I: #a8a2f4; --c-S: #74b9ee; --c-M: #e486c4; --c-R: #a0aebd;
-    --lm-core: #f08c58; --lm-support: #e2b35a; --lm-peri: #a3a097;
-  }
+  --lm-core: var(--hot-ink); --lm-support: #e2b35a; --lm-peri: #a3a097;
 }
 
 button { font: inherit; color: inherit; }
@@ -135,7 +126,7 @@ html { scroll-padding-top: 0; }
 
 /* ---------- 切り替えバー（サイト共通ヘッダーの下に固定） ---------- */
 .bar {
-  position: sticky; top: var(--site-h); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+  position: sticky; top: var(--sticky-header-offset); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
   margin-top: 28px; padding-block: 10px; background: color-mix(in srgb, var(--bg) 96%, transparent); backdrop-filter: blur(8px);
   border-bottom: 1.5px solid var(--ink);
 }
@@ -155,7 +146,7 @@ html { scroll-padding-top: 0; }
 #main { display: flex; flex-direction: column; gap: 18px; margin: 18px 0 64px; }
 .sheet {
   display: grid; grid-template-columns: 300px minmax(0, 1fr); background: var(--rm-sheet); border: 1px solid var(--rm-rule); border-radius: var(--radius);
-  scroll-margin-top: calc(var(--site-h) + var(--bar-h) + 12px);
+  scroll-margin-top: calc(var(--sticky-header-offset) + var(--bar-h) + 12px);
 }
 .sheet:focus { outline: none; }
 .side { padding: 18px 20px 20px; border-right: 1px solid var(--rm-rule); min-width: 0; }
@@ -223,6 +214,7 @@ html { scroll-padding-top: 0; }
 @media (max-width: 520px) {
   .tl { padding: 12px 12px 4px; }
   .lmsec { margin: 0 12px; }
+  .was { white-space: normal; }
   .ev, .nowline { grid-template-columns: 4.9em 18px minmax(0, 1fr); column-gap: 8px; }
   .lml li { grid-template-columns: 4.9em minmax(0, 1fr); }
   .lml .lst { grid-column: 2; grid-row: 1; justify-self: start; margin-bottom: 2px; }
@@ -231,7 +223,7 @@ html { scroll-padding-top: 0; }
 }
 
 /* 年表ビュー */
-.yg { background: var(--rm-sheet); border: 1px solid var(--rm-rule); border-radius: var(--radius); scroll-margin-top: calc(var(--site-h) + var(--bar-h) + 12px); }
+.yg { background: var(--rm-sheet); border: 1px solid var(--rm-rule); border-radius: var(--radius); scroll-margin-top: calc(var(--sticky-header-offset) + var(--bar-h) + 12px); }
 .yg-h { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 10px 18px; border-bottom: 1px solid var(--rm-rule); font-family: var(--serif); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .yg-h small { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--rm-ink-3); }
 .yg.cur .yg-h { color: var(--accent-ink); }
