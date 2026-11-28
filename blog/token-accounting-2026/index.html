@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>AI の「使ったトークン数」の数え方 | XLM開発会議 城北支部</title>
+  <meta name="description" content="「AI に何トークン使ったか」という数字は、キャッシュから読み直した分・推論の分・出力だけのどれを数えるかで何十倍も変わります。Anthropic・OpenAI・Claude Code の数え方と、筆者の30日分の内訳から整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI の「使ったトークン数」の数え方 | XLM開発会議 城北支部">
+  <meta property="og:description" content="4億トークンは多いのか。キャッシュ・推論・出力で何十倍も変わるトークン数の数え方を整理します（2026年11月27日時点）。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/token-accounting-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-token-accounting-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="AI の「使ったトークン数」の数え方">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/token-accounting-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></p>
+            <h1>AI の「使ったトークン数」の数え方</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p><a href="../quantum-gravity-null-cone-2026/">前の記事</a>で取り上げた量子重力の論文には、謝辞に「GPT-6 Astra と何か月もやりとりし、使ったトークンは合計で約4億になる」と書かれていました。</p>
+          <p>筆者の PC の Claude Code は、直近30日で約29億トークンを使っています。何か月もかけた研究が、筆者の1か月分より少ないのか。そう思って調べてみると、比べ方しだいで「筆者の4日分」にも「18か月分」にもなることがわかりました。この記事では、AI の「使ったトークン数」がどう数えられているのかを整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>トークン数には<strong>入力・出力・キャッシュへの書き込み・キャッシュからの読み出し・推論</strong>の5種類が混ざる。どれを足すかで数字は何十倍も変わる。</li>
+              <li>Claude Code のようなエージェントは毎回会話全体を送り直すので、<strong>量の大半はキャッシュからの読み直し</strong>になる。筆者の30日分では約97%だった。</li>
+              <li>同じ <code>input_tokens</code> という名前でも、<strong>Anthropic と OpenAI で中身が逆</strong>。数字を比べる前に「何を数えたか」を確かめる必要がある。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月27日時点の情報です。料金はすべて定価での換算で、実際の請求額ではありません。</p>
+
+          <h2>トークンとは何か</h2>
+          <p>トークンは AI が文章を読み書きするときの単位です。単語やその切れ端、日本語なら数文字ほどの塊にあたります。料金も、処理できる量の上限も、トークン数で決まります。</p>
+          <p>文章をトークンに切り分ける仕組み（トークナイザー）はモデルによって違います。同じ文章でも、モデルが変わればトークン数が変わります。たとえば Anthropic のドキュメントは、Claude Opus 4.7 以降のトークナイザーでは、それ以前のモデルの約1〜1.35倍のトークン数になると書いています。会社が違えば、なおさら1トークンの大きさはそろいません。</p>
+
+          <h2>1回のやりとりで数えられる5種類のトークン</h2>
+          <p>AI に1回質問して答えが返ってくるまでに、次の5種類のトークンが数えられます。</p>
+          <ul>
+            <li><strong>入力</strong>：AI に送る文章。指示や質問、それまでの会話、読ませたファイルなど。</li>
+            <li><strong>キャッシュへの書き込み</strong>：入力のうち、次回も使うために AI 側に一時保存した分。</li>
+            <li><strong>キャッシュからの読み出し</strong>：前回保存した分を、そのまま使い回した分。同じ文章を最初から処理し直さずに済む。</li>
+            <li><strong>出力</strong>：AI が書いて返す文章やツールの呼び出し。</li>
+            <li><strong>推論（思考）</strong>：答えを出す前に AI が内部で考える分。画面には出ないことが多いが、<strong>出力として課金される</strong>。</li>
+          </ul>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 250" role="img" aria-labelledby="fig1-t">
+              <title id="fig1-t">1回のリクエストで送る入力は、キャッシュからの読み出しが大部分で、新しく書き込む分と残りの入力は少ない。返ってくる出力は、見えない推論と、返答の文章やツールの呼び出しに分かれる</title>
+              <text class="t-main" x="10" y="24">送る側（入力）</text>
+              <rect class="s-strip" x="10" y="36" width="400" height="44"/>
+              <rect class="s-band" x="410" y="36" width="110" height="44"/>
+              <rect x="520" y="36" width="30" height="44" style="fill: var(--hot-ink)"/>
+              <text class="t-sub" x="210" y="63" text-anchor="middle">キャッシュから読み出し</text>
+              <text class="t-tiny" x="465" y="63" text-anchor="middle">書き込み</text>
+              <text class="t-tiny" x="535" y="30" text-anchor="middle">入力</text>
+              <text class="t-tiny" x="210" y="100" text-anchor="middle">指示・これまでの会話・ツールの結果</text>
+              <text class="t-tiny" x="465" y="100" text-anchor="middle">前回の返答＋今回の発言</text>
+              <text class="t-main" x="10" y="152">返ってくる側（出力）</text>
+              <rect class="s-band" x="10" y="164" width="220" height="44" style="opacity: .55"/>
+              <rect class="s-band" x="230" y="164" width="120" height="44"/>
+              <text class="t-sub" x="120" y="191" text-anchor="middle">推論（画面に出ない）</text>
+              <text class="t-sub" x="290" y="191" text-anchor="middle">返答・ツール</text>
+              <text class="t-tiny" x="10" y="232">幅は種類の違いを示すための模式。実際の割合はやりとりによって大きく変わる</text>
+            </svg>
+            <figcaption><span class="fig-no">図1</span>1回のリクエストで数えられるトークンの種類。Claude Code の場合の模式図</figcaption>
+          </figure>
+
+          <p>5種類は単価も違います。Claude Opus 5.5 の定価では、100万トークンあたり次のとおりです。</p>
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>種類</th><th>100万トークンあたり</th><th>入力を1としたとき</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">入力</th><td data-label="単価">$4</td><td data-label="比">1</td></tr>
+                <tr><th scope="row">キャッシュへの書き込み（5分保存）</th><td data-label="単価">$5</td><td data-label="比">1.25</td></tr>
+                <tr><th scope="row">キャッシュへの書き込み（1時間保存）</th><td data-label="単価">$8</td><td data-label="比">2</td></tr>
+                <tr><th scope="row">キャッシュからの読み出し</th><td data-label="単価">$0.20</td><td data-label="比">0.05</td></tr>
+                <tr><th scope="row">出力（推論を含む）</th><td data-label="単価">$20</td><td data-label="比">5</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図2</span>Claude Opus 5.5 の定価（Anthropic の料金ページ、2026年11月27日時点）。読み出しは入力の20分の1、出力は5倍</figcaption>
+          </figure>
+          <p>ほかの会社やモデルの単価と、2020年からの値下がりの推移は、コンテンツ「<a href="../../contents/token-pricing/">AI サービスのトークン単価</a>」にまとめています。</p>
+
+          <h2>なぜエージェントでは読み直しが大半になるのか</h2>
+          <p>AI のモデルは、前のやりとりを覚えていません。そのため Claude Code は、1回やりとりするたびに会話全体を送り直します。公式ドキュメントはこう説明しています。</p>
+          <blockquote>
+            <p>モデルはリクエストの間で何も覚えていないので、Claude Code は文脈全体を送り直す。システムの指示、プロジェクトの文脈、これまでのすべてのメッセージとツールの結果、そして新しいメッセージだ。</p>
+            <cite>Claude Code ドキュメント「Prompt caching」の訳</cite>
+          </blockquote>
+          <p>ツールを1回使うたびにも、その結果を載せて全体をもう一度送ります。会話が長くなるほど、1回あたりに送る量は増えていきます。</p>
+          <p>架空の例で考えます。1回のやりとりで新しく5,000トークンずつ会話が伸びるとします。20回目には、それまでの9万5,000トークンを読み直してから、新しい5,000トークンを足すことになります。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 300" role="img" aria-labelledby="fig3-t">
+              <title id="fig3-t">1回目から20回目まで、毎回送る量の棒グラフ。新しく足す分は毎回5,000トークンで一定だが、読み直す履歴は回を追うごとに増え、20回目には9万5,000トークンになる</title>
+              <line class="s-axis" x1="50" y1="250" x2="550" y2="250"/>
+              <line class="s-axis" x1="50" y1="250" x2="50" y2="30"/>
+              <text class="t-tiny" x="44" y="254" text-anchor="end">0</text>
+              <text class="t-tiny" x="44" y="144" text-anchor="end">5万</text>
+              <text class="t-tiny" x="44" y="34" text-anchor="end">10万</text>
+              <line class="s-edge" x1="50" y1="140" x2="550" y2="140" stroke-dasharray="3 4"/>
+              <line class="s-edge" x1="50" y1="30" x2="550" y2="30" stroke-dasharray="3 4"/>
+              <g>
+                <rect x="58" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="83" y="228" width="18" height="11"/><rect x="83" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="108" y="217" width="18" height="22"/><rect x="108" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="133" y="206" width="18" height="33"/><rect x="133" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="158" y="195" width="18" height="44"/><rect x="158" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="183" y="184" width="18" height="55"/><rect x="183" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="208" y="173" width="18" height="66"/><rect x="208" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="233" y="162" width="18" height="77"/><rect x="233" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="258" y="151" width="18" height="88"/><rect x="258" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="283" y="140" width="18" height="99"/><rect x="283" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="308" y="129" width="18" height="110"/><rect x="308" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="333" y="118" width="18" height="121"/><rect x="333" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="358" y="107" width="18" height="132"/><rect x="358" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="383" y="96" width="18" height="143"/><rect x="383" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="408" y="85" width="18" height="154"/><rect x="408" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="433" y="74" width="18" height="165"/><rect x="433" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="458" y="63" width="18" height="176"/><rect x="458" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="483" y="52" width="18" height="187"/><rect x="483" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="508" y="41" width="18" height="198"/><rect x="508" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+                <rect class="s-strip" x="533" y="30" width="18" height="209"/><rect x="533" y="239" width="18" height="11" style="fill: var(--hot-ink)"/>
+              </g>
+              <text class="t-tiny" x="67" y="268" text-anchor="middle">1</text>
+              <text class="t-tiny" x="292" y="268" text-anchor="middle">10</text>
+              <text class="t-tiny" x="542" y="268" text-anchor="middle">20</text>
+              <text class="t-tiny" x="300" y="290" text-anchor="middle">やりとりの回数</text>
+              <rect class="s-strip" x="70" y="40" width="14" height="12" style="stroke: var(--line)"/>
+              <text class="t-tiny" x="90" y="51">読み直す履歴（キャッシュから読み出し）</text>
+              <rect x="70" y="60" width="14" height="12" style="fill: var(--hot-ink)"/>
+              <text class="t-tiny" x="90" y="71">新しく足す分（5,000）</text>
+            </svg>
+            <figcaption><span class="fig-no">図3</span>毎回送る量の架空の例。20回で新しく足したのは合計10万トークンだが、読み直したのは合計95万トークンになる</figcaption>
+          </figure>
+
+          <p>20回の合計では、新しく足したのは10万トークン、読み直したのは95万トークンです。会話が長くなるほど、読み直しの割合は大きくなります。</p>
+          <p>筆者の PC の Claude Code の直近30日分（2026年11月27日時点の <code>/stats</code> の表示）を見ると、実際にそうなっていました。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>種類</th><th>トークン数</th><th>割合</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">キャッシュからの読み出し</th><td data-label="トークン数">28億</td><td data-label="割合">約96.6%</td></tr>
+                <tr><th scope="row">キャッシュへの書き込み</th><td data-label="トークン数">7,750万</td><td data-label="割合">約2.7%</td></tr>
+                <tr><th scope="row">出力（推論を含む）</th><td data-label="トークン数">2,200万</td><td data-label="割合">約0.8%</td></tr>
+                <tr><th scope="row">入力</th><td data-label="トークン数">3.4万</td><td data-label="割合">ほぼ0%</td></tr>
+                <tr><th scope="row">合計</th><td data-label="トークン数">29億</td><td data-label="割合">100%</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図4</span>筆者の PC の Claude Code の直近30日分。30日のうち使ったのは17日、セッションは60。主に使ったモデルは Claude Opus 5.5</figcaption>
+          </figure>
+
+          <p>29億のうち、新しく処理した分（書き込み・出力・入力）は約1億で、全体の3%ほどしかありません。「入力」がほぼ0なのは、送ったものがほとんどキャッシュの書き込みか読み出しとして数えられているからです。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：同じ画面に2つの数え方</p>
+            <p>Claude Code の <code>/stats</code> の画面には「Total tokens: 2.9b」の下に、「入力と出力は『ホビット』のトークン数の約178倍」という一文も出ます。こちらは入力と出力だけ（約2,200万）で比べた数字で、キャッシュの分を含みません。作業中にスピナーの横に出るトークン数も、そのターンの出力だけを数えています。同じ道具の中でも、場面によって数え方が違うわけです。</p>
+          </aside>
+
+          <h2>同じ input_tokens でも中身が逆</h2>
+          <p>API の応答には、使ったトークン数が <code>usage</code> という欄で返ってきます。ここでも会社によって数え方が違います。とくに紛らわしいのが <code>input_tokens</code> です。</p>
+          <ul>
+            <li><strong>Anthropic</strong>：<code>input_tokens</code> は、キャッシュに当たらなかった残りだけです。送った入力の全体は、<code>input_tokens</code>・<code>cache_creation_input_tokens</code>・<code>cache_read_input_tokens</code> の3つを足して求めます。</li>
+            <li><strong>OpenAI</strong>：<code>input_tokens</code> に、キャッシュから読んだ分も書き込んだ分も含まれます。ふつうの入力は、そこからキャッシュの分を引いて求めます。</li>
+          </ul>
+          <p>OpenAI のドキュメントにある例の数字を使って、同じ中身のリクエストを両社の形式で書くと次のようになります。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>中身</th><th>Anthropic の usage</th><th>OpenAI の usage</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">入力の全体（12,000）</th><td data-label="Anthropic">どの欄にもない（3つを足す）</td><td data-label="OpenAI"><code>input_tokens</code>: 12,000</td></tr>
+                <tr><th scope="row">キャッシュに当たらなかった入力（1,000）</th><td data-label="Anthropic"><code>input_tokens</code>: 1,000</td><td data-label="OpenAI">どの欄にもない（引き算する）</td></tr>
+                <tr><th scope="row">キャッシュへの書き込み（7,000）</th><td data-label="Anthropic"><code>cache_creation_input_tokens</code></td><td data-label="OpenAI"><code>cache_write_tokens</code>（<code>input_tokens</code> の内数）</td></tr>
+                <tr><th scope="row">キャッシュからの読み出し（4,000）</th><td data-label="Anthropic"><code>cache_read_input_tokens</code></td><td data-label="OpenAI"><code>cached_tokens</code>（<code>input_tokens</code> の内数）</td></tr>
+                <tr><th scope="row">出力（1,186。うち推論 1,024）</th><td data-label="Anthropic"><code>output_tokens</code>（推論も出力として課金）</td><td data-label="OpenAI"><code>output_tokens</code>: 1,186、うち <code>reasoning_tokens</code>: 1,024</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図5</span>同じリクエストを両社の usage の形で並べた例。数字は OpenAI の「Prompt caching」と「Reasoning models」のドキュメントの例から取った</figcaption>
+          </figure>
+
+          <p>「<code>input_tokens</code> の合計」を両社で比べると、片方はキャッシュの分を含み、もう片方は含みません。同じ名前の欄を足し合わせただけでは、比べたことになりません。</p>
+          <p>推論の扱いにも注意が要ります。OpenAI の例では、出力1,186トークンのうち1,024トークンが画面に出ない推論です。推論を多く使うモデルでは、出力のトークン数の大半が、読者の目に触れない部分になります。</p>
+
+          <h2>トークンの量と料金は別</h2>
+          <p>キャッシュからの読み出しは単価が安いので、量の割合と料金の割合は一致しません。筆者の30日分を、すべて Claude Opus 5.5 の定価で換算してみます。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>種類</th><th>量の割合</th><th>定価での換算</th><th>料金の割合</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">キャッシュからの読み出し</th><td data-label="量">約96.6%</td><td data-label="換算">約$560</td><td data-label="料金">35〜40%</td></tr>
+                <tr><th scope="row">キャッシュへの書き込み</th><td data-label="量">約2.7%</td><td data-label="換算">約$390〜620</td><td data-label="料金">28〜38%</td></tr>
+                <tr><th scope="row">出力（推論を含む）</th><td data-label="量">約0.8%</td><td data-label="換算">約$440</td><td data-label="料金">27〜32%</td></tr>
+                <tr><th scope="row">入力</th><td data-label="量">ほぼ0%</td><td data-label="換算">約$0.14</td><td data-label="料金">ほぼ0%</td></tr>
+                <tr><th scope="row">合計</th><td data-label="量">29億トークン</td><td data-label="換算">約$1,390〜1,620</td><td data-label="料金">100%</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図6</span>筆者の30日分を Claude Opus 5.5 の定価で換算した値。書き込みは5分保存と1時間保存のどちらで数えるかで幅がある。筆者はサブスクリプションなので実際の請求額ではない</figcaption>
+          </figure>
+
+          <p>量では97%近い読み出しが、料金では4割ほどにとどまります。2,200万トークンしかない出力が、料金では3割前後を占めます。「何トークン使ったか」と「いくらかかったか」は、別の問いです。</p>
+          <p>なお Claude Code は、サブスクリプションの範囲内では本体の会話に1時間保存のキャッシュを使い、サブエージェントなどには5分保存を使います。筆者の書き込みのうち、どれだけがどちらだったかはわからないので、表では幅をもたせました。</p>
+
+          <h2>発表されたトークン数をどう読むか</h2>
+          <p>AI を使った成果の発表では、使ったトークン数が書かれることが増えました。その数え方はそろっていません。</p>
+          <ul>
+            <li>Anthropic は2026年8月、Claude がゼータ関数の零点の研究で成果を出した件について「出力3,100万トークン」と、<strong>出力だけ</strong>を公表しました（<a href="../riemann-hypothesis-2026/">リーマン予想の記事</a>）。</li>
+            <li>量子重力の論文は「約4億トークン（total tokens spent）」と書いていますが、<strong>何を足したのかは書いていません</strong>。</li>
+          </ul>
+          <p>論文の4億を、筆者の30日分と比べるとこうなります。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>4億の中身の仮定</th><th>筆者の30日分の何にあたるか</th><th>筆者の何日分か</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">読み出しも含む合計</th><td data-label="比べる相手">合計29億（1日約1億）</td><td data-label="期間">約4日分</td></tr>
+                <tr><th scope="row">読み出しを含まない</th><td data-label="比べる相手">書き込み＋出力＋入力 約1億</td><td data-label="期間">約4か月分</td></tr>
+                <tr><th scope="row">出力だけ</th><td data-label="比べる相手">出力 2,200万</td><td data-label="期間">約18か月分</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図7</span>同じ「4億トークン」でも、中身の仮定によって4日分から18か月分まで変わる。モデルもトークナイザーも違うので、目安にすぎない</figcaption>
+          </figure>
+
+          <p>トークン数を見たら、少なくとも次の4つを確かめると、比べられるかどうかがわかります。</p>
+          <ol>
+            <li>キャッシュからの読み出しを含むか。</li>
+            <li>推論（思考）のトークンを含むか。</li>
+            <li>どのモデルか。トークナイザーが違えば、同じ文章でも数が変わる。</li>
+            <li>サブエージェントや並行したセッションを含むか。期間はどれだけか。</li>
+          </ol>
+
+          <h2>おわりに</h2>
+          <p>4億という数字を見たとき、筆者はまず「少ないトークンで重大な科学的発見ができるのなら、それは素晴らしいことだ」と思いました。今もその気持ちは変わりません。ただ、調べてみると、トークン数は数え方しだいで何十倍も変わる数字でした。</p>
+          <p>トークン数は計算機をどれだけ使ったかの目安です。研究の手間や発見の価値をそのまま表す物差しではありません。人間が考えた時間は、どの欄にも出てきません。AI を使った成果を発表するときは、トークン数と一緒に「何を数えたか」も書いてもらえると、読む側は比べることができます。</p>
+
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月27日。引用の日本語は筆者の訳です。</p>
+            <ul>
+              <li>Anthropic「<a href="https://platform.claude.com/docs/en/about-claude/pricing" rel="noopener" target="_blank">Pricing</a>」「<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" rel="noopener" target="_blank">Prompt caching</a>」Claude API ドキュメント</li>
+              <li>Anthropic「<a href="https://code.claude.com/docs/en/costs" rel="noopener" target="_blank">Manage costs effectively</a>」「<a href="https://code.claude.com/docs/en/prompt-caching" rel="noopener" target="_blank">Prompt caching</a>」Claude Code ドキュメント</li>
+              <li>OpenAI「<a href="https://developers.openai.com/api/docs/guides/prompt-caching" rel="noopener" target="_blank">Prompt caching</a>」「<a href="https://developers.openai.com/api/docs/guides/reasoning" rel="noopener" target="_blank">Reasoning models</a>」OpenAI API ドキュメント</li>
+              <li>V. Chandrasekaran「<a href="https://arxiv.org/abs/2611.34924" rel="noopener" target="_blank">An algebraic quantization of gravity from the null cone</a>」arXiv:2611.34924（謝辞）</li>
+              <li>Anthropic「<a href="https://www.anthropic.com/research/riemann-zeta" rel="noopener" target="_blank">Learning more about Claude's mathematical capabilities</a>」（2026年8月10日）</li>
+              <li>筆者の PC の Claude Code の <code>/stats</code>（直近30日、2026年11月27日に表示）</li>
+            </ul>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>Lean とは何か ―― 「Lean で検証済み」は何を確かめているのか | XLM開発会議 城北支部</title>
+  <meta name="description" content="数学の証明をプログラムとして書き、コンピューターに検査させる Lean。そのしくみと、「Lean で検証済み」が保証することと保証しないことを、コード例と操作できる図で整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Lean とは何か ―― 「Lean で検証済み」は何を確かめているのか | XLM開発会議 城北支部">
+  <meta property="og:description" content="Lean のしくみと、「Lean で検証済み」が保証することと保証しないことを、コード例と操作できる図で整理します。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/lean-what-it-checks/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-lean-what-it-checks.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="Lean とは何か ―― 「Lean で検証済み」は何を確かめているのか">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/lean-what-it-checks/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <script src="lean-checks.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-24">2026.11.24</time><span class="content-tag">解説</span></p>
+            <h1>Lean とは何か ―― 「Lean で検証済み」は何を確かめているのか</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>前の記事「<a href="../riemann-hypothesis-2026/">AI はリーマン予想を解いたのか</a>」では、「Lean で検証済み」という言葉が何度も出てきました。リーマン予想の証明を主張する1,700万行のコードも、Lean で書かれています。</p>
+          <p>この記事では、Lean とはどんな道具なのかを説明します。そのうえで「Lean で検証済み」と言うとき、何を確かめていて何を確かめていないのかを、コード例と図で整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>Lean は、数学の証明をプログラムとして書き、<strong>kernel</strong> という小さなプログラムに正しさを検査させる道具。</li>
+              <li>Lean が強く保証するのは「書いた証明が、書いた主張を正しく導いている」こと。</li>
+              <li>「その主張が本当に言いたかったことか」と「なぜ正しいのか」は、<strong>人間が確かめるしかない</strong>。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月24日時点の情報です（Lean の最新版は v4.36.0）。Lean は月に1回ほど新しい版が出ていて、2026年は検査のしくみが大きく変わりました。</p>
+
+          <h2>Lean はどんなソフトウェアか</h2>
+          <p>Lean は、プログラミング言語であり、<strong>proof assistant</strong>（日本語では証明支援系）でもあります。proof assistant とは、数学の証明をコンピューターが読める形で書き、正しさを機械に検査させるソフトウェアです。</p>
+          <p>Lean は、Leonardo de Moura（レオナルド・デ・モウラ）が Microsoft Research 在籍中の2013年に作り始めました。いま広く使われている Lean 4 の正式版は2023年に出ています。開発の中心は、2023年に設立された非営利の組織 Lean FRO です。</p>
+          <p>数学の定義と定理は、<strong>Mathlib</strong> という共有ライブラリに集められています。2026年11月23日時点で、約14万の定義と約30万の定理が入っていて、772人が貢献しています。新しい証明を書く人は、この上に積み上げていきます。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：Lean で形式化された主な成果</p>
+            <ul class="record-list">
+              <li><span>2022年7月</span><strong>Liquid Tensor Experiment</strong>：数学者 Peter Scholze が2020年12月に出した挑戦。Clausen と Scholze の定理を、約1年半かけて Lean で形式化し終えた</li>
+              <li><span>2024年7月</span><strong>AlphaProof</strong>（Google DeepMind）：Lean で証明を書くよう自分を訓練した AI。国際数学オリンピックで、ほかのシステムと合わせて6問中4問を解き、銀メダル相当の成績を出した。問題は人の手で Lean に訳した</li>
+              <li><span>2026年8〜11月</span>臨界線上の零点の割合（Anthropic）、準リーマン予想（OpenAI）、リーマン予想の主張（Alpöge と Claude）。どれも証明を Lean で書いている（前の記事）</li>
+            </ul>
+          </aside>
+
+          <h2>証明をプログラムとして書く</h2>
+          <p>Lean の中心にあるのは「<strong>命題は型、証明はその型の値</strong>」という考え方です。型のあるプログラミング言語を使ったことがあれば、次の対応表がわかりやすいと思います。</p>
+
+          <figure class="fig">
+            <table class="post-table">
+              <thead><tr><th>プログラミング</th><th>Lean での数学</th><th>例</th></tr></thead>
+              <tbody>
+                <tr><td>型</td><td>命題（主張）</td><td><code>2 + 2 = 4</code> という型</td></tr>
+                <tr><td>その型の値</td><td>命題の証明</td><td><code>rfl</code>（計算すれば両辺が同じ、という証明）</td></tr>
+                <tr><td>関数 <code>A → B</code></td><td>「A ならば B」の証明</td><td>A の証明を受け取って B の証明を返す</td></tr>
+                <tr><td>型検査が通る</td><td>証明が正しい</td><td>kernel が受理する</td></tr>
+                <tr><td>型エラー</td><td>証明の誤り</td><td>kernel が拒否する</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図1</span>プログラミングの型と Lean での数学の対応。この対応は Curry–Howard 対応と呼ばれる</figcaption>
+          </figure>
+
+          <p>いちばん簡単な例を見てみます。</p>
+          <pre><code>theorem two_add_two : 2 + 2 = 4 := rfl</code></pre>
+          <p>「<code>two_add_two</code> という名前の定理を作る。主張は <code>2 + 2 = 4</code>。証明は <code>rfl</code>」と読みます。<code>rfl</code> は「両辺を計算すると同じになる」という証明です。Lean は実際に計算して、両辺がどちらも 4 になることを確かめます。</p>
+          <p>次は、どんな自然数でも足す順番を入れ替えてよい、という定理です。</p>
+          <pre><code>theorem my_add_comm (a b : Nat) : a + b = b + a := Nat.add_comm a b</code></pre>
+          <p>「自然数 <code>a</code> と <code>b</code> について <code>a + b = b + a</code>。証明は、すでにある定理 <code>Nat.add_comm</code> に <code>a</code> と <code>b</code> を渡したもの」と読みます。関数に引数を渡すのと同じ書き方で、定理を使っています。</p>
+          <p>同じ定理は、次のようにも書けます。</p>
+          <pre><code>theorem my_add_comm' (a b : Nat) : a + b = b + a := by
+  omega</code></pre>
+          <p><code>by</code> の後ろには <strong>tactic</strong> を書きます。<code>omega</code> は、足し算と不等式だけでできた主張を自動で証明する tactic です。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">用語：tactic とは</p>
+            <p>証明を組み立てる手順を指示する命令です。「ここは場合分けする」「この式を展開して整理する」といった操作を書くと、Lean が証明を作ってくれます。長い証明の大半は、tactic で書かれています。</p>
+          </aside>
+
+          <aside class="column">
+            <p class="column-title">コラム：「型」とは何か</p>
+            <p>プログラミング言語の型は、値の種類を表すラベルです。<code>3</code> は自然数の型 <code>Nat</code> の値で、<code>"abc"</code> は文字列の型 <code>String</code> の値です。型検査は、関数に正しい種類の値が渡されているかをプログラムを動かす前に確かめます。</p>
+            <p>Lean の型はもっと表現力が高く、<code>2 + 2 = 4</code> のような主張そのものを型として書けます。この型の値を1つでも作れれば、その主張は証明されたことになります。値を作れない型（たとえば <code>2 + 2 = 5</code>）は、偽の主張にあたります。</p>
+            <p>このおかげで、証明の検査は型検査と同じ問題になります。型検査は機械的にできるので、コンピューターが証明を検査できるのです。</p>
+          </aside>
+
+          <h2>三平方の定理を Lean で証明する</h2>
+          <p>もう少し実際の数学に近い例として、三平方の定理（ピタゴラスの定理）を Lean で扱ってみます。直角三角形で、直角をはさむ2辺の長さを a と b、斜辺の長さを c とすると a² + b² = c² が成り立つ、という定理です。</p>
+          <p>Lean で定理を扱う作業は、大きく3つに分かれます。数学の文を Lean の主張に書き直すこと、証明を書くこと、そして主張が意図どおりかを確かめることです。</p>
+
+          <h3>手順1：数学の文を Lean の主張に書き直す</h3>
+          <p>三平方の定理を、Lean のコードに書き直すと次のようになります。各行が数学の文のどの部分にあたるかを並べました。</p>
+
+          <figure class="fig">
+            <ol class="code-map">
+              <li>
+                <pre class="cm-code"><code>import Mathlib
+open EuclideanGeometry Real</code></pre>
+                <p class="cm-text"><strong>準備</strong>：Mathlib を読み込み、角の記号 <code>∠</code> と円周率 <code>π</code> を使えるようにする</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>example (A B C : EuclideanSpace ℝ (Fin 2))</code></pre>
+                <p class="cm-text"><strong>対象</strong>：「平面上の3点 A, B, C について」。<code>Fin 2</code> の 2 が「2次元」を表す</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>    (h : ∠ A B C = π / 2) :</code></pre>
+                <p class="cm-text"><strong>前提</strong>：「角 ABC が直角（π/2）ならば」。この前提に <code>h</code> という名前を付ける</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>    dist A C * dist A C =
+      dist A B * dist A B + dist C B * dist C B</code></pre>
+                <p class="cm-text"><strong>結論</strong>：「AC² = AB² + CB²」。Mathlib では2乗を距離どうしの掛け算で書く</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>  := (dist_sq_eq_dist_sq_add_dist_sq_iff_angle_eq_pi_div_two
+        A B C).mpr h</code></pre>
+                <p class="cm-text"><strong>証明</strong>：Mathlib の三平方の定理に3点を当てはめ、前提 <code>h</code> を渡す（手順2）</p>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図2</span>三平方の定理の Lean のコードと、数学の文との対応。上から順につなげると1つのコードになる</figcaption>
+          </figure>
+
+          <p>書き直すときにいちばん注意が要るのは、前提と結論の部分です。ここに書いた内容こそが「Lean が証明したこと」になるからです。</p>
+
+          <h3>手順2：証明を書く</h3>
+          <p>三平方の定理は Mathlib にすでに入っているので、証明はその定理を使うだけで済みます。Mathlib は、Freek Wiedijk が選んだ「有名な定理100個」のうちどれを形式化したかを一覧にしています。三平方の定理はその4番目で、Joseph Myers が形式化しました。</p>
+          <p>Mathlib の三平方の定理は、「AC² = AB² + CB² であることと、角 ABC が直角であることは同値」という形で書かれています。図2の最後の行の <code>.mpr</code> は、この同値のうち「直角ならば」の向きを取り出すという意味です。平面に限らず、どんな次元の空間でも使える形になっています。</p>
+          <p>定理の長い名前を覚えておく必要はありません。証明を <code>by exact?</code> と書くと、Lean がいま証明したい主張に使える定理を Mathlib から探してくれます。約30万の定理がある Mathlib は、こうした検索と組み合わせて使うのが普通です。</p>
+          <p>こうして書いた証明は、elaborator が proof term に変換し、kernel が検査します。この流れは次の節で説明します。</p>
+
+          <h3>手順3：主張が意図どおりかを確かめる</h3>
+          <p>図2の主張を、わざと書き間違えてみます。Lean の反応は、間違いの種類によって大きく違います。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>書き間違い</th><th>コードの変化</th><th>Lean の反応</th><th>気づけるのは</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">2乗を書き忘れる</th><td data-label="コードの変化"><code>dist A C = dist A B + dist C B</code></td><td data-label="Lean の反応"><span class="st st-ok">受理しない</span>偽の主張なので、どんな証明も通らない</td><td data-label="気づけるのは">Lean</td></tr>
+                <tr><th scope="row">直角の前提を書き忘れる</th><td data-label="コードの変化"><code>(h : ∠ A B C = π / 2)</code> を消す</td><td data-label="Lean の反応"><span class="st st-ok">受理しない</span>一般には偽なので証明できない</td><td data-label="気づけるのは">Lean</td></tr>
+                <tr><th scope="row">空間を直線にしてしまう</th><td data-label="コードの変化"><code>Fin 2</code> を <code>Fin 1</code> にする</td><td data-label="Lean の反応"><span class="st st-ng">受理する</span>同じ証明がそのまま通る</td><td data-label="気づけるのは">主張を読む人だけ</td></tr>
+                <tr><th scope="row">矛盾する前提を足す</th><td data-label="コードの変化"><code>(h₂ : ∠ A B C = π / 3)</code> を加える</td><td data-label="Lean の反応"><span class="st st-ng">受理する</span>前提どうしが矛盾するので、どんな結論でも証明できる</td><td data-label="気づけるのは">主張を読む人だけ</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図3</span>三平方の定理の主張の書き間違いと Lean の反応。偽の主張は Lean が拒否してくれるが、正しいのに意味が違う主張は受理される</figcaption>
+          </figure>
+
+          <p>上の2つは、Lean が「証明できない」という形で教えてくれる間違いです。下の2つは、主張としては正しいので Lean が受理してしまいます。</p>
+          <p>3つ目の「直線にしてしまう」は、Mathlib の角度の約束によるものです。Mathlib では、長さ0の矢印との角を π/2 と決めています。そのため、A と B が同じ点のような「つぶれた三角形」でも、角 ABC は直角として扱われます。直線の上で角が直角になるのはこのつぶれた場合だけなので、直線版の定理は私たちが思い浮かべる直角三角形について何も言っていません。</p>
+          <p>このように、受理される間違いは主張を読む人間にしか見つけられません。この点は、次の節以降で見る「Lean で検証済み」の読み方の中心になります。</p>
+
+          <h2>検査しているのは kernel という小さなプログラム</h2>
+          <p>人が書いた Lean のコードは、そのまま検査されるわけではありません。まず <strong>elaborator</strong> と呼ばれる部分がコードを読み、tactic を実行して、<strong>proof term</strong> という細かな形に変換します。proof term は、使った推論をすべて省略せずに書き出したものです。</p>
+          <p>最後に、<strong>kernel</strong> がこの proof term を1つずつ検査します。Lean のリファレンスマニュアルは、kernel を「proof term を検査すること以外は何もしない最小の部品」と説明しています。</p>
+
+          <figure class="fig">
+            <ol class="flow">
+              <li class="flow-step">
+                <span class="flow-name">人や AI が書いたコード</span>
+                <span class="flow-desc">主張と証明。tactic を使ってもよい</span>
+              </li>
+              <li class="flow-step is-untrusted">
+                <span class="flow-badge">信頼しなくてよい</span>
+                <span class="flow-name">elaborator と tactic</span>
+                <span class="flow-desc">コードを読み、tactic を実行して proof term を作る。大きく複雑な部分</span>
+              </li>
+              <li class="flow-step">
+                <span class="flow-name">proof term</span>
+                <span class="flow-desc">推論をすべて書き出した形</span>
+              </li>
+              <li class="flow-step is-trusted">
+                <span class="flow-badge">ここだけ信頼する</span>
+                <span class="flow-name">kernel</span>
+                <span class="flow-desc">proof term が型理論の規則に従っているかを検査する。小さな部分</span>
+              </li>
+              <li class="flow-step is-result">
+                <span class="flow-name">受理または拒否</span>
+                <span class="flow-desc">必要なら、別の人が作った別の kernel でも同じ proof term を検査し直す</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図4</span>Lean が証明を検査する流れ。tactic に不具合があって誤った proof term を作っても、kernel が拒否する</figcaption>
+          </figure>
+
+          <p>この分け方が Lean の設計の要です。tactic や elaborator は大きく複雑で、不具合があるかもしれません。それでも最後に kernel が proof term を検査するので、tactic の不具合が誤った証明を通すことはありません。信頼しなければならないのは小さな kernel だけ、というわけです。</p>
+          <p>Lean の開発者 de Moura は、2026年8月のブログで「elaborator は設計上、信頼しない部品だ」と書いています。そして、この分離こそが proof term を使う大きな利点だとしています。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：Lean が前提にしている3つの公理</p>
+            <p>どんな数学も、証明なしに認める出発点（公理）を持っています。Lean の標準の公理は次の3つで、無矛盾であることが知られています。</p>
+            <ul>
+              <li><code>propext</code>：同値な2つの命題は等しい</li>
+              <li><code>Quot.sound</code>：同じと見なした値は、割った後の型で等しい（商型）</li>
+              <li><code>Classical.choice</code>：空でない型からは値を1つ選べる（選択公理）</li>
+            </ul>
+            <p>注意が要るのは、ほかの「公理」が紛れ込む場合です。書きかけの証明に使う <code>sorry</code> は、<code>sorryAx</code> という公理として扱われます。これを使うと何でも証明できてしまいます。</p>
+            <p>計算をコンパイラに任せる <code>native_decide</code> も、使うたびに専用の公理を1つ足します。この公理は、kernel だけでなくコンパイラ全体が正しいことを前提にしています。どちらも <code>#print axioms</code> という命令で見つけられます。</p>
+          </aside>
+
+          <h2>「Lean で検証済み」を4つの問いに分けて読む</h2>
+          <p>ここがこの記事でいちばん伝えたいところです。Lean のコミュニティでよく読まれているブログ Xena Project は、2026年11月12日の記事で「Lean で検証済み」という主張を読むための問いを4つ挙げています。順に見ていきます。</p>
+
+          <h3>問い1：Lean で書いた主張は本当に言いたかったことか</h3>
+          <p>これは Lean には確かめられません。リファレンスマニュアルも「Lean は主張が証明されたことは確かめられるが、それが意図した主張かどうかは確かめられない」と明記しています。主張を読んで、意図どおりかを判断するのは人間の仕事です。</p>
+          <p>たとえば次の定理は、Lean が問題なく受理します。</p>
+          <pre><code>theorem rh_from_false (h : False) : RiemannHypothesis := h.elim</code></pre>
+          <p>「偽の命題 <code>False</code> の証明 <code>h</code> が与えられたら、リーマン予想が成り立つ」という主張です。偽の前提からは何でも導けるので、これは正しい定理です。しかし前提の <code>False</code> は決して成り立たないので、リーマン予想について何も言っていません。こうした中身のない主張が、長い前提の中に紛れ込むことがあります。</p>
+          <p>定義の誤りも同じです。素数を次のように定義したとします。</p>
+          <pre><code>def MyPrime (n : Nat) : Prop := ∀ m : Nat, m ∣ n → m = 1 ∨ m = n</code></pre>
+          <p>「n を割り切る数は 1 か n だけ」という定義です。一見正しそうですが、この定義では 1 も「素数」になってしまいます。本来は「2 以上」という条件が要るからです。この定義で証明した素数の定理は、意図とは違う意味になります。</p>
+          <p>三平方の定理の図3で見た「空間を直線にしてしまう」「矛盾する前提を足す」も、同じ種類の問題です。</p>
+
+          <h3>問い2：コンパイルできて未完成の部分が残っていないか</h3>
+          <p>証明の途中を <code>sorry</code> で埋めると、Lean は警告を出しつつ先へ進みます。<code>#print axioms</code> を使うと、その定理が頼っている公理が一覧で出ます。</p>
+          <pre><code>theorem rh_sorry : RiemannHypothesis := sorry
+
+#print axioms rh_sorry
+-- 'rh_sorry' depends on axioms: [sorryAx]</code></pre>
+          <p>最後の行が Lean の出力です。<code>sorryAx</code> が出たら、どこかが未完成です。標準の3つの公理だけが出れば合格です。</p>
+          <p>もう1つの目安が、エディタに出る <strong>blue double check marks</strong> です。VS Code で Lean を書いていると、証明が通った定理の左側の余白に、blue double check marks（✓✓）が表示されます。これは「主張を Lean が読み取れて、kernel がその証明を受理した」という印です。リファレンスマニュアルは、普段使いならこのチェックを見れば十分だとしています。コマンドラインで <code>lake build</code> がエラーも警告もなく終わることも、同じ意味になります。</p>
+          <p>ただし注意点が1つあります。このチェックは、いま見ている定理の中の <code>sorry</code> は見つけますが、依存している別の定理の中の <code>sorry</code> までは見ません。リファレンスマニュアルもこの点をはっきり書いています。依存先まで確かめるには、上の <code>#print axioms</code> を使います。</p>
+
+          <h3>問い3：主張した定理を本当に証明しているか</h3>
+          <p>大きなプロジェクトでは、証明したい主張を「challenge file」に書き、信頼できる人が確認しておきます。<code>lake comparator</code> という道具は、challenge file の主張と実際に証明された定理が完全に同じかを照合します。標準の3つの公理だけを使っていることも同時に確かめます。名前は同じでも中身が少し違う定理にすり替わっていれば、ここで見つかります。</p>
+
+          <h3>問い4：kernel の不具合を突いていないか</h3>
+          <p>kernel もプログラムなので、不具合がありえます。そこで、別の人が別に作った kernel でも同じ proof term を検査し直します。<code>lake check --paranoid</code>（2026年10月の v4.35.0 から）は、公式の kernel のほかに4つの kernel で検査し直します。すべての kernel に同じ不具合がない限り、誤った証明は見つかります。</p>
+
+          <p>4つの問いと、よくある問題の関係を図にまとめました。図の上のボタンで問題を選ぶと、どの検査で見つかるかが表示されます。</p>
+
+          <figure class="fig lean-checks" data-viz="lean-checks">
+            <div class="lc-cases" role="tablist" aria-label="問題の例">
+              <button type="button" role="tab" data-case="0">証明に sorry が残っている</button>
+              <button type="button" role="tab" data-case="1">依存先の定理に sorry がある</button>
+              <button type="button" role="tab" data-case="2">前提に False が入っている</button>
+              <button type="button" role="tab" data-case="3">定義が間違っている</button>
+              <button type="button" role="tab" data-case="4">別の定理にすり替わっている</button>
+              <button type="button" role="tab" data-case="5">native_decide を使っている</button>
+              <button type="button" role="tab" data-case="6">kernel の不具合を突いている</button>
+            </div>
+            <div class="lc-result" aria-live="polite">
+              <ul class="lc-checks"></ul>
+              <p class="lc-explain"></p>
+            </div>
+            <details class="lc-table" open>
+              <summary>表ですべて見る</summary>
+              <table class="post-table">
+                <thead><tr><th>問題</th><th>blue double check marks</th><th><code>#print axioms</code></th><th><code>comparator</code></th><th><code>--paranoid</code></th><th>人が主張を読む</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">証明に sorry が残っている</th><td>見つかる</td><td>見つかる</td><td>見つかる</td><td>見つかる</td><td>—</td></tr>
+                  <tr><th scope="row">依存先の定理に sorry がある</th><td>見逃す</td><td>見つかる</td><td>見つかる</td><td>見つかる</td><td>—</td></tr>
+                  <tr><th scope="row">前提に False が入っている</th><td>見逃す</td><td>見逃す</td><td>見逃す</td><td>見逃す</td><td>見つかる</td></tr>
+                  <tr><th scope="row">定義が間違っている</th><td>見逃す</td><td>見逃す</td><td>見逃す</td><td>見逃す</td><td>見つかる</td></tr>
+                  <tr><th scope="row">別の定理にすり替わっている</th><td>見逃す</td><td>見逃す</td><td>見つかる</td><td>見つかる</td><td>読む場所しだい</td></tr>
+                  <tr><th scope="row">native_decide を使っている</th><td>見逃す</td><td>見つかる</td><td>見つかる</td><td>見つかる</td><td>—</td></tr>
+                  <tr><th scope="row">kernel の不具合を突いている</th><td>見逃す</td><td>見逃す</td><td>見逃す</td><td>見つかる</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </details>
+            <figcaption><span class="fig-no">図5</span>よくある問題と、それを見つけられる検査。「—」はその検査の対象外を表す。<code>comparator</code> と <code>--paranoid</code> は、主張を書いた challenge file が正しいことを前提にしている</figcaption>
+          </figure>
+
+          <p>図からわかるとおり、機械の検査をすべて通しても、「前提に False が入っている」「定義が間違っている」の2つは見つかりません。どちらも、主張の書き方の問題だからです。</p>
+
+          <h2>kernel に不具合があったらどうなるか</h2>
+          <p>これは仮定の話ではありません。2026年7月25日、AI の助けを借りて作られた、コラッツ予想を「反証」する Lean の証明が公開されました。<code>sorry</code> はどこにもなく、公式の kernel も受理していました。</p>
+          <p>実際には、入れ子になった型の扱いにある kernel の不具合を突いたものでした。7月28日にこの証明が小さな例に縮めて報告されると、Lean FRO は1時間後に修正を出しています。この不具合は、metaprogramming で kernel に直接宣言を送ったときにしか起きないものでした。de Moura は「実装の不具合であって、Lean の理論の穴ではない」と書いています。</p>
+          <p>この「反証」は、別の kernel である nanoda の古い版も通ってしまいました。nanoda にも別の不具合があったためです。つまり、2つの kernel にある2つの別々の不具合を同時に突く必要がありました。de Moura は、独立した kernel で検査し直す方法はいまも有効で、ただし両方を最新にしておく必要があるとまとめています。</p>
+          <p>この件のあと、OpenAI の研究者がサイバーセキュリティ向けの AI で協力し、kernel の別の誤りもいくつか見つかりました。すべて修正済みで、どれも nanoda は捕まえていました。AI が証明を書くだけでなく、検査器の穴を探す時代になっています。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：検査器を検査する</p>
+            <p>kernel の不具合をなくすには、kernel そのものが正しいことを証明すればよい、という考え方があります。2026年10月、Lean に <strong>verified kernel</strong> が2つ同梱されました。</p>
+            <ul>
+              <li><strong>con-leche</strong>：Lean で書かれ、無矛盾であることが証明された初めての Lean の kernel。Claude（Anthropic の AI）が、Lean FRO の Joachim Breitner の厳しい監督の下で実装し、無矛盾性も証明した</li>
+              <li><strong>con-ron</strong>：con-leche を Rust に訳し、元と同じ検査をすることを Aeneas という道具で証明したもの</li>
+            </ul>
+            <p>ここでの「無矛盾」とは、con-leche が受理するものはすべて集合論の中に解釈を持つ、という意味です。それでも、使った集合論が無矛盾であることは前提として残ります。con-leche を動かすコンパイラに不具合がある可能性も残るので、別の言語で書いた con-ron でも検査します。</p>
+          </aside>
+
+          <h2>それでも残ること</h2>
+          <p>Lean のリファレンスマニュアルは、comparator と複数の kernel を使っても残る前提として、次の3つを挙げています。</p>
+          <ul>
+            <li>Lean の論理そのものが健全であること</li>
+            <li>使ったすべての検査器に、同時に効く不具合がないこと</li>
+            <li>challenge file の主張の書き方に、人為的な誤りや誤解を招く書き方がないこと</li>
+          </ul>
+          <p>3つ目は、問い1と同じです。そしてもう1つ、Lean の仕事の外にあることがあります。それは「なぜその定理が成り立つのか」を人間が理解することです。前の記事で見たとおり、リーマン予想の主張では、機械の検査はほぼ通っても、証明の中身を理解した人間はまだいません。</p>
+
+          <figure class="fig">
+            <ol class="layers">
+              <li class="layer is-done">
+                <span class="layer-q">証明は主張を正しく導いているか</span>
+                <span class="layer-how">kernel が proof term を検査する</span>
+                <span class="layer-state">Lean が強く保証する</span>
+              </li>
+              <li class="layer is-done">
+                <span class="layer-q">未完成の部分や余計な公理はないか</span>
+                <span class="layer-how"><code>#print axioms</code> と comparator で確かめる</span>
+                <span class="layer-state">道具を使えば機械で確かめられる</span>
+              </li>
+              <li class="layer is-partial">
+                <span class="layer-q">kernel の不具合を突いていないか</span>
+                <span class="layer-how">別に作った複数の kernel で検査し直す（<code>--paranoid</code>）</span>
+                <span class="layer-state">すべての kernel に同じ不具合がなければ確かめられる</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">主張は本当に言いたかったことか</span>
+                <span class="layer-how">challenge file の主張と定義を人が読む</span>
+                <span class="layer-state">人間にしか確かめられない</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">なぜ成り立つのかを説明できるか</span>
+                <span class="layer-how">人が読める証明、専門家の理解</span>
+                <span class="layer-state">Lean の仕事の外にある</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図6</span>「Lean で検証済み」が保証することと保証しないこと。上の層ほど機械で確かめやすく、下の層ほど人間にしかできない</figcaption>
+          </figure>
+
+          <h2>AI と Lean の組み合わせが広がっている</h2>
+          <p>AI に証明を書かせると、もっともらしいのに間違った証明を出すことがあります。そこで、AI に Lean で証明を書かせ、kernel に検査させる組み合わせが広がりました。よく知られた例は2024年の AlphaProof です。2026年には、前の記事で見た3つの成果もすべてこの形をとっています。</p>
+          <p>2026年には、AI が kernel の不具合を探し、AI が verified kernel を書く段階にまで来ました。証明を書くことも、それを機械で検査することも、AI の助けで速くなっています。</p>
+          <p>その結果、もっとも時間のかかる作業は、主張が意図どおりかを人間の目で確かめることになりつつあります。AI の書く証明が増えるほど、問い1は重要になります。</p>
+
+          <h2>おわりに</h2>
+          <p>「Lean で検証済み」は、数学の世界でとても強い言葉です。それでも、その言葉が何を確かめたのかは分けて読む必要があります。</p>
+          <p>Lean の検証済みの証明に出会ったら、次の3つを確かめてみてください。</p>
+          <ul>
+            <li>主張と定義を書いたファイルを、誰が読んで確認したか</li>
+            <li><code>#print axioms</code> の結果が標準の3つの公理だけか</li>
+            <li>どの検査器で確かめたか（公式の kernel だけか、<code>--paranoid</code> まで通したか）</li>
+          </ul>
+          <p>私たちの新刊『言素 vol.1』の「AI for Science」の記事でも、AI による証明をどう検証してどう受け止めるかを考えています。あわせて読んでいただけるとうれしいです。</p>
+
+          <hr>
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月24日。引用の日本語は筆者の訳です。記事中の Lean のコード例は、説明のための短い例です。</p>
+            <ul>
+              <li>Lean「<a href="https://lean-lang.org/" rel="noopener" target="_blank">Lean Programming Language</a>」</li>
+              <li>Lean FRO「<a href="https://lean-lang.org/fro/about/" rel="noopener" target="_blank">About the Lean FRO</a>」</li>
+              <li>Mathlib「<a href="https://mathlib.org/mathlib_stats.html" rel="noopener" target="_blank">Mathlib statistics</a>」（2026年11月23日更新）</li>
+              <li>Lean Reference Manual「<a href="https://lean-lang.org/doc/reference/latest/ValidatingProofs/" rel="noopener" target="_blank">Validating a Lean Proof</a>」「<a href="https://lean-lang.org/doc/reference/latest/Axioms/" rel="noopener" target="_blank">Axioms</a>」</li>
+              <li>Theorem Proving in Lean 4「<a href="https://lean-lang.org/theorem_proving_in_lean4/axioms_and_computation.html" rel="noopener" target="_blank">Axioms and Computation</a>」</li>
+              <li>Xena Project「<a href="https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/" rel="noopener" target="_blank">…and the proof is checked in Lean</a>」（2026年11月12日）</li>
+              <li>L. de Moura「<a href="https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/" rel="noopener" target="_blank">Postmortem for Kernel Soundness Bug #14576</a>」（2026年8月1日）</li>
+              <li>L. de Moura「<a href="https://leodemoura.github.io/blog/2026-10-15-lean-now-ships-with-verified-kernels/" rel="noopener" target="_blank">Lean Now Ships with Verified Kernels</a>」（2026年10月15日）</li>
+              <li>Lean Community「<a href="https://leanprover-community.github.io/blog/posts/lte-final/" rel="noopener" target="_blank">Completion of the Liquid Tensor Experiment</a>」（2022年7月15日）</li>
+              <li>Google DeepMind「<a href="https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/" rel="noopener" target="_blank">AI achieves silver-medal standard solving International Mathematical Olympiad problems</a>」（2024年7月25日）</li>
+            </ul>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

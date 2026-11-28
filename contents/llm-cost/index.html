@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>LLM の学習と推論のコストを下げる手法 | XLM開発会議 城北支部</title>
+  <meta name="description" content="LLM の学習と推論で、計算・メモリ・通信がどこで使われているのか。量子化、KV キャッシュの工夫、投機的デコーディング、LoRA など100以上の削減手法を、効果の数字と出典つきで一覧にしました。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="LLM の学習と推論のコストを下げる手法 | XLM開発会議 城北支部">
+  <meta property="og:description" content="コストはどこで生まれ、どう減らせるのか。学習・モデルの軽量化・推論の配信の削減手法を、効果の数字と出典つきで一覧にしました。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/contents/llm-cost/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/contents-llm-cost.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="LLM の学習と推論のコストを下げる手法">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/contents/llm-cost/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="data/costs.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../" aria-current="page">コンテンツ</a>
+        <a href="../../blog/">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section page-head lc-head">
+      <div class="wrap">
+        <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">コンテンツ</a><span aria-hidden="true"> / </span>LLM の学習と推論のコストを下げる手法</p>
+        <h1 class="section-title"><span class="en">Cost</span>LLM の学習と推論のコストを下げる手法</h1>
+        <p class="page-lead">LLM を作るにも使うにも、大量の計算とメモリと通信が要ります。それがどこで使われているのかを地図にし、それを減らすための手法を、効果の数字と出典つきで一覧にしました。数値の精度を下げる、使い回す、先読みする、振り分けるなど、手法は大きくいくつかの考え方に分けられます。</p>
+        <section class="lc-keyfigs" aria-label="収録の概要">
+          <div class="lc-fig"><span class="lc-fig-num" id="kfMethods">—<span class="unit">件</span></span><span class="lc-fig-cap">削減の手法</span></div>
+          <div class="lc-fig"><span class="lc-fig-num" id="kfEffects">—<span class="unit">件</span></span><span class="lc-fig-cap">出典つきの効果の数字</span></div>
+          <div class="lc-fig"><span class="lc-fig-num" id="kfFacts">—<span class="unit">件</span></span><span class="lc-fig-cap">コストの内訳の事実</span></div>
+          <div class="lc-fig"><span class="lc-fig-num lc-fig-date" id="kfAsOf">—</span><span class="lc-fig-cap">確かめた日</span></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="mapH">
+      <div class="wrap">
+        <h2 class="section-title" id="mapH"><span class="en">Map</span>コストはどこで生まれるのか</h2>
+        <p class="lc-lead">LLM の一生は、大量の文章で学ぶ<strong>事前学習</strong>、用途に合わせる<strong>追加学習</strong>、使うときの<strong>推論</strong>に分けられます。推論はさらに、入力をまとめて読み込む <strong>prefill</strong> と、1トークンずつ出力する <strong>decode</strong> に分かれ、重い部分が違います。</p>
+
+        <figure class="lc-figure">
+          <ol class="lc-flow">
+            <li class="lc-stage">
+              <p class="lc-stage-name">事前学習</p>
+              <p class="lc-stage-res"><span class="lc-res res-compute">計算</span><span class="lc-res res-memory">メモリ</span><span class="lc-res res-comm">通信</span></p>
+              <ul>
+                <li>計算量はおよそ「6 × パラメータ数 × トークン数」</li>
+                <li>Adam で学習すると、重み1つあたり約16バイトのメモリ</li>
+                <li>数千台の GPU をつなぐので、通信と故障が効く</li>
+              </ul>
+            </li>
+            <li class="lc-stage">
+              <p class="lc-stage-name">追加学習</p>
+              <p class="lc-stage-res"><span class="lc-res res-memory">メモリ</span><span class="lc-res res-compute">計算</span></p>
+              <ul>
+                <li>量は事前学習よりずっと少ないが、メモリの事情は同じ</li>
+                <li>強化学習では、答えを生成する推論の時間もかかる</li>
+              </ul>
+            </li>
+            <li class="lc-stage">
+              <p class="lc-stage-name">推論：prefill</p>
+              <p class="lc-stage-res"><span class="lc-res res-compute">計算</span></p>
+              <ul>
+                <li>入力のトークンをまとめて処理する</li>
+                <li>計算が重い（計算律速）</li>
+              </ul>
+            </li>
+            <li class="lc-stage">
+              <p class="lc-stage-name">推論：decode</p>
+              <p class="lc-stage-res"><span class="lc-res res-memory">メモリ</span><span class="lc-res res-comm">帯域</span></p>
+              <ul>
+                <li>1トークンごとに重みと KV キャッシュを読み出す</li>
+                <li>メモリの読み出しが重い（帯域律速）</li>
+              </ul>
+            </li>
+          </ol>
+          <figcaption class="lc-fig-cap-long"><span class="lc-fig-no">図1</span>LLM の一生と、それぞれの段階で主に重いもの。下のカードに出典つきの数字がある。KV キャッシュは、過去のトークンの計算結果をためておく領域</figcaption>
+        </figure>
+
+        <p class="lc-lead">それぞれの数字を、出典つきのカードにしました。項目の見出しを押すと開きます。</p>
+        <div id="anatomy" class="lc-anatomy"></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="matrixH">
+      <div class="wrap">
+        <h2 class="section-title" id="matrixH"><span class="en">Approaches</span>削減のアプローチの全体像</h2>
+        <p class="lc-lead">手法を「どこで効くか」の分類と「何を減らすか」で数えた表です。数字を押すと、その手法だけを下の一覧に出します。</p>
+        <div class="lc-table-wrap" tabindex="0" role="region" aria-labelledby="matrixH">
+          <table class="lc-matrix" id="matrix"></table>
+        </div>
+        <p class="note lc-note">1つの手法が複数のものを減らすので、行の合計は手法の数より多くなります。</p>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="listH">
+      <div class="wrap">
+        <h2 class="section-title" id="listH"><span class="en">Methods</span>削減手法の一覧</h2>
+        <div class="lc-controls" role="group" aria-label="一覧の絞り込み">
+          <label class="lc-ctl"><span class="lc-ctl-l">分野</span><select id="fSection"><option value="">すべて</option></select></label>
+          <label class="lc-ctl"><span class="lc-ctl-l">分類</span><select id="fGroup"><option value="">すべて</option></select></label>
+          <label class="lc-ctl"><span class="lc-ctl-l">段階</span><select id="fStage"><option value="">すべて</option></select></label>
+          <label class="lc-ctl"><span class="lc-ctl-l">減らすもの</span><select id="fReduce"><option value="">すべて</option></select></label>
+          <label class="lc-ctl lc-ctl-q"><span class="lc-ctl-l">キーワード</span><input type="search" id="fQ" placeholder="例：量子化、KV、LoRA" autocomplete="off" enterkeyhint="search"></label>
+          <button type="button" class="lc-reset" id="fReset">条件を消す</button>
+          <span class="lc-count" id="count" aria-live="polite"></span>
+        </div>
+        <div id="list"></div>
+        <noscript><p>一覧の表示には JavaScript を使っています。ブラウザの設定で JavaScript を有効にしてください。</p></noscript>
+        <p class="lc-empty" id="empty" hidden>条件に合う手法はありません。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="notesH">
+      <div class="wrap">
+        <h2 class="section-title" id="notesH"><span class="en">Notes</span>読み方の注意</h2>
+        <ul class="lc-note-list">
+          <li>効果の数字は、論文や各社の技術報告が自ら示したものです。<strong>比べる相手や条件（モデル・GPU・バッチの大きさ）は発表ごとに違い</strong>、同じ物差しでは比べられません。「〇倍速い」は、その条件での値として読んでください。条件と注意は各カードに書きました。</li>
+          <li>著者自身の実装や、調整の甘い比較相手と比べた数字もあります。よく調整した相手と比べ直すと効果が小さくなるという報告がある手法は、そのことも書きました。</li>
+          <li>精度を下げる・情報を捨てる手法は、多くの場合、答えの質と引き換えです。</li>
+          <li>料金や割引は2026年11月27日時点の公式の料金ページの値で、変わることがあります。単価の一覧は「<a href="../token-pricing/">AI サービスのトークン単価</a>」、トークン数の数え方はブログ「<a href="../../blog/token-accounting-2026/">AI の「使ったトークン数」の数え方</a>」、実際の成果のトークン数は「<a href="../token-feats/">何トークンで何ができたか</a>」にまとめています。</li>
+          <li>「推定値」の印は、一次情報ではない推定や換算の数字です。</li>
+          <li id="asOfNote">2026年11月27日時点の情報です。</li>
+        </ul>
+        <p class="note">誤りや、載せるべき手法に気付かれた方は、X（<a href="https://x.com/xlm_dev" rel="noopener" target="_blank">@xlm_dev</a>）までお知らせください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

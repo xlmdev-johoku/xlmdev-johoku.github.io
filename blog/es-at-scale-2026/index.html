@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>強化学習の代わりに「進化」で LLM を鍛える ―― 30個の候補で数十億の重みを動かした論文を読む | XLM開発会議 城北支部</title>
+  <meta name="description" content="強化学習が主流の LLM の追加学習を、勾配を使わない進化戦略（ES）で行った論文（ICML 2026）を読みます。仕組み、結果、そしてどこまで言えるのかを整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="強化学習の代わりに「進化」で LLM を鍛える | XLM開発会議 城北支部">
+  <meta property="og:description" content="30個の候補で数十億の重みを動かした進化戦略（ES）の論文を、仕組みと限界から読みます（2026年11月27日時点）。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/es-at-scale-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-es-at-scale-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="強化学習の代わりに「進化」で LLM を鍛える ―― 30個の候補で数十億の重みを動かした論文を読む">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/es-at-scale-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false})"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></p>
+            <h1>強化学習の代わりに「進化」で LLM を鍛える ―― 30個の候補で数十億の重みを動かした論文を読む</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>LLM を用途に合わせて鍛える「追加学習」では、強化学習が主流になっています。これに対して2025年9月、<strong>進化戦略</strong>（Evolution Strategies、ES）という古くからある方法で、数十億パラメータの LLM を直接鍛えられたという論文が arXiv に出ました。改訂を経て、2026年7月の機械学習の国際会議 ICML 2026 で発表されています。</p>
+          <p>驚かされるのは、1回の更新で試す候補がたった30個だということです。ここでいう候補とは、モデルの重みに少しずつ違う揺らぎを足した「モデルの複製」のことです。数十億ある重みをどちらへ動かすかを、30個の複製に問題を解かせた結果だけで決めています。この記事では、進化戦略の仕組み、論文が示した結果、そしてどこまで言えるのかを整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>進化戦略は、重みに揺らぎを足した候補を試し、点数の良い方向へ重みを動かす方法。<strong>勾配を計算せず、推論だけで学習する</strong>。</li>
+              <li>論文は、数十億パラメータの LLM で強化学習より良い結果や安定性を示した。<strong>査読（ICML 2026）も通っている</strong>。</li>
+              <li>ただし試したのは最大140億パラメータのモデルと限られた課題で、<strong>学習全体の計算量では強化学習に劣る</strong>という後続の研究もある。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月27日時点の情報です。</p>
+
+          <h2>LLM の追加学習と強化学習</h2>
+          <p>LLM は、大量の文章で事前学習したあとに、特定の課題や好みに合わせて追加で学習させます。これを<strong>追加学習</strong>（ファインチューニング、事後学習）と呼びます。</p>
+          <p>いま主流なのは<strong>強化学習</strong>です。モデルが出した答えに点数（報酬）をつけ、点数が上がるように重みを変えます。PPO や GRPO という手法がよく使われます。ふつうの学習と同じく、どの重みをどちらに動かせばよいか（勾配）を、<strong>誤差逆伝播</strong>で計算します。</p>
+          <p>論文は、強化学習の悩みとして次の4つを挙げています。</p>
+          <ul>
+            <li>最後の答えにしか点数がつかない長い課題では、学習が不安定になりやすい。</li>
+            <li>元のモデルによって、効いたり効かなかったりする。</li>
+            <li>点数の決め方の抜け穴を突いて、点数だけを上げてしまう（<strong>報酬ハッキング</strong>）。</li>
+            <li>同じ設定でも、実行するたびに結果がばらつく。</li>
+          </ul>
+
+          <h2>進化戦略とは何か</h2>
+          <p>進化戦略は、生物の進化になぞらえた最適化の方法です。1回の更新は次のように進みます。</p>
+          <ol>
+            <li>今の重みに、ランダムな小さな揺らぎを足した候補を N 個作る。</li>
+            <li>それぞれの候補に課題を解かせて、点数を測る。</li>
+            <li>点数の良かった候補の揺らぎの方向へ、今の重みを少しだけ動かす。</li>
+          </ol>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 300" role="img" aria-labelledby="fig1-t">
+              <title id="fig1-t">進化戦略の1回の更新。今の重みのまわりに揺らぎを足した候補を置き、点数の高い候補のある方向へ重みを動かす</title>
+              <defs><marker id="es-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--hot-ink)"/></marker></defs>
+              <ellipse cx="420" cy="90" rx="230" ry="125" style="fill: var(--green-tint); opacity: .5"/>
+              <ellipse cx="420" cy="80" rx="160" ry="100" style="fill: var(--green-tint); opacity: .8"/>
+              <ellipse cx="420" cy="80" rx="90" ry="55" class="s-band"/>
+              <text class="t-tiny" x="430" y="70" text-anchor="middle">点数の高い領域</text>
+              <circle cx="230" cy="180" r="60" style="fill: none; stroke: var(--line); stroke-dasharray: 4 4"/>
+              <circle cx="290" cy="180" r="7" style="fill: var(--accent)"/>
+              <circle cx="272" cy="138" r="7" style="fill: var(--accent)"/>
+              <circle cx="230" cy="120" r="7" style="fill: var(--accent)"/>
+              <circle cx="272" cy="222" r="6" style="fill: var(--muted)"/>
+              <circle cx="188" cy="138" r="6" style="fill: var(--muted)"/>
+              <circle cx="170" cy="180" r="6" style="fill: var(--surface); stroke: var(--muted); stroke-width: 2"/>
+              <circle cx="188" cy="222" r="6" style="fill: var(--surface); stroke: var(--muted); stroke-width: 2"/>
+              <circle cx="230" cy="240" r="6" style="fill: var(--surface); stroke: var(--muted); stroke-width: 2"/>
+              <line x1="230" y1="180" x2="266" y2="152" style="stroke: var(--hot-ink); stroke-width: 3" marker-end="url(#es-arrow)"/>
+              <circle cx="230" cy="180" r="5" style="fill: var(--ink)"/>
+              <text class="t-tiny" x="238" y="204">今の重み</text>
+              <circle cx="40" cy="276" r="6" style="fill: var(--accent)"/><text class="t-tiny" x="52" y="281">点数の高い候補</text>
+              <circle cx="170" cy="276" r="6" style="fill: var(--surface); stroke: var(--muted); stroke-width: 2"/><text class="t-tiny" x="182" y="281">点数の低い候補</text>
+              <line x1="300" y1="276" x2="330" y2="276" style="stroke: var(--hot-ink); stroke-width: 3" marker-end="url(#es-arrow)"/><text class="t-tiny" x="340" y="281">重みを動かす向き</text>
+            </svg>
+            <figcaption><span class="fig-no">図1</span>進化戦略の1回の更新を、重みが2つしかないとして描いた模式図。実際の重みは数十億あり、論文では1回に30個の候補を試す</figcaption>
+          </figure>
+
+          <p>式で書くと、更新は次の1行です。</p>
+          <div class="eq">
+            \[ \theta \;\leftarrow\; \theta + \alpha \cdot \frac{1}{N} \sum_{n=1}^{N} R_n \, \varepsilon_n \]
+            <p class="eq-note">\(\theta\) は今の重み、\(\varepsilon_n\) は n 番目の候補に足した揺らぎ、\(R_n\) はその候補の点数（平均0・標準偏差1にそろえたもの）、\(\alpha\) は動かす幅。点数の高い揺らぎほど強く効く。</p>
+          </div>
+          <p>ここには勾配が出てきません。必要なのは、候補ごとに課題を解かせて点数を測ること、つまり<strong>推論だけ</strong>です。誤差逆伝播のための計算やメモリが要りません。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：なぜ大きなモデルでは無理だと思われていたのか</p>
+            <p>進化戦略を深層学習に広めたのは、2017年の OpenAI の論文です。ロボットの歩行やゲームの課題で強化学習と競える結果を出し、1,000以上の計算機に並列で分けられることを示しました。ただ、今回の論文によると、それまでの成功例のモデルは数百万パラメータ以下で、1回に1万個以上の候補を試していました。揺らぎで探す空間は、重みの数だけ次元があります。数十億次元の空間を数十個の候補で探すのは、とても無理だと考えられていました。</p>
+          </aside>
+
+          <h2>論文は何をしたのか</h2>
+          <p>論文は、Cognizant AI Lab を中心とする9人の研究者によるものです。数十億パラメータの LLM の<strong>すべての重み</strong>に、次元を減らす工夫なしで進化戦略をかけました。</p>
+          <p>大きなモデルで動かすための工夫は、主に次のとおりです。</p>
+          <ul>
+            <li>揺らぎそのものは保存せず、乱数の種（シード）だけを持つ。同じ種から同じ揺らぎを作り直せる。</li>
+            <li>揺らぎは層ごとに重みへ足し、評価が終わったら引いて戻す。追加のメモリは1層分で済む。</li>
+            <li>点数は、候補の間で平均0・標準偏差1にそろえる。</li>
+            <li>答えの生成では毎回いちばん確率の高いトークンを選び、揺らぎは重みの側だけに入れる。</li>
+          </ul>
+          <p>一方で、進化戦略でよく使われる工夫（点数を順位に直す、最適化手法の Adam を使う、など）は<strong>あえて使っていません</strong>。単純な形でどこまでできるかを見るためです。設定も全モデルで同じにしました（候補は30個、揺らぎの大きさ0.001、動かす幅0.0005）。比べる強化学習の側は、モデルごとに設定を探して最も良いものを選んでいます。</p>
+
+          <h2>論文が示した結果</h2>
+
+          <h3>数字を組み合わせる課題で全モデルが強化学習を上回る</h3>
+          <p>Countdown は、与えられた数字を四則演算で組み合わせて、目標の数を作る課題です。最後の答えが合っているかだけで点数がつきます。Qwen2.5 の4つと Llama 3 の3つ、計7つのモデルで比べました。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg es-bars" viewBox="0 0 560 390" role="img" aria-labelledby="fig2-t">
+              <title id="fig2-t">Countdown の正答率。7つのモデルすべてで、ES が強化学習の最良の結果を上回る</title>
+              <rect x="130" y="12" width="12" height="10" style="fill: var(--line)"/><text class="t-tiny" x="148" y="21">元のモデル</text>
+              <rect x="240" y="12" width="12" height="10" style="fill: var(--muted)"/><text class="t-tiny" x="258" y="21">強化学習の最良</text>
+              <rect x="380" y="12" width="12" height="10" style="fill: var(--accent)"/><text class="t-tiny" x="398" y="21">ES</text>
+              <line class="s-edge" x1="130.0" y1="38" x2="130.0" y2="384"/><text class="t-tiny" x="130.0" y="390" text-anchor="middle">0%</text>
+              <line class="s-edge" x1="238.0" y1="38" x2="238.0" y2="384"/><text class="t-tiny" x="238.0" y="390" text-anchor="middle">20%</text>
+              <line class="s-edge" x1="346.0" y1="38" x2="346.0" y2="384"/><text class="t-tiny" x="346.0" y="390" text-anchor="middle">40%</text>
+              <line class="s-edge" x1="454.0" y1="38" x2="454.0" y2="384"/><text class="t-tiny" x="454.0" y="390" text-anchor="middle">60%</text>
+              <text class="t-sub" x="120" y="66" text-anchor="end">Qwen2.5-0.5B</text>
+              <rect x="130" y="48" width="1.5" height="11" style="fill: var(--line)"/><text class="t-tiny" x="136.5" y="58">0.1</text>
+              <rect x="130" y="61" width="72.9" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="207.9" y="71">13.5</text>
+              <rect x="130" y="74" width="77.8" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="212.8" y="84">14.4</text>
+              <text class="t-sub" x="120" y="114" text-anchor="end">Qwen2.5-1.5B</text>
+              <rect x="130" y="96" width="3.8" height="11" style="fill: var(--line)"/><text class="t-tiny" x="138.8" y="106">0.7</text>
+              <rect x="130" y="109" width="167.4" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="302.4" y="119">31.0</text>
+              <rect x="130" y="122" width="201.4" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="336.4" y="132">37.3</text>
+              <text class="t-sub" x="120" y="162" text-anchor="end">Qwen2.5-3B</text>
+              <rect x="130" y="144" width="54.0" height="11" style="fill: var(--line)"/><text class="t-tiny" x="189.0" y="154">10.0</text>
+              <rect x="130" y="157" width="236.5" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="371.5" y="167">43.8</text>
+              <rect x="130" y="170" width="326.7" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="461.7" y="180">60.5</text>
+              <text class="t-sub" x="120" y="210" text-anchor="end">Qwen2.5-7B</text>
+              <rect x="130" y="192" width="168.5" height="11" style="fill: var(--line)"/><text class="t-tiny" x="303.5" y="202">31.2</text>
+              <rect x="130" y="205" width="310.5" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="445.5" y="215">57.5</text>
+              <rect x="130" y="218" width="360.7" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="495.7" y="228">66.8</text>
+              <text class="t-sub" x="120" y="258" text-anchor="end">Llama-3.2-1B</text>
+              <rect x="130" y="240" width="2.2" height="11" style="fill: var(--line)"/><text class="t-tiny" x="137.2" y="250">0.4</text>
+              <rect x="130" y="253" width="80.5" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="215.5" y="263">14.9</text>
+              <rect x="130" y="266" width="90.7" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="225.7" y="276">16.8</text>
+              <text class="t-sub" x="120" y="306" text-anchor="end">Llama-3.2-3B</text>
+              <rect x="130" y="288" width="17.3" height="11" style="fill: var(--line)"/><text class="t-tiny" x="152.3" y="298">3.2</text>
+              <rect x="130" y="301" width="258.1" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="393.1" y="311">47.8</text>
+              <rect x="130" y="314" width="278.6" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="413.6" y="324">51.6</text>
+              <text class="t-sub" x="120" y="354" text-anchor="end">Llama-3.1-8B</text>
+              <rect x="130" y="336" width="43.7" height="11" style="fill: var(--line)"/><text class="t-tiny" x="178.7" y="346">8.1</text>
+              <rect x="130" y="349" width="277.0" height="11" style="fill: var(--muted)"/><text class="t-tiny" x="412.0" y="359">51.3</text>
+              <rect x="130" y="362" width="330.5" height="11" style="fill: var(--accent)"/><text class="t-tiny" x="465.5" y="372">61.2</text>
+            </svg>
+            <figcaption><span class="fig-no">図2</span>Countdown の正答率（%）。強化学習は PPO・GRPO・Dr.GRPO の5つの実装のうち最も良かったもの。論文の表1から作成</figcaption>
+          </figure>
+
+          <p>7つすべてで進化戦略が最も良い結果でした。差が大きいのは Qwen2.5-3B（43.8%に対して60.5%）や Llama-3.1-8B（51.3%に対して61.2%）です。</p>
+
+          <h3>答えを短くさせる課題で報酬ハッキングが起きない</h3>
+          <p>Qwen2.5-7B に「答えを短くするほど点数が高い」という課題で追加学習させ、どう学ぶかを比べました。強化学習（GRPO）では、元のモデルから離れすぎないようにする罰則を弱くすると、短いが意味のない記号を並べる報酬ハッキングが起きました。進化戦略では、この罰則なしでも起きませんでした。4回の実行のばらつきは、GRPO が進化戦略の15.5倍でした。</p>
+
+          <h3>数学とパズルでも効果</h3>
+          <p>数学の5つのベンチマークでは、公開されている強い強化学習のモデル3つと「競える」水準でした。論文は、上回ったとは書いていません。パズルでは、ARC-AGI の課題の正答率が Qwen2.5-14B で0.2%から29.5%に、4×4のミニ数独が Qwen2.5-3B で2.5%から69.5%に上がりました。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>項目</th><th>強化学習（PPO・GRPO）</th><th>進化戦略（この論文）</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">揺らぎを入れる場所</th><td data-label="強化学習">答えの各トークンを選ぶとき</td><td data-label="進化戦略">モデルの重み</td></tr>
+                <tr><th scope="row">必要な計算</th><td data-label="強化学習">推論＋誤差逆伝播（勾配）</td><td data-label="進化戦略">推論だけ</td></tr>
+                <tr><th scope="row">1サンプルあたりの計算量</th><td data-label="強化学習">GRPO で 8PL</td><td data-label="進化戦略">2PL</td></tr>
+                <tr><th scope="row">元のモデルから離れすぎない工夫</th><td data-label="強化学習">罰則（KL）の重みの調整が要る</td><td data-label="進化戦略">論文では罰則なし</td></tr>
+                <tr><th scope="row">設定の探索</th><td data-label="強化学習">モデルごとに探して最良を採用</td><td data-label="進化戦略">全モデルで同じ設定</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図3</span>論文が挙げる強化学習と進化戦略の違い。P はパラメータ数、L は系列の長さ</figcaption>
+          </figure>
+
+          <h2>どこまで言えるのか</h2>
+          <p>ここがこの記事でいちばん伝えたいところです。論文の主張を、言えること、一部しか言えないこと、まだ言えないことに分けます。</p>
+
+          <figure class="fig">
+            <ol class="layers">
+              <li class="layer is-done">
+                <span class="layer-q">数十億パラメータでも進化戦略で追加学習できるか</span>
+                <span class="layer-how">次元を減らさずに全部の重みを動かして、成績が上がるか</span>
+                <span class="layer-state">言える。140億パラメータまでで成績が上がった。査読（ICML 2026）も通っている</span>
+              </li>
+              <li class="layer is-partial">
+                <span class="layer-q">強化学習より良いのか</span>
+                <span class="layer-how">課題・モデル・比べる相手・計算量をそろえて比べたか</span>
+                <span class="layer-state">一部。Countdown と簡潔さでは上回ったが、数学は「競える」水準。学習全体の計算量ではそろえていない</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">なぜうまくいくのか、最前線のモデルでも通じるのか</span>
+                <span class="layer-how">仕組みの説明と、さらに大きなモデルや別の課題での確認</span>
+                <span class="layer-state">まだ。論文自身が「仮説」としている。独立に再現した報告も見つからない</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図4</span>論文の主張をどこまで言えるかで分ける（2026年11月27日時点）</figcaption>
+          </figure>
+
+          <h3>計算量の比べ方に注意が要る</h3>
+          <p>論文は、進化戦略は計算量（FLOPs）が少ないと書いています。ただし比べているのは、<strong>1サンプルを処理するときの計算量</strong>です。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 175" role="img" aria-labelledby="fig5-t">
+              <title id="fig5-t">1サンプルあたりの計算量。進化戦略は順伝播1回で2PL、GRPO は順伝播と参照モデルの順伝播と逆伝播で合わせて8PL</title>
+              <text class="t-sub" x="110" y="52" text-anchor="end">進化戦略</text>
+              <rect x="120" y="32" width="100" height="30" style="fill: var(--accent)"/>
+              <text class="t-tiny" x="170" y="52" text-anchor="middle" style="fill: #fff">順伝播</text>
+              <text class="t-main" x="230" y="53">2PL</text>
+              <text class="t-sub" x="110" y="112" text-anchor="end">GRPO</text>
+              <rect x="120" y="92" width="100" height="30" style="fill: var(--muted)"/>
+              <text class="t-tiny" x="170" y="112" text-anchor="middle" style="fill: #fff">順伝播</text>
+              <rect x="220" y="92" width="100" height="30" style="fill: var(--line)"/>
+              <text class="t-tiny" x="270" y="112" text-anchor="middle">参照モデル</text>
+              <rect x="320" y="92" width="200" height="30" style="fill: var(--hot-ink)"/>
+              <text class="t-tiny" x="420" y="112" text-anchor="middle" style="fill: #fff">逆伝播（勾配の計算）</text>
+              <text class="t-main" x="530" y="113">8PL</text>
+              <text class="t-tiny" x="120" y="152">P：パラメータの数　L：1サンプルのトークン数</text>
+              <text class="t-tiny" x="120" y="170">参照モデル：離れすぎを測るための学習前のモデル</text>
+            </svg>
+            <figcaption><span class="fig-no">図5</span>1サンプルを処理するときの計算量。論文の付録 A.8 の見積もりから作成。進化戦略は GRPO の4分の1になる</figcaption>
+          </figure>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：FLOPs・サンプル・GPU 時間</p>
+            <ul>
+              <li><strong>FLOPs</strong>：計算機が行う、小数を含む計算の回数。計算の量の目安になる。</li>
+              <li><strong>サンプル</strong>：学習に使う問題1つ分。1サンプルを処理するとは、モデルが1つの問題に答え、それに点数をつけて学習に使うこと。</li>
+              <li><strong>GPU 時間</strong>：GPU を何台、何時間使ったかの合計。実際の費用に近い物差し。</li>
+            </ul>
+            <p>学習全体の計算量は、おおまかに「1サンプルあたりの計算量 × 使ったサンプルの数」です。1サンプルあたりが少なくても、学習を終えるまでに多くのサンプルが要れば、全体では多くなります。進化戦略は1回の更新で30個の候補それぞれに問題を解かせるので、どちらが少ないかは、1サンプルあたりの量だけでは決まりません。論文は、学習全体の量は比べていません。</p>
+          </aside>
+
+          <p>学習全体で比べた数字は、後続の研究にあります。2026年8月の CoPES の論文は、Qwen3.5-4B の数学で、GRPO と同じ GPU 時間の予算で比べました。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 170" role="img" aria-labelledby="fig6-t">
+              <title id="fig6-t">同じ GPU 時間で、GRPO が上げた正答率の伸びを100%とすると、CoPES は92%、標準の進化戦略は67%</title>
+              <text class="t-tiny" x="170" y="16">元のモデルからの正答率の伸び（GRPO の伸びを100%とする）</text>
+              <text class="t-sub" x="160" y="52" text-anchor="end">GRPO</text>
+              <rect x="170" y="36" width="330" height="22" style="fill: var(--green-tint)"/>
+              <rect x="170" y="36" width="330.0" height="22" style="fill: var(--muted)"/>
+              <text class="t-main" x="508.0" y="53">100%</text>
+              <text class="t-sub" x="160" y="90" text-anchor="end">CoPES</text>
+              <rect x="170" y="74" width="330" height="22" style="fill: var(--green-tint)"/>
+              <rect x="170" y="74" width="303.6" height="22" style="fill: var(--accent)"/>
+              <text class="t-main" x="481.6" y="91">92%</text>
+              <text class="t-sub" x="160" y="128" text-anchor="end">標準の進化戦略</text>
+              <rect x="170" y="112" width="330" height="22" style="fill: var(--green-tint)"/>
+              <rect x="170" y="112" width="221.1" height="22" style="fill: var(--hot-ink)"/>
+              <text class="t-main" x="399.1" y="129">67%</text>
+              <text class="t-tiny" x="20" y="162">Qwen3.5-4B の数学。GRPO の最良のチェックポイントまでと同じ GPU 時間で比べた値</text>
+            </svg>
+            <figcaption><span class="fig-no">図6</span>同じ GPU 時間でどこまで正答率を伸ばせたか（CoPES の論文の要旨と本文から作成）。CoPES は、進化戦略を改良した手法</figcaption>
+          </figure>
+
+          <p>標準の進化戦略は、GRPO が上げた正答率の伸びの67%分にとどまりました。同じ時間をかけるなら、まだ強化学習のほうが効率が良い場面がある、ということです。</p>
+          <p>なお、今回の論文の最初の版の要旨は、強化学習より優れる点の1つ目に「サンプル効率」（少ないサンプルで学習できること）を挙げていました。この言葉は、2026年2月の改訂以降の要旨から消えています。</p>
+
+          <h3>試した範囲は限られている</h3>
+          <ul>
+            <li><strong>モデルの大きさ</strong>：最大でも140億パラメータ（Qwen2.5-14B）。いまの最前線のモデルよりずっと小さい。</li>
+            <li><strong>課題</strong>：Countdown・答えの簡潔さ・数学・2つのパズルだけ。人の好みに合わせる学習のような課題では試していない。</li>
+            <li><strong>数字の食い違い</strong>：数独の正答率が、表では69.5%、付録の本文では66.5%になっている。</li>
+          </ul>
+
+          <h3>なぜ30個で足りるのかはまだわからない</h3>
+          <p>論文は、30個の候補で数十億の重みを動かせた理由を「LLM の本質的な次元が低いことと関係するのかもしれない」としています。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：本質的な次元（内在次元）とは</p>
+            <p>重みが数十億あっても、課題に合わせて性能を変えるために、本当に動かす必要がある方向はずっと少ないのかもしれない、という考え方です。論文が引用する2020年の研究は、RoBERTa という言語モデルで、ランダムに選んだ200個の方向だけを動かしても、全部の重みを動かしたときの90%の性能が出たと報告しています。大きなモデルほどこの次元が低い傾向がある、とも書いています。動かすべき方向が少なければ、30個の候補でも見当をつけやすくなるはずです。</p>
+          </aside>
+
+          <p>報酬ハッキングが起きにくい理由についても、論文は仮説を書いています。LLM では、重みを少し変えるだけで点数が細かく上下し、点数の地形がぎざぎざになっています。強化学習の勾配は、このぎざぎざに振り回されやすいといいます。進化戦略は重みに揺らぎを入れて点数を平均するので、地形をならしたうえで登ることになる、という説明です。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 230" role="img" aria-labelledby="fig7-t">
+              <title id="fig7-t">重みを少し変えるだけで点数が細かく上下するぎざぎざの地形と、重みに揺らぎを入れて平均した、なめらかな地形</title>
+              <line class="s-axis" x1="40" y1="190" x2="540" y2="190"/>
+              <line class="s-axis" x1="40" y1="190" x2="40" y2="24"/>
+              <polyline points="40.0,166.2 42.1,161.8 44.2,163.0 46.2,166.3 48.3,167.5 50.4,165.1 52.5,161.6 54.6,161.3 56.7,167.1 58.8,178.1 60.8,189.3 62.9,195.3 65.0,193.5 67.1,185.6 69.2,176.6 71.2,171.1 73.3,170.3 75.4,171.6 77.5,170.8 79.6,166.0 81.7,159.0 83.8,154.3 85.8,156.3 87.9,165.3 90.0,177.7 92.1,187.6 94.2,191.0 96.2,187.8 98.3,181.9 100.4,178.0 102.5,177.8 104.6,179.4 106.7,178.8 108.8,173.1 110.8,163.3 112.9,154.0 115.0,150.2 117.1,154.5 119.2,164.6 121.2,175.2 123.3,181.4 125.4,181.8 127.5,179.1 129.6,177.6 131.7,179.6 133.8,183.7 135.8,185.8 137.9,182.0 140.0,172.0 142.1,159.6 144.2,150.7 146.2,149.0 148.3,154.3 150.4,162.4 152.5,168.4 154.6,169.8 156.7,168.4 158.8,168.1 160.8,171.8 162.9,178.9 165.0,185.2 167.1,185.7 169.2,178.6 171.2,166.4 173.3,154.4 175.4,147.9 177.5,148.0 179.6,152.0 181.7,155.4 183.8,155.2 185.8,152.3 187.9,150.7 190.0,153.9 192.1,162.3 194.2,172.1 196.2,177.7 198.3,175.7 200.4,166.5 202.5,154.9 204.6,146.0 206.7,142.6 208.8,143.0 210.8,143.3 212.9,140.3 215.0,134.1 217.1,128.7 219.2,128.4 221.2,134.9 223.3,145.7 225.4,155.1 227.5,158.1 229.6,153.6 231.7,144.8 233.8,136.6 235.8,132.3 237.9,131.4 240.0,130.3 242.1,125.4 244.2,116.1 246.2,106.0 248.3,100.2 250.4,102.0 252.5,110.4 254.6,120.5 256.7,126.8 258.8,126.6 260.8,121.5 262.9,115.7 265.0,113.0 267.1,113.4 269.2,113.6 271.2,109.6 273.3,99.6 275.4,86.4 277.5,75.4 279.6,71.3 281.7,74.9 283.8,82.9 285.8,89.7 287.9,91.8 290.0,89.4 292.1,86.2 294.2,85.9 296.2,89.2 298.3,93.2 300.4,93.2 302.5,86.1 304.6,73.3 306.7,59.7 308.8,51.0 310.8,49.7 312.9,53.9 315.0,59.2 317.1,61.3 319.2,59.8 321.2,57.6 323.3,58.6 325.4,64.6 327.5,73.1 329.6,79.0 331.7,77.9 333.8,69.3 335.8,57.0 337.9,46.8 340.0,42.4 342.1,43.6 344.2,46.7 346.2,47.7 348.3,45.2 350.4,41.9 352.5,42.1 354.6,48.5 356.7,59.8 358.8,71.1 360.8,76.9 362.9,74.8 365.0,67.1 367.1,58.8 369.2,54.3 371.2,54.5 373.3,56.7 375.4,56.8 377.5,52.9 379.6,47.1 381.7,44.1 383.8,47.9 385.8,58.7 387.9,72.5 390.0,83.5 392.1,87.7 394.2,85.6 396.2,81.2 398.3,78.9 400.4,80.5 402.5,83.8 404.6,84.7 406.7,80.6 408.8,72.6 410.8,65.5 412.9,64.4 415.0,71.3 417.1,83.7 419.2,96.2 421.2,104.0 423.3,106.1 425.4,105.4 427.5,105.9 429.6,110.1 431.7,116.2 433.8,120.0 435.8,117.9 437.9,109.7 440.0,99.6 442.1,93.2 444.2,94.4 446.2,102.4 448.3,112.8 450.4,120.7 452.5,124.1 454.6,124.7 456.7,126.7 458.8,132.7 460.8,141.9 462.9,149.9 465.0,151.9 467.1,146.3 469.2,135.9 471.2,126.3 473.3,122.3 475.4,125.0 477.5,131.4 479.6,136.7 481.7,138.5 483.8,137.7 485.8,138.4 487.9,144.1 490.0,154.6 492.1,166.2 494.2,173.3 496.2,172.6 498.3,165.0 500.4,155.2 502.5,148.7 504.6,147.6 506.7,150.3 508.8,152.6 510.8,151.5 512.9,147.5 515.0,144.5 517.1,146.7 519.2,155.8 521.2,168.7 523.3,179.7 525.4,184.2 527.5,181.2 529.6,174.2 531.7,168.1 533.8,166.1 535.8,167.4 537.9,168.3 540.0,165.2" style="fill: none; stroke: var(--muted); stroke-width: 1.5"/>
+              <polyline points="40.0,167.5 42.1,167.9 44.2,168.4 46.2,168.9 48.3,169.5 50.4,170.1 52.5,170.7 54.6,171.3 56.7,171.9 58.8,172.3 60.8,172.7 62.9,173.1 65.0,173.3 67.1,173.4 69.2,173.5 71.2,173.5 73.3,173.5 75.4,173.4 77.5,173.3 79.6,173.3 81.7,173.3 83.8,173.3 85.8,173.3 87.9,173.3 90.0,173.4 92.1,173.4 94.2,173.4 96.2,173.4 98.3,173.4 100.4,173.3 102.5,173.1 104.6,172.9 106.7,172.8 108.8,172.6 110.8,172.4 112.9,172.2 115.0,172.1 117.1,172.0 119.2,171.9 121.2,171.9 123.3,171.8 125.4,171.7 127.5,171.6 129.6,171.5 131.7,171.3 133.8,171.0 135.8,170.7 137.9,170.4 140.0,170.1 142.1,169.7 144.2,169.3 146.2,169.0 148.3,168.7 150.4,168.4 152.5,168.1 154.6,167.8 156.7,167.5 158.8,167.1 160.8,166.8 162.9,166.4 165.0,165.9 167.1,165.3 169.2,164.7 171.2,164.1 173.3,163.4 175.4,162.7 177.5,161.9 179.6,161.2 181.7,160.5 183.8,159.9 185.8,159.2 187.9,158.5 190.0,157.7 192.1,157.0 194.2,156.1 196.2,155.3 198.3,154.3 200.4,153.3 202.5,152.2 204.6,151.0 206.7,149.8 208.8,148.6 210.8,147.4 212.9,146.1 215.0,144.9 217.1,143.7 219.2,142.4 221.2,141.2 223.3,139.9 225.4,138.6 227.5,137.2 229.6,135.8 231.7,134.3 233.8,132.7 235.8,131.0 237.9,129.3 240.0,127.6 242.1,125.9 244.2,124.1 246.2,122.4 248.3,120.7 250.4,119.0 252.5,117.3 254.6,115.6 256.7,113.9 258.8,112.2 260.8,110.4 262.9,108.6 265.0,106.8 267.1,104.9 269.2,102.9 271.2,101.0 273.3,99.0 275.4,97.1 277.5,95.2 279.6,93.3 281.7,91.6 283.8,89.8 285.8,88.1 287.9,86.4 290.0,84.8 292.1,83.2 294.2,81.5 296.2,79.9 298.3,78.3 300.4,76.7 302.5,75.0 304.6,73.5 306.7,71.9 308.8,70.4 310.8,69.0 312.9,67.7 315.0,66.5 317.1,65.4 319.2,64.3 321.2,63.4 323.3,62.5 325.4,61.6 327.5,60.8 329.6,60.1 331.7,59.3 333.8,58.6 335.8,58.0 337.9,57.4 340.0,56.9 342.1,56.5 344.2,56.2 346.2,56.0 348.3,55.9 350.4,55.9 352.5,56.1 354.6,56.3 356.7,56.6 358.8,57.0 360.8,57.4 362.9,57.9 365.0,58.3 367.1,58.9 369.2,59.5 371.2,60.1 373.3,60.8 375.4,61.6 377.5,62.5 379.6,63.5 381.7,64.7 383.8,65.9 385.8,67.2 387.9,68.5 390.0,69.9 392.1,71.4 394.2,72.8 396.2,74.3 398.3,75.8 400.4,77.3 402.5,78.8 404.6,80.3 406.7,81.9 408.8,83.5 410.8,85.2 412.9,86.9 415.0,88.7 417.1,90.6 419.2,92.5 421.2,94.4 423.3,96.3 425.4,98.2 427.5,100.1 429.6,102.0 431.7,103.8 433.8,105.5 435.8,107.3 437.9,109.0 440.0,110.8 442.1,112.5 444.2,114.3 446.2,116.1 448.3,117.9 450.4,119.8 452.5,121.6 454.6,123.4 456.7,125.2 458.8,126.9 460.8,128.6 462.9,130.2 465.0,131.8 467.1,133.2 469.2,134.7 471.2,136.1 473.3,137.4 475.4,138.8 477.5,140.2 479.6,141.5 481.7,142.9 483.8,144.3 485.8,145.6 487.9,146.9 490.0,148.2 492.1,149.4 494.2,150.6 496.2,151.7 498.3,152.7 500.4,153.6 502.5,154.5 504.6,155.4 506.7,156.2 508.8,157.1 510.8,157.9 512.9,158.8 515.0,159.7 517.1,160.6 519.2,161.5 521.2,162.4 523.3,163.2 525.4,164.0 527.5,164.6 529.6,165.2 531.7,165.7 533.8,166.1 535.8,166.3 537.9,166.5 540.0,166.5" style="fill: none; stroke: var(--accent); stroke-width: 3.5"/>
+              <text class="t-tiny" x="540" y="208" text-anchor="end">重み（本当は数十億次元）</text>
+              <text class="t-tiny" x="46" y="20">点数</text>
+              <line x1="50" y1="218" x2="80" y2="218" style="stroke: var(--muted); stroke-width: 1.5"/><text class="t-tiny" x="88" y="222">そのままの点数（ぎざぎざ）</text>
+              <line x1="270" y1="218" x2="300" y2="218" style="stroke: var(--accent); stroke-width: 3.5"/><text class="t-tiny" x="308" y="222">揺らぎを入れて平均した点数</text>
+            </svg>
+            <figcaption><span class="fig-no">図7</span>論文の仮説のイメージ図（筆者が作った模式図で、実際の測定値ではない）。揺らぎを入れて平均すると、細かな上下が消えて、山の形が見えやすくなる</figcaption>
+          </figure>
+
+          <p>どちらの説明についても、直接の証拠はまだだと論文自身が認めています。</p>
+
+          <h3>後続の研究が続いている</h3>
+          <p>この論文のあと、進化戦略で LLM を学習させる研究が相次ぎました。主なものを並べます。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>研究</th><th>何を示したか</th><th>この論文にとっての意味</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">EGGROLL（2025年11月、ICML 2026）</th><td data-label="何を示したか">揺らぎを低ランクの行列（少ない数のベクトルの掛け算で作る行列）にして計算をまとめ、候補の数が多いときの学習を単純な進化戦略の約100倍速くした</td><td data-label="意味">弱点だった「遅さ」を改善</td></tr>
+                <tr><th scope="row">CoPES（2026年8月）</th><td data-label="何を示したか">同じ GPU 時間で、標準の進化戦略は GRPO の伸びの67%。重みを小さな組に分けて探す改良で92%に</td><td data-label="意味">学習全体の効率はまだ課題（図6）</td></tr>
+                <tr><th scope="row">Ba ほか（2026年8月）</th><td data-label="何を示したか">進化戦略で学習したモデルは、GRPO より答えの幅が広く、pass@k が高い</td><td data-label="意味">別のグループが「強化学習と違う学び方をする」ことを支持</td></tr>
+                <tr><th scope="row">独立の再現</th><td data-label="何を示したか">今回の論文の結果をそのまま再現した、または否定したという報告</td><td data-label="意味"><span class="st st-ng">見つからない</span>（2026年11月27日時点）</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図8</span>進化戦略で LLM を学習させる後続の研究。pass@k は、k 回答えさせて1回でも正解すれば成功とする評価。どれも要旨や本文の主張で、筆者は再現していない</figcaption>
+          </figure>
+
+          <h2>おわりに</h2>
+          <p>進化戦略は「勾配を使わず、推論だけで学習する」方法です。学習の中身が推論の繰り返しになるので、推論が速く安くなるほど、学習も速く安くなります。<a href="../token-accounting-2026/">トークンの数え方の記事</a>で見た推論の単価や量が、そのまま学習のコストにつながる形です。</p>
+          <p>進化戦略が強化学習を置き換えるかどうかは、まだわかりません。論文自身も、両者は排他的ではなく、広く探す段階を進化戦略に、細かく詰める段階を強化学習に任せるような組み合わせを提案しています。「大きなモデルには使えない」とされてきた道具が使えるとわかったことで、追加学習の選択肢が1つ増えたのは確かだと思います。</p>
+
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月27日。引用の日本語は筆者の訳です。</p>
+            <ul>
+              <li>X. Qiu ほか「<a href="https://arxiv.org/abs/2509.24372" rel="noopener" target="_blank">Evolution Strategies at Scale: LLM Fine-Tuning Beyond Reinforcement Learning</a>」arXiv:2509.24372（v1 2025年9月29日、v3 2026年7月14日）、ICML 2026。コード <a href="https://github.com/VsonicV/es-at-scale" rel="noopener" target="_blank">VsonicV/es-at-scale</a></li>
+              <li>T. Salimans ほか「<a href="https://arxiv.org/abs/1703.03864" rel="noopener" target="_blank">Evolution Strategies as a Scalable Alternative to Reinforcement Learning</a>」arXiv:1703.03864（2017年）</li>
+              <li>B. Sarkar ほか「<a href="https://arxiv.org/abs/2511.16652" rel="noopener" target="_blank">Evolution Strategies at the Hyperscale</a>」arXiv:2511.16652（2025年11月）</li>
+              <li>Z. Wang ほか「<a href="https://arxiv.org/abs/2608.02391" rel="noopener" target="_blank">Cooperative Coevolution for Resource-Constrained Agentic LLM Post-Training</a>」arXiv:2608.02391（2026年8月）</li>
+              <li>Y. Ba ほか「<a href="https://arxiv.org/abs/2608.27351" rel="noopener" target="_blank">Understanding Evolution Strategies for LLM Reasoning: Broader Reasoning Coverage than GRPO</a>」arXiv:2608.27351（2026年8月）</li>
+            </ul>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。論文の著者や所属する会社とは関係がありません。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>AI は量子重力の理論を作ったのか ―― GPT-6 Astra と作った提案を何で確かめるかで読む | XLM開発会議 城北支部</title>
+  <meta name="description" content="2026年11月25日、Stanford の物理学者が GPT-6 Astra と何か月もやりとりして作った量子重力の提案を arXiv に投稿しました。証明ではなく提案であるこの論文を、何で確かめられるのかという観点から整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI は量子重力の理論を作ったのか | XLM開発会議 城北支部">
+  <meta property="og:description" content="GPT-6 Astra と作った量子重力の提案を、確かめる3つの段に分けて読みます（2026年11月27日時点）。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/quantum-gravity-null-cone-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-quantum-gravity-null-cone-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="AI は量子重力の理論を作ったのか ―― GPT-6 Astra と作った提案を何で確かめるかで読む">
+  <meta property="article:published_time" content="2026-11-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/quantum-gravity-null-cone-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false})"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></p>
+            <h1>AI は量子重力の理論を作ったのか ―― GPT-6 Astra と作った提案を何で確かめるかで読む</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>2026年11月25日、Stanford 大学の物理学者 Venkatesa Chandrasekaran が、83ページの論文を arXiv に投稿しました。題は「An algebraic quantization of gravity from the null cone」（光円錐から重力を代数的に量子化する）です。論文の謝辞には「いくつかの計算と証明は、GPT-6 Astra と何か月もやりとりして作った」と書かれています。GPT-6 Astra は OpenAI の AI モデルです。</p>
+          <p>報道では「AI を使って完全な量子重力理論を提案」と紹介されました。この記事では、まず量子重力がどんな問題なのかを説明します。そのうえで、論文が何を主張しているのか、それを何で確かめられるのか、どこまで確かめられたのかを整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>論文は量子重力の<strong>理論の提案</strong>で、数学の定理の証明ではない。対象は<strong>物質を含まない重力だけ</strong>で、「万物の理論」ではない。</li>
+              <li>著者は人間1人で、AI は謝辞に出てくる。<strong>どの計算を AI と作ったのかは書かれていない</strong>。</li>
+              <li>ブラックホールのエントロピーなど<strong>既知の答えを再現した</strong>と論文は主張する。しかし計算を著者以外が確かめた報告はまだなく、<strong>実験で確かめる手段もない</strong>。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月27日時点の情報です。</p>
+
+          <h2>量子重力とはどんな問題か</h2>
+          <p>重力を説明する<strong>一般相対論</strong>と、原子や素粒子を説明する<strong>量子力学</strong>は、どちらも実験とよく合う理論です。ところが、2つが同時に効く場面で使える理論はまだありません。ブラックホールの中心や宇宙の始まりがその例です。重力と量子力学を矛盾なくまとめる理論を<strong>量子重力</strong>と呼びます。</p>
+
+          <h3>ふつうのやり方では無限大が消せない</h3>
+          <p>電磁気力などは、決まった時空の上で場を量子化し、小さな揺らぎとして計算するとうまくいきます。途中で無限大が出ても、有限個の量に吸収できます（繰り込み）。</p>
+          <p>重力を同じように扱うと、計算を細かくするほど新しい種類の無限大が出て、有限個の量では吸収できません。重力は「摂動論的に繰り込み不可能」だと言われます。今回の論文も、序論をこの問題から始めています。</p>
+          <p>これまでの主な取り組みには、弦理論、ループ量子重力、AdS/CFT 対応などがあります。論文の序論はそれぞれを1段落ずつ紹介し、どこがまだ届いていないかを書いています。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：なぜ実験で決められないのか</p>
+            <p>量子重力の効果がはっきり表れるのは、プランク長（約 \(10^{-35}\) メートル）ほどの小さな距離です。今の加速器や観測は、ここに遠く届きません。そのため量子重力の候補は「すでに知られている答えを再現できるか」で試されてきました。その代表がブラックホールのエントロピーです。</p>
+          </aside>
+
+          <h2>何が公開されたのか</h2>
+          <p>論文は2026年11月25日（協定世界時）に arXiv に投稿されました。11月27日時点で改訂版はありません。著者は Chandrasekaran の1人で、所属欄には Stanford 大学の Leinweber 理論物理学研究所だけが書かれています。分量は本文54ページと付録で計83ページ、図は34枚です。</p>
+
+          <figure class="fig">
+            <ul class="timeline">
+              <li><b>2026年9月</b>OpenAI が GPT-6 Astra を公開した。</li>
+              <li><b>10月6日</b>物理学者 Nathaniel Craig が、GPT-6 Astra を使った論文を arXiv に投稿した。素粒子の標準模型を格子の上で定義する候補を作ったという内容。</li>
+              <li><b>11月20日</b>Claude がリーマン予想を証明したという主張が出た（<a href="../riemann-hypothesis-2026/">記事</a>）。</li>
+              <li><b>11月23日</b>Claude が VP ≠ VNP を証明したという主張が出た（<a href="../vp-vnp-2026/">記事</a>）。</li>
+              <li><b>11月25日</b>Chandrasekaran がこの論文を arXiv に投稿した。</li>
+            </ul>
+            <figcaption><span class="fig-no">図1</span>AI と数学・物理をめぐる2026年秋の主な出来事。前の2つは数学の証明の主張で、今回は物理の理論の提案</figcaption>
+          </figure>
+
+          <h3>謝辞が AI について書いていること</h3>
+          <p>論文の中で AI に触れているのは、謝辞の2文だけです。本文と付録には AI の記述がありません。</p>
+          <blockquote>
+            <p>プロジェクトを通じて励ましてくれた Sam Altman、Sébastien Bubeck、そして OpenAI の同僚たちにも感謝する。この論文の計算と証明のいくつかは、何か月にもわたる GPT-6 Astra との詳細なやりとりの中で作られた。使ったトークンは合計で約4億になる。この計算資源を提供してくれた OpenAI に感謝する。</p>
+            <cite>V. Chandrasekaran「An algebraic quantization of gravity from the null cone」謝辞の訳</cite>
+          </blockquote>
+          <p>ここからわかることは2つあります。1つは、著者が OpenAI の人々を「同僚」と呼んでいることです。所属欄に OpenAI はないので、どういう関係なのかは論文からはわかりません。もう1つは、<strong>どの計算と証明を AI と作ったのかが書かれていない</strong>ことです。</p>
+          <p>謝辞には、議論とコメントへのお礼として Juan Maldacena や Andy Strominger ら15人の物理学者の名前もあります。これは論文に賛成したという意味ではありません。</p>
+
+          <h2>論文は何を主張しているのか</h2>
+          <p>論文の要旨の1文目は次のとおりです。</p>
+          <blockquote>
+            <p>4次元の Lorentz 型時空の上で、物質を含まない一般相対論を、背景によらずに量子化する方法を提案する。</p>
+            <cite>同論文の要旨の訳</cite>
+          </blockquote>
+          <p>主張は「提案」です。そして対象は<strong>物質を含まない重力だけ</strong>です。電子やクォークは入っていません。報道の一部にあった「万物の理論」という見出しは、論文の主張を超えています。</p>
+
+          <h3>光円錐で囲んだ領域を量子化して貼り合わせる</h3>
+          <p>論文の方法を、形だけ説明します。</p>
+          <p>ある点から光が届く範囲の境目を<strong>光円錐</strong>（null cone）と呼びます。論文は時空の一部を、過去の頂点から未来へ広がる光円錐と、未来の頂点から過去へ広がる光円錐で挟みます。この菱形の領域を<strong>因果ダイヤモンド</strong>と呼びます。境界の光円錐の上のデータだけで中の様子を決め、そのデータを量子化します。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 380" role="img" aria-labelledby="fig2-t">
+              <title id="fig2-t">左は1つの因果ダイヤモンド。下の頂点からの光円錐と上の頂点からの光円錐が角 S で交わり、上下の頂点は小さなふた Σ0 と Σ1 で切り落としてある。右は2つのダイヤモンド M1 と M2 を Σ で貼り合わせ、Σ の上の状態について足し合わせる様子</title>
+              <text class="t-main" x="170" y="22" text-anchor="middle">1つの因果ダイヤモンド</text>
+              <polygon class="s-strip" points="150,280 50,180 150,80 190,80 290,180 190,280"/>
+              <line class="s-axis" x1="150" y1="280" x2="50" y2="180"/>
+              <line class="s-axis" x1="190" y1="280" x2="290" y2="180"/>
+              <line class="s-axis" x1="50" y1="180" x2="150" y2="80"/>
+              <line class="s-axis" x1="290" y1="180" x2="190" y2="80"/>
+              <line class="s-crit s-crit-strong" x1="150" y1="280" x2="190" y2="280"/>
+              <line class="s-crit s-crit-strong" x1="150" y1="80" x2="190" y2="80"/>
+              <line class="s-edge" x1="50" y1="180" x2="290" y2="180" stroke-dasharray="4 4"/>
+              <g class="s-zero"><circle cx="50" cy="180" r="5"/><circle cx="290" cy="180" r="5"/></g>
+              <text class="t-sub" x="170" y="172" text-anchor="middle">角 S</text>
+              <text class="t-hot" x="170" y="304" text-anchor="middle">Σ0（入ってくる状態）</text>
+              <text class="t-hot" x="170" y="66" text-anchor="middle">Σ1（出ていく状態）</text>
+              <text class="t-tiny" x="86" y="118" text-anchor="middle" transform="rotate(-45 86 118)">過去向きの光円錐</text>
+              <text class="t-tiny" x="84" y="244" text-anchor="middle" transform="rotate(45 84 244)">未来向きの光円錐</text>
+              <text class="t-main" x="430" y="22" text-anchor="middle">時間の向きに貼り合わせる</text>
+              <polygon class="s-strip" points="430,345 515,260 445,190 415,190 345,260"/>
+              <polygon class="s-strip" points="430,35 515,120 445,190 415,190 345,120"/>
+              <polyline class="s-axis" fill="none" points="415,190 345,260 430,345 515,260 445,190"/>
+              <polyline class="s-axis" fill="none" points="415,190 345,120 430,35 515,120 445,190"/>
+              <ellipse class="s-crit" cx="430" cy="190" rx="34" ry="11" fill="none"/>
+              <line class="s-crit s-crit-strong" x1="415" y1="190" x2="445" y2="190"/>
+              <text class="t-main" x="430" y="126" text-anchor="middle">M2</text>
+              <text class="t-main" x="430" y="270" text-anchor="middle">M1</text>
+              <text class="t-hot" x="474" y="195">Σ</text>
+              <text class="t-tiny" x="430" y="372" text-anchor="middle">Σ の上のすべての状態について足し合わせる</text>
+            </svg>
+            <figcaption><span class="fig-no">図2</span>因果ダイヤモンドと貼り合わせ。論文の図1・図7・図19をもとに簡略化した。頂点の近くは小さなふたで切り落とし、そこは別のダイヤモンドで覆う</figcaption>
+          </figure>
+
+          <p>こうして作った因果ダイヤモンドを継ぎ目で貼り合わせ、継ぎ目の上のあらゆる状態について足し合わせます。これを重ねると、時空全体での量子的な振る舞い（経路積分）が組み上がります。時空の形をあらかじめ決めず、重力の強さを表す定数 \(G_{N}\) について展開もしません。これがふつうのやり方との違いです。</p>
+
+          <h3>主張されている結果</h3>
+          <p>論文は、この構成から次のことが導けると主張しています。</p>
+          <ol>
+            <li><strong>無限大が出ない</strong>：継ぎ目での足し合わせはすべて収束する。確かめの例として、重力子の対が生まれて消える振幅を計算した。\(G_{N}\) で先に展開すると対数的に発散するが、展開せずに計算すると有限の式になる。</li>
+            <li><strong>状態の数が有限</strong>：大きさに上限のある因果ダイヤモンドがとれる量子状態の数は有限で、面積はとびとびの値しかとらない。</li>
+            <li><strong>ブラックホールのエントロピーを再現</strong>：Bekenstein–Hawking の公式を得て、大きなブラックホールへの次の補正（対数補正）の係数が、物理学者 Ashoke Sen が別の方法で求めた値と一致する。</li>
+            <li><strong>Einstein 方程式に戻る</strong>：エネルギーの低い極限で、量子補正の最初の項を含めた Einstein 方程式が出てくる。</li>
+          </ol>
+          <p>一方で、論文自身が保留している点もあります。量子状態を作るときに特定の形の状態を「選んで」いて、別の選び方でも同じ理論になるかは「今後の課題」としています（脚注20）。途中には「heuristic」（厳密な証明ではない見積もり）と断った議論もあります（脚注18）。論文には結論や限界をまとめた章がなく、こうした保留は脚注に散らばっています。</p>
+
+          <h2>証明ではなく提案を何で確かめるのか</h2>
+          <p>ここがこの記事でいちばん伝えたいところです。</p>
+          <p>これまでの記事では、AI による<strong>数学の証明</strong>の主張を扱いました。リーマン予想も VP ≠ VNP も、Lean という道具で証明が機械的に検査されていました。<a href="../lean-what-it-checks/">Lean の記事</a>で見たとおり、Lean は「書かれた主張が正しく導かれているか」を人間よりずっと確実に確かめます。</p>
+          <p>今回は<strong>物理の理論の提案</strong>です。Lean による形式化はついていません。そして物理の理論は、論理の中だけでは決着しません。最後は「自然が本当にそうなっているか」が問われます。そこで、確かめることを3つの段に分けて見ます。</p>
+
+          <figure class="fig">
+            <ol class="layers">
+              <li class="layer is-open">
+                <span class="layer-q">計算は正しいか</span>
+                <span class="layer-how">83ページの計算と議論を、著者以外が追って確かめたか／機械による検査はあるか</span>
+                <span class="layer-state">まだ。著者以外が確かめたという報告はない。形式化もない</span>
+              </li>
+              <li class="layer is-partial">
+                <span class="layer-q">すでに知られている答えを再現しているか</span>
+                <span class="layer-how">ブラックホールのエントロピー・その対数補正・Einstein 方程式と合うか</span>
+                <span class="layer-state">論文は再現したと主張する。筆者が確かめられたのは数字がそろうことだけ</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">自然が本当にそうなっているか</span>
+                <span class="layer-how">実験や観測と比べられるか</span>
+                <span class="layer-state">まだ。今のところ比べる手段がない。物質も含んでいない</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図3</span>物理の提案を確かめる3つの段とこの論文の状態（2026年11月27日時点）</figcaption>
+          </figure>
+
+          <h3>1つ目の段はまだ誰も確かめていない</h3>
+          <p>83ページの計算を他の研究者が追うには、時間がかかります。論文の投稿から2日しかたっておらず、著者以外が計算を確かめたという報告はまだ見つかりません。</p>
+          <p>AI との共同作業は、この段をさらに難しくします。数学の主張なら、Lean が最後の砦になります。物理の提案では、人間の査読がその役を担います。しかし謝辞の「計算と証明のいくつか」だけでは、査読者はどこを重点的に疑えばよいのかの手がかりを得られません。</p>
+
+          <h3>2つ目の段は数字がそろうところまで確かめた</h3>
+          <p>量子重力の候補にとって、ブラックホールのエントロピーは大事な試金石です。ブラックホールのエントロピーは地平線の面積 \(A\) に比例することが知られています（Bekenstein–Hawking の公式）。</p>
+          <div class="eq">
+            \[ S \;=\; \frac{A}{4 G_{N} \hbar} \;+\; C \log \frac{A}{4 G_{N} \hbar} \;+\; \cdots \]
+            <p class="eq-note">光速とボルツマン定数を1とする単位。第1項が Bekenstein–Hawking の公式。第2項が対数補正で、係数 \(C\) の値は理論によって違いうる。</p>
+          </div>
+          <p>Sen は2012年の論文で、低エネルギーで重力がどう振る舞うかという情報だけから、この対数補正を計算しました。そのうえで、ループ量子重力の予言とは合わないようだと指摘しています。対数補正は、量子重力の候補をふるい分ける問題として使われてきたわけです。</p>
+          <p>筆者は今回の論文と Sen の論文の両方で、係数を確かめました。</p>
+          <ul>
+            <li>今回の論文（式 5.69）は、質量を固定したときの係数を、上の式の \(\log\) の中身について \(106/45\) と求めています。</li>
+            <li>Sen の論文は、4次元の物質を含まない重力について \(C_{\text{local}} = 212/45\) という係数を示しています。これはブラックホールの大きさを表す長さ \(a\) の対数にかかる係数です。</li>
+            <li>面積は \(a\) の2乗に比例するので、\(\tfrac{106}{45}\log A\) は \(\tfrac{212}{45}\log a\) と同じです。数字はそろっています。</li>
+          </ul>
+          <p>ただし、これは導き方が正しいことの確認ではありません。Sen の論文では、何を固定して状態を数えるかで係数が変わります。今回の論文の条件が Sen のどの値に対応するのかまで、筆者は追えていません。答えを知ったうえで合わせにいった計算になっていないかも、途中の計算を追わないとわかりません。</p>
+
+          <h3>3つ目の段は今のところ手段がない</h3>
+          <p>コラムに書いたとおり、量子重力の効果を実験で確かめる手段は今のところありません。これはこの論文の欠点ではなく、量子重力という問題の性質です。加えて、この論文は物質を含んでいません。私たちの世界と比べるには、電子やクォークを入れても同じ構成がうまくいくかを、まず示す必要があります。</p>
+
+          <h3>VP ≠ VNP の主張と並べる</h3>
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>項目</th><th>VP ≠ VNP（Anthropic）</th><th>今回の論文</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">分野</th><td data-label="VP ≠ VNP">数学（計算量理論）</td><td data-label="今回の論文">物理（量子重力）</td></tr>
+                <tr><th scope="row">主張の形</th><td data-label="VP ≠ VNP">定理の証明</td><td data-label="今回の論文">理論の提案</td></tr>
+                <tr><th scope="row">著者</th><td data-label="VP ≠ VNP">AI（「Claude, Anthropic」）</td><td data-label="今回の論文">人間1人。AI は謝辞に出てくる</td></tr>
+                <tr><th scope="row">AI の役割の説明</th><td data-label="VP ≠ VNP">論文も Lean も AI が書いたと明記</td><td data-label="今回の論文"><span class="st st-mid">あいまい</span>「計算と証明のいくつか」</td></tr>
+                <tr><th scope="row">機械による検査</th><td data-label="VP ≠ VNP"><span class="st st-ok">あり</span>Lean で検査済み</td><td data-label="今回の論文"><span class="st st-ng">なし</span></td></tr>
+                <tr><th scope="row">人間による確認</th><td data-label="VP ≠ VNP"><span class="st st-ng">なし</span>README に明記</td><td data-label="今回の論文">著者本人が責任を持つ。著者以外の<span class="st st-ng">報告なし</span></td></tr>
+                <tr><th scope="row">最後に決めるもの</th><td data-label="VP ≠ VNP">証明が正しいか（論理の中で決着する）</td><td data-label="今回の論文">自然がそうなっているか（実験）</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図4</span><a href="../vp-vnp-2026/">VP ≠ VNP の主張</a>と今回の論文の比較（2026年11月27日時点）</figcaption>
+          </figure>
+          <p>VP ≠ VNP では、機械の検査は済んでいて、人間の確認が残っていました。今回は人間が著者として責任を持っていますが、機械の検査はなく、自然との照合も先の話です。同じ「AI が関わった大きな成果」でも、確かめるべきことの形がまったく違います。</p>
+
+          <h2>専門家はどう見ているか</h2>
+          <p>2026年11月27日時点で、名前の出た物理学者がこの論文を公に評価した文章は見つかりませんでした。</p>
+          <p>同じ GPT-6 Astra を使った物理の論文には先例があります。Columbia 大学の数学者 Peter Woit は、10月8日のブログで Craig の論文を取り上げ、次のように書いています。</p>
+          <blockquote>
+            <p>この原稿では、Astra は数学者の共同研究者の役を演じている。</p>
+            <cite>P. Woit「AI and Chiral Fermions」Not Even Wrong（2026年10月8日）の訳</cite>
+          </blockquote>
+          <p>Woit は2025年12月にも、AI の着想による理論物理の論文が出たことをきっかけに、こうした論文が分野にあふれることへの懸念を書いています。今回の論文については、11月27日時点でまだ何も書いていません。</p>
+
+          <h2>何が起きれば一歩進んだと言えるのか</h2>
+          <p>今回の提案が量子重力の研究を進めたと言えるようになるには、少なくとも次のことが要ります。</p>
+          <ul>
+            <li>著者以外の研究者が計算を追い、とくに「無限大が出ない」「状態の数が有限」という議論を確かめること（1つ目の段）。</li>
+            <li>状態の選び方を変えても同じ理論になると示すこと。論文が「今後の課題」とした点です。</li>
+            <li>物質を入れても同じ構成がうまくいくと示すこと。</li>
+            <li>そのうえで、論文として査読を経ること。</li>
+          </ul>
+          <p>実験との比較は、さらにその先の話になります。</p>
+
+          <h2>おわりに</h2>
+          <p>これまでの2本は「AI が証明を書き、Lean が検査した」話でした。今回は「人間が AI と作り、まだ誰も検査していない」話です。</p>
+          <p>数学には Lean のような機械の検査があります。物理の提案には、最後に自然という検査があります。その間を埋めるのは、今のところ人間が論文を読むことだけです。AI が理論物理の論文づくりに深く入ってきたことで、確かめる側の仕事も同じだけ増えています。どこを AI と作ったのかを書くことは、その仕事を助ける最初の一歩になると思います。</p>
+
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月27日。引用の日本語は筆者の訳です。</p>
+            <ul>
+              <li>V. Chandrasekaran「<a href="https://arxiv.org/abs/2611.34924" rel="noopener" target="_blank">An algebraic quantization of gravity from the null cone</a>」arXiv:2611.34924v1（2026年11月25日）</li>
+              <li>A. Sen「<a href="https://arxiv.org/abs/1205.0971" rel="noopener" target="_blank">Logarithmic Corrections to Schwarzschild and Other Non-extremal Black Hole Entropy in Different Dimensions</a>」JHEP 04 (2013) 156</li>
+              <li>N. Craig「<a href="https://arxiv.org/abs/2610.09093" rel="noopener" target="_blank">A gauge-invariant measure for lattice chiral fermions</a>」arXiv:2610.09093（2026年10月6日）</li>
+              <li>P. Woit「<a href="https://www.math.columbia.edu/~woit/wordpress/?p=15915" rel="noopener" target="_blank">AI and Chiral Fermions</a>」（2026年10月8日）、「<a href="https://www.math.columbia.edu/~woit/wordpress/?p=15362" rel="noopener" target="_blank">Theoretical Physics Slop</a>」（2025年12月9日）Not Even Wrong</li>
+              <li>OfficeChai「<a href="https://officechai.com/ai/stanford-physicist-venkatesa-chandrasekaran-uses-gpt-6-astra-to-propose-a-full-quantum-theory-of-gravity/" rel="noopener" target="_blank">Stanford Physicist Venkatesa Chandrasekaran Uses GPT-6 Astra To Propose A Full Quantum Theory Of Gravity</a>」（2026年11月26日）</li>
+              <li>Axios「<a href="https://www.axios.com/2026/09/03/openai-astra-gpt-6-agi-brockman" rel="noopener" target="_blank">"Welcome to the AGI era," OpenAI says as GPT-6 Astra debuts</a>」（2026年9月3日）</li>
+            </ul>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。Anthropic は、GPT-6 Astra を作った OpenAI の競合です。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

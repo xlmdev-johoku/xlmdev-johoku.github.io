@@ -1,0 +1,142 @@
+/*
+  AI サービスのトークン単価（/contents/token-pricing/）専用のスタイル。
+  サイト共通の ../../style.css の上に重ねる。図の強調はサイトの --accent、下げる色は --muted。
+*/
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.tp-head { padding-bottom: 56px; }
+.tp-head .page-lead { max-width: 42em; line-height: 2; }
+.tp-lead { max-width: 46em; margin: 0 0 20px; color: var(--ink-soft); line-height: 1.9; }
+
+/* ---------- 数字のまとめ ---------- */
+.tp-keyfigs {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 0;
+  margin: 32px 0 0; padding: 16px 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+}
+@media (min-width: 720px) { .tp-keyfigs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tp-fig { display: grid; gap: 2px; min-width: 0; padding: 0 14px; }
+.tp-fig:nth-child(odd) { padding-left: 0; }
+.tp-fig:nth-child(even) { border-left: 1px solid var(--line); }
+@media (min-width: 720px) {
+  .tp-fig, .tp-fig:nth-child(odd) { padding: 0 16px; }
+  .tp-fig:first-child { padding-left: 0; }
+  .tp-fig + .tp-fig { border-left: 1px solid var(--line); }
+}
+.tp-fig-num { font-family: var(--serif); font-weight: 700; line-height: 1.25; font-size: clamp(1.4rem, 1.05rem + 1.4vw, 1.9rem); }
+.tp-fig-num.tp-fig-date { font-size: clamp(1.05rem, .9rem + .8vw, 1.35rem); padding-top: .25em; }
+.tp-fig-num .unit { margin-left: 2px; font-family: var(--sans); font-size: .5em; font-weight: 500; color: var(--muted); }
+.tp-fig-cap { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+
+/* ---------- 絞り込み ---------- */
+.tp-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 14px; margin: 0 0 14px; }
+.tp-ctl { display: grid; gap: 4px; font-size: 13px; }
+.tp-ctl-l { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .05em; }
+.tp-ctl select, .tp-ctl input {
+  min-height: 38px; padding: 6px 10px; font: inherit; font-size: 14px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+}
+.tp-ctl-q { flex: 1 1 14rem; }
+.tp-ctl-q input { width: 100%; }
+.tp-count { margin-left: auto; padding-bottom: 8px; font-size: 13px; color: var(--muted); }
+
+/* ---------- 表 ---------- */
+.tp-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.tp-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
+.tp-table th, .tp-table td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.tp-table thead th { position: sticky; top: 0; background: var(--surface); font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.tp-table tbody tr:last-child td { border-bottom: 0; }
+.tp-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tp-table .model { font-weight: 700; }
+.tp-table .mid { display: block; font-size: 12px; font-weight: 400; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+.tp-table .notes { min-width: 16rem; max-width: 26rem; font-size: 12.5px; color: var(--ink-soft); }
+.tp-more { margin-top: 2px; }
+.tp-more summary { cursor: pointer; color: var(--accent-ink); font-size: 12px; }
+.tp-more-body { margin-top: 4px; }
+.tp-table .notes a, .tp-refs a { color: var(--accent-ink); text-underline-offset: 3px; word-break: break-all; }
+.tp-table tr.group-start td { border-top: 2px solid var(--line); }
+.tp-table .prov { white-space: nowrap; }
+.tp-dash { color: var(--muted); }
+.tp-badge {
+  display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; line-height: 1.7; white-space: nowrap;
+  color: var(--hot-ink); border: 1px solid color-mix(in srgb, var(--hot-ink) 55%, transparent);
+}
+.tp-tier { display: inline-block; padding: 0 7px; border-radius: 4px; font-size: 12px; white-space: nowrap; background: var(--green-tint); color: var(--ink-soft); }
+.tp-empty { margin: 14px 0 0; color: var(--muted); }
+.tp-be { min-width: 720px; }
+.tp-be th, .tp-be td { padding-inline: 10px; }
+.tp-be thead th { white-space: normal; vertical-align: bottom; }
+.tp-be .be-model { display: block; color: var(--ink); font-size: 13px; }
+.tp-be .be-price { display: block; font-weight: 400; font-size: 11.5px; }
+.tp-be tbody th { font-weight: 700; }
+.tp-table td.num .mid { font-family: var(--sans); text-align: right; }
+.tp-legend-note { margin-top: 12px; }
+.tp-noscript { margin: 0; padding: 16px; }
+
+/* ---------- 図1：推移 ---------- */
+.tp-figure { display: grid; gap: 12px; margin: 0; }
+.tp-fig-label { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .2em; color: var(--muted); }
+.tp-fig-title { margin: 2px 0 0; font-family: var(--serif); font-size: clamp(17px, 2.2vw, 20px); font-weight: 600; line-height: 1.6; }
+.tp-fig-sub { margin: 2px 0 0; font-size: 13px; color: var(--ink-soft); }
+.tp-fig-cap-long { max-width: 46em; font-size: 12.5px; line-height: 1.8; color: var(--ink-soft); }
+
+.tp-chart-ctl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.tp-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--surface); }
+.tp-seg-btn { border: 0; background: none; padding: 5px 14px; border-radius: 999px; font-size: 13px; cursor: pointer; color: var(--ink-soft); }
+.tp-seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.tp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tp-chip {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  padding: 4px 11px; border-radius: 999px; font-size: 12.5px; cursor: pointer;
+}
+.tp-chip[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); font-weight: 700; box-shadow: inset 0 0 0 1px var(--accent); }
+
+.tp-chart-box { position: relative; }
+.tp-chart { display: block; width: 100%; height: clamp(300px, 46vw, 460px); overflow: visible; touch-action: pan-y; }
+.tp-grid { stroke: var(--line); stroke-width: 1; }
+.tp-axis-text { fill: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.tp-axis-title { fill: var(--muted); font-size: 12px; }
+.tp-step { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.tp-step.dim { stroke: var(--muted); stroke-opacity: .28; stroke-width: 1.5; }
+.tp-dot { fill: var(--accent); stroke: var(--bg); stroke-width: 2; }
+.tp-dot.dim { fill: var(--muted); fill-opacity: .45; stroke-opacity: .6; }
+.tp-dot.unverified { fill: var(--bg); stroke: var(--accent); stroke-width: 2; }
+.tp-dot.dim.unverified { fill: var(--bg); stroke: var(--muted); stroke-opacity: .6; }
+.tp-dot.active { stroke: var(--ink); stroke-width: 2.5; }
+.tp-cross { stroke: var(--ink-soft); stroke-width: 1; stroke-opacity: .5; }
+.tp-label { fill: var(--ink-soft); font-size: 11.5px; }
+
+.tp-tip {
+  position: absolute; z-index: 2; pointer-events: none;
+  display: grid; gap: 2px; width: max-content; max-width: min(18rem, calc(100% - 8px));
+  padding: 8px 11px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
+  font-size: 12.5px; line-height: 1.5;
+}
+.tp-tip-val { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tp-tip-model { font-weight: 700; }
+.tp-tip-meta { color: var(--ink-soft); }
+
+.tp-chart-legend { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 12.5px; color: var(--ink-soft); }
+.tp-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.tp-key-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.tp-key-dot.hollow { background: transparent; border: 2px solid var(--accent); }
+.tp-key-dot.dim { background: var(--muted); opacity: .5; }
+
+.tp-details { margin: 22px 0 0; }
+.tp-details summary { cursor: pointer; font-weight: 700; color: var(--accent-ink); }
+.tp-details .tp-table-wrap { margin-top: 12px; max-height: 70vh; }
+
+.tp-findings { display: grid; gap: 12px; margin: 28px 0 0; }
+@media (min-width: 760px) { .tp-findings { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tp-finding { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.tp-finding h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.6; }
+.tp-finding p { margin: 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+
+/* ---------- 注記と参照先 ---------- */
+.tp-note-list { margin: 0; padding-left: 1.2em; max-width: 50em; line-height: 1.9; color: var(--ink-soft); }
+.tp-refs { margin: 0; padding-left: 1.2em; font-size: 13px; line-height: 1.9; color: var(--ink-soft); columns: 1; }
+@media (min-width: 900px) { .tp-refs { columns: 2; column-gap: 32px; } }
+.tp-refs li { break-inside: avoid; }

@@ -1,0 +1,143 @@
+/*
+  LLM の学習と推論のコストを下げる手法（/contents/llm-cost/）専用のスタイル。
+  サイト共通の ../../style.css の上に重ねる。部品の形はほかのコンテンツ（token-pricing、token-feats）にそろえる。
+*/
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.lc-head { padding-bottom: 56px; }
+.lc-head .page-lead { max-width: 44em; line-height: 2; }
+.lc-lead { max-width: 46em; margin: 0 0 20px; color: var(--ink-soft); line-height: 1.9; }
+.lc-note { margin-top: 10px; }
+
+/* ---------- 数字のまとめ ---------- */
+.lc-keyfigs {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 0;
+  margin: 32px 0 0; padding: 16px 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+}
+@media (min-width: 720px) { .lc-keyfigs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lc-fig { display: grid; gap: 2px; min-width: 0; padding: 0 14px; }
+.lc-fig:nth-child(odd) { padding-left: 0; }
+.lc-fig:nth-child(even) { border-left: 1px solid var(--line); }
+@media (min-width: 720px) {
+  .lc-fig, .lc-fig:nth-child(odd) { padding: 0 16px; }
+  .lc-fig:first-child { padding-left: 0; }
+  .lc-fig + .lc-fig { border-left: 1px solid var(--line); }
+}
+.lc-fig-num { font-family: var(--serif); font-weight: 700; line-height: 1.25; font-size: clamp(1.4rem, 1.05rem + 1.4vw, 1.9rem); }
+.lc-fig-num.lc-fig-date { font-size: clamp(1.05rem, .9rem + .8vw, 1.35rem); padding-top: .25em; }
+.lc-fig-num .unit { margin-left: 2px; font-family: var(--sans); font-size: .5em; font-weight: 500; color: var(--muted); }
+.lc-fig-cap { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+
+/* ---------- 図1：一生の流れ ---------- */
+.lc-figure { margin: 0 0 32px; }
+.lc-flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: st; }
+@media (min-width: 760px) { .lc-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lc-stage {
+  position: relative; padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: var(--radius);
+}
+@media (min-width: 760px) {
+  .lc-stage + .lc-stage::before {
+    content: "→"; position: absolute; left: -12px; top: 18px; transform: translateX(-50%);
+    color: var(--muted); font-weight: 700;
+  }
+}
+.lc-stage-name { margin: 0 0 6px; font-family: var(--serif); font-weight: 700; font-size: 17px; }
+.lc-stage-res { margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.lc-stage ul { margin: 0; padding-left: 1.1em; font-size: 13px; line-height: 1.7; color: var(--ink-soft); }
+.lc-fig-cap-long { margin-top: 10px; font-size: 12.5px; line-height: 1.8; color: var(--ink-soft); }
+.lc-fig-no { margin-right: 8px; font-weight: 700; color: var(--accent-ink); }
+
+/* 減らすもの・重いものの札 */
+.lc-res {
+  display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; line-height: 1.8;
+  border: 1px solid transparent; white-space: nowrap;
+}
+.res-compute { background: #e6efe2; color: #1f5a37; }
+.res-memory { background: #fbe9e3; color: #8f3a22; }
+.res-comm { background: #e5eef6; color: #23507a; }
+.res-time { background: #f3eedc; color: #6b5512; }
+.res-tokens { background: #efe6f5; color: #5b2f7a; }
+.res-cost { background: #eceeea; color: #3f463d; }
+.lc-stage-chip { display: inline-block; padding: 0 7px; border-radius: 4px; font-size: 11.5px; line-height: 1.8; background: var(--bg-alt); color: var(--ink-soft); white-space: nowrap; }
+
+/* ---------- 内訳のカード ---------- */
+.lc-anatomy { display: grid; gap: 10px; }
+.lc-place { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.lc-place > summary {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; list-style: none;
+}
+.lc-place > summary::-webkit-details-marker { display: none; }
+.lc-place > summary::before { content: "＋"; color: var(--accent-ink); font-weight: 700; }
+.lc-place[open] > summary::before { content: "－"; }
+.lc-place-name { font-family: var(--serif); font-size: 16.5px; font-weight: 600; }
+.lc-place-n { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.lc-place .lc-facts { padding: 0 12px 12px; }
+.lc-place .lc-fact { background: var(--bg); }
+.lc-facts { display: grid; gap: 10px; }
+.lc-fact { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); font-size: 13.5px; line-height: 1.75; }
+.lc-fact h4 { margin: 0 0 4px; font-size: 14.5px; font-weight: 700; line-height: 1.55; }
+.lc-fact p { margin: 0; color: var(--ink-soft); }
+.lc-fact .num { margin-top: 6px; color: var(--ink); font-weight: 700; }
+.lc-fact .cav { margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+/* ---------- 図2：表 ---------- */
+.lc-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.lc-matrix { width: 100%; min-width: 680px; border-collapse: collapse; font-size: 13px; }
+.lc-matrix th, .lc-matrix td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.lc-matrix thead th { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.lc-matrix td.n { text-align: center; padding: 4px; }
+.lc-matrix .sec td { font-weight: 700; color: var(--accent-ink); background: var(--bg-alt); }
+.lc-cell {
+  display: inline-grid; place-items: center; min-width: 30px; height: 26px; padding: 0 6px; border: 0; border-radius: 6px;
+  cursor: pointer; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.lc-cell:hover, .lc-cell:focus-visible { outline: 2px solid var(--accent-ink); }
+.lc-matrix .g { white-space: nowrap; }
+.lc-matrix .g button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--ink); text-align: left; }
+.lc-matrix .g button:hover { color: var(--accent-ink); text-decoration: underline; }
+.lc-zero { color: var(--line); }
+
+/* ---------- 絞り込み ---------- */
+.lc-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 12px; margin: 0 0 16px; }
+.lc-ctl { display: grid; gap: 4px; font-size: 13px; }
+.lc-ctl-l { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .05em; }
+.lc-ctl select, .lc-ctl input {
+  min-height: 38px; padding: 6px 10px; font: inherit; font-size: 14px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; max-width: 16rem;
+}
+.lc-ctl-q { flex: 1 1 12rem; }
+.lc-ctl-q input { width: 100%; max-width: none; }
+.lc-reset { min-height: 38px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: pointer; font-size: 13px; }
+.lc-count { margin-left: auto; padding-bottom: 8px; font-size: 13px; color: var(--muted); }
+.lc-empty { color: var(--muted); }
+
+/* ---------- 手法のカード ---------- */
+.lc-sec-h { margin: 28px 0 6px; font-family: var(--serif); font-size: 20px; font-weight: 600; }
+.lc-sec-h:first-child { margin-top: 0; }
+.lc-grp-h { margin: 18px 0 8px; font-size: 14px; font-weight: 700; color: var(--accent-ink); }
+.lc-cards { display: grid; gap: 10px; }
+.lc-card { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); font-size: 13.5px; line-height: 1.75; min-width: 0; }
+.lc-card h4 { margin: 0; font-size: 15.5px; font-weight: 700; line-height: 1.5; }
+.lc-card .en { margin: 0; font-size: 12px; color: var(--muted); }
+.lc-card .chips { margin: 6px 0 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.lc-card .what { margin: 0 0 6px; }
+.lc-card .eff { margin: 0 0 6px; padding-left: 1.1em; }
+.lc-card .eff li + li { margin-top: 2px; }
+.lc-card .trade { margin: 0 0 4px; font-size: 12.5px; color: var(--ink-soft); }
+.lc-card .trade b { color: var(--hot-ink); font-weight: 700; }
+.lc-card .src { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+.lc-card a, .lc-fact a, .lc-note-list a { color: var(--accent-ink); text-underline-offset: 3px; word-break: break-all; }
+.lc-more summary { cursor: pointer; color: var(--accent-ink); font-size: 12px; }
+.lc-more blockquote { margin: 6px 0 0; padding: 4px 10px; border-left: 3px solid var(--line); font-size: 12px; color: var(--ink-soft); }
+.lc-more blockquote + blockquote { margin-top: 6px; }
+.lc-badge {
+  display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; line-height: 1.7; white-space: nowrap;
+  color: var(--hot-ink); border: 1px solid color-mix(in srgb, var(--hot-ink) 55%, transparent);
+}
+
+.lc-note-list { margin: 0; padding-left: 1.2em; max-width: 50em; line-height: 1.9; color: var(--ink-soft); }

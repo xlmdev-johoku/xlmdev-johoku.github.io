@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>Language Model は社会を豊かにするか ―― 「AIで豊かになる」と「AIで失業者が増える」を供給と需要に分けて考える | XLM開発会議 城北支部</title>
+  <meta name="description" content="「AIで社会が豊かになる」と「AIで失業者が増える」という一見矛盾する2つの話を、作れる量（供給能力）と買われる量（需要）に分けて考えます。分かれ目は技術の性能ではなく、AI を何に使うかと、経済や産業の政策です。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Language Model は社会を豊かにするか ―― 「AIで豊かになる」と「AIで失業者が増える」を供給と需要に分けて考える | XLM開発会議 城北支部">
+  <meta property="og:description" content="「AIで社会が豊かになる」と「AIで失業者が増える」という一見矛盾する2つの話を、作れる量（供給能力）と買われる量（需要）に分けて考えます。分かれ目は技術の性能ではなく、AI を何に使うかと、経済や産業の政策です。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/lm-prosperity-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-lm-prosperity-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="Language Model は社会を豊かにするか ―― 「AIで豊かになる」と「AIで失業者が増える」を供給と需要に分けて考える">
+  <meta property="article:published_time" content="2026-11-28">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/lm-prosperity-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-28">2026.11.28</time><span class="content-tag">考察</span></p>
+            <h1>Language Model は社会を豊かにするか ―― 「AIで豊かになる」と「AIで失業者が増える」を供給と需要に分けて考える</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>LLM（大規模言語モデル）をはじめとする AI をめぐっては、2つの見方がよく語られます。「AIで社会が進化し豊かになる」という期待と、「AIで失業者が増える」という不安です。仕事を奪う技術が社会を豊かにするというのは、一見すると矛盾しています。</p>
+          <p>この記事では、2つの話を「作れる量」と「買われる量」に分けて考えます。結論を先に書くと、2つは同時に起こりえます。どちらがどれだけ表れるかは、技術の性能よりも AI を何に使うかで決まります。そして、その使い道を方向づけるのが経済や産業の政策です。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>「豊かになる」は主に<strong>作れる量（供給能力）</strong>の話で、「失業者が増える」は<strong>雇われる量（労働需要）</strong>の話。作れる量が増えても買われる量が増えなければ、人の仕事は増えない。</li>
+              <li>いまの AI は、すでにあるものを少ない手間で作る<strong>効率化に多く使われている</strong>。AI 関連の投資で経済が成長する一方で、仕事への影響は<strong>むしろ若年層の採用の減少</strong>として表れている。</li>
+              <li>AI を何に使うかは、企業の誘因とそれを形づくる政策で変わる。需要を生みやすいのは<strong>新しい製品やサービス</strong>で、それが「誰にとって新しいか」を考えることが次の手がかりになる。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月28日時点の情報です。</p>
+
+          <nav class="toc" aria-labelledby="toc-title">
+            <p class="toc-title" id="toc-title">目次</p>
+            <ol>
+              <li><a href="#sec1">同一人物が「豊かになる」と「仕事が減る」の両方を主張している</a></li>
+              <li><a href="#sec2">2つの話は別のものを測っている</a>
+                <ol>
+                  <li><a href="#sec2-1">LLM はこれまでの自動化と影響の向きが違う</a></li>
+                </ol>
+              </li>
+              <li><a href="#sec3">いまの AI は何に使われているか</a></li>
+              <li><a href="#sec4">データに表れていることとまだ表れていないこと</a>
+                <ol>
+                  <li><a href="#sec4-1">成長を大きく支えているのは AI 関連の投資</a></li>
+                  <li><a href="#sec4-2">仕事への影響は若年層の採用に表れ始めている</a></li>
+                  <li><a href="#sec4-3">失業への影響は中長期の問題</a></li>
+                </ol>
+              </li>
+              <li><a href="#sec5">なぜ経済と産業政策の問題なのか</a>
+                <ol>
+                  <li><a href="#sec5-1">生産性が上がった分は働く人にどれだけ回っているか</a></li>
+                  <li><a href="#sec5-2">効率化で浮いた費用の行き先を決めるのは企業の誘因と政策</a></li>
+                  <li><a href="#sec5-3">人手不足の日本では問いの形が少し違う</a></li>
+                </ol>
+              </li>
+              <li><a href="#sec6">需要を生むのはどんな新しさか</a>
+                <ol>
+                  <li><a href="#sec6-1">新しさには3つの段階がある</a></li>
+                </ol>
+              </li>
+              <li><a href="#sec7">Language Model は社会を豊かにするか</a></li>
+            </ol>
+          </nav>
+
+          <h2 id="sec1">同一人物が「豊かになる」と「仕事が減る」の両方を主張している</h2>
+          <p>2つの話は、立場の違う人どうしの議論とは限りません。たとえば Anthropic の CEO であるダリオ・アモデイ（Dario Amodei）は、2本のエッセイで両方を主張しています。</p>
+          <ul>
+            <li><strong>2024年10月「Machines of Loving Grace」</strong>：強力な AI ができれば、生物学と医学で21世紀の100年間に見込まれる進歩を数年で成し遂げられるとしました。これを「圧縮された21世紀」と呼んでいます。途上国で年20%の経済成長を目指すことも「夢のシナリオ」として挙げました<sup class="cite"><a href="#ref1">[1]</a></sup>。</li>
+            <li><strong>2026年1月「The Adolescence of Technology」</strong>：AI の最もわかりやすい効果は、経済成長を大きく押し上げることだと書きました。同じエッセイの中で、AI は1〜5年のうちに<strong>エントリーレベルのホワイトカラーの仕事の50%を揺るがす</strong>（disrupt）とも書いています<sup class="cite"><a href="#ref2">[2]</a></sup>。</li>
+          </ul>
+          <p>アモデイ自身は、これを矛盾とは考えていません。過去の技術と比べて移行期の痛みが異例に大きくなる、ということだとしています<sup class="cite"><a href="#ref2">[2]</a></sup>。では、経済が大きくなるのに仕事が減るとは、どういう状態なのでしょうか。</p>
+
+          <h2 id="sec2">2つの話は別のものを測っている</h2>
+          <p>「AIで豊かになる」というとき、多くの場合は、同じ人手と設備でより多くのものやサービスを作れるようになることを指しています。経済学では、これを<strong>供給能力</strong>が増えるといいます。</p>
+          <p>一方の「失業者が増える」は、人がどれだけ雇われるかの話です。企業が人を雇うのは、作ったものが売れる見込みがあるからです。そのため、人が雇われる量（<strong>労働需要</strong>）は、ものやサービスがどれだけ買われるか（<strong>需要</strong>）に左右されます。</p>
+          <p>作れる量と買われる量は、自然にそろうわけではありません。架空の例で考えます。10人で100個作っていた職場が、AI で1人あたり2倍作れるようになったとします。買われる量が100個のままなら、必要な人手は5人です。作れる量は200個に増えたのに、雇われる人は半分になります。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 266" role="img" aria-labelledby="fig1-t">
+              <title id="fig1-t">AIを使う前は作れる量も買われる量も100で、必要な人手は10人。工程を効率化しただけだと作れる量は200になるが、買われる量が100のままなので必要な人手は5人。新しい需要も生まれて買われる量が200になると、必要な人手は10人に戻る</title>
+              <rect class="s-band" x="160" y="10" width="18" height="14"/>
+              <text class="t-tiny" x="184" y="22">作れる量（供給能力）</text>
+              <rect class="s-strip" style="fill: var(--accent-ink)" x="340" y="10" width="18" height="14"/>
+              <text class="t-tiny" x="364" y="22">買われる量（需要）</text>
+              <text class="t-main" x="10" y="70">AI を使う前</text>
+              <rect class="s-band" x="160" y="50" width="140" height="22"/>
+              <rect class="s-strip" style="fill: var(--accent-ink)" x="160" y="76" width="140" height="22"/>
+              <text class="t-tiny" x="306" y="66">100</text>
+              <text class="t-tiny" x="306" y="92">100</text>
+              <text class="t-sub" x="480" y="80">人手 10人</text>
+              <text class="t-main" x="10" y="150">効率化だけ</text>
+              <text class="t-tiny" x="10" y="170">1人あたり2倍作れる</text>
+              <rect class="s-band" x="160" y="130" width="280" height="22"/>
+              <rect class="s-strip" style="fill: var(--accent-ink)" x="160" y="156" width="140" height="22"/>
+              <text class="t-tiny" x="446" y="146">200</text>
+              <text class="t-tiny" x="306" y="172">100</text>
+              <text class="t-hot" x="480" y="160">人手 5人</text>
+              <text class="t-main" x="10" y="230">需要も増えた</text>
+              <text class="t-tiny" x="10" y="250">新しい製品が売れた</text>
+              <rect class="s-band" x="160" y="210" width="280" height="22"/>
+              <rect class="s-strip" style="fill: var(--accent-ink)" x="160" y="236" width="280" height="22"/>
+              <text class="t-tiny" x="446" y="226">200</text>
+              <text class="t-tiny" x="446" y="252">200</text>
+              <text class="t-sub" x="480" y="240">人手 10人</text>
+            </svg>
+            <figcaption><span class="fig-no">図1</span>作れる量が増えても、買われる量が増えなければ必要な人手は減る。「豊かになる」と「失業者が増える」は、同じ職場で同時に起こりうる。数字は説明のための架空の値で、必要な人手＝買われる量÷1人あたり作れる量</figcaption>
+          </figure>
+
+          <p>図1の2段目では、作れる量が増えた分だけ社会は豊かになっています。一方で、働く人に回る仕事は減っています。2つの話はこうして同時に成り立ちます。3段目のように買われる量も増えれば、必要な人手は元に戻ります。</p>
+          <p>もちろん、現実はもっと複雑です。効率化で値段が下がれば、買われる量が増えることもあります。安くなって浮いたお金で、人々がほかのものを買うこともあります。経済学では、こうした経路が整理されています。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：人の仕事の量を動かす3つの力</p>
+            <p>経済学者のダロン・アセモグル（Daron Acemoglu）とパスクアル・レストレポ（Pascual Restrepo）は、自動化が人の労働需要に与える影響を3つの力に分けました（2019年）<sup class="cite"><a href="#ref3">[3]</a></sup>。</p>
+            <ul>
+              <li><strong>置換効果</strong>（displacement）：人がしていた作業が機械に移り、人の仕事が減る。</li>
+              <li><strong>生産性効果</strong>（productivity）：費用が下がって生産と所得が増え、自動化されていない作業で人の需要が増える。</li>
+              <li><strong>復元効果</strong>（reinstatement）：人が担う新しい作業が生まれ、仕事が人の側に戻る。</li>
+            </ul>
+            <p>生産性効果が人の仕事を増やすのは、安くなった分や増えた所得が、ほかのものやサービスへの需要になるときです。二人は、生産性があまり上がらない「そこそこの自動化（so-so automation）」だと、生産性効果が小さく置換効果が目立つと指摘しています。二人の推計では、米国の1987〜2017年は置換効果による押し下げが年0.70%分に強まり、復元効果による押し上げは年0.35%分に弱まりました。それ以前の40年は、両者がほぼ釣り合っていました<sup class="cite"><a href="#ref3">[3]</a></sup>。</p>
+          </aside>
+
+          <h3 id="sec2-1">LLM はこれまでの自動化と影響の向きが違う</h3>
+          <p>同じ置換効果でも、LLM はこれまでの自動化と影響が及ぶ仕事の向きが違います。ある推計では、ロボットに置き換えられやすいのは賃金の低い職種の作業で、ソフトウェアでは中くらいの職種の作業でした（Webb 2020）<sup class="cite"><a href="#ref4">[4]</a></sup>。これに対して LLM がこなしうる作業は、<strong>賃金の高い職種ほど多い</strong>と推計されています（Eloundou ほか 2023）<sup class="cite"><a href="#ref5">[5]</a></sup>。レストレポも、1980年以降の自動化で作業を失ったのは賃金分布の下と中の働き手だったのに対し、LLM ではむしろ高賃金の働き手のほうが影響を受けやすく見えると書いています<sup class="cite"><a href="#ref6">[6]</a></sup>。ただし、これらはこなしうる作業の多さを測ったもので、仕事が置き換わると予測したものではありません。Claude の会話を分析した Anthropic の報告では、実際の利用は中〜高賃金の職種の作業に多く、賃金が最も低い職種と最も高い職種ではどちらも少なくなっていました<sup class="cite"><a href="#ref7">[7]</a></sup>。</p>
+
+          <h2 id="sec3">いまの AI は何に使われているか</h2>
+          <p>AI の使い道は、大きく2つに分けられます。1つは、すでにあるものやサービスを、より少ない人手や時間で作る使い方です。もう1つは、これまでなかった製品やサービスを作る使い方です。前者は主に供給能力を増やし、後者は新しい需要を生みます。</p>
+          <p>企業への調査を見ると、前者が中心です。総務省の『令和8年版 情報通信白書』は、日本・米国・ドイツ・中国の企業に、生成 AI の活用で生じうる影響を聞いています。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>生じうる影響（複数回答）</th><th>日本</th><th>米国</th><th>ドイツ</th><th>中国</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">作業時間の短縮などによる業務の効率化</th><td data-label="日本"><strong>61.6%</strong></td><td data-label="米国">56.6%</td><td data-label="ドイツ">51.1%</td><td data-label="中国">46.9%</td></tr>
+                <tr><th scope="row">製品・サービスの質の向上</th><td data-label="日本">32.2%</td><td data-label="米国"><strong>59.9%</strong></td><td data-label="ドイツ"><strong>54.4%</strong></td><td data-label="中国"><strong>65.7%</strong></td></tr>
+                <tr><th scope="row">人員不足の解消</th><td data-label="日本">26.8%</td><td data-label="米国">24.6%</td><td data-label="ドイツ">28.5%</td><td data-label="中国">38.5%</td></tr>
+                <tr><th scope="row">新規ビジネスの立ち上げやイノベーションによるビジネスの拡大</th><td data-label="日本">20.6%</td><td data-label="米国">22.3%</td><td data-label="ドイツ">25.2%</td><td data-label="中国">32.0%</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図2</span>生成 AI の活用で生じうる影響（総務省『令和8年版 情報通信白書』図表Ⅰ-2-1-10 から一部の項目を抜き出した。太字は各国の最多）<sup class="cite"><a href="#ref8">[8]</a></sup></figcaption>
+          </figure>
+
+          <p>どの国でも、新規ビジネスを挙げた企業は2〜3割にとどまり、効率化や質の向上より少なくなっています。ただし、これは企業がどんな影響を見込んでいるかを聞いたもので、実際の使い道の割合ではありません。また、米国・ドイツ・中国で最も多いのは「質の向上」で、量だけでなく質を高める使い方も期待されています<sup class="cite"><a href="#ref8">[8]</a></sup>。</p>
+          <p>実際のやりとりを分類したデータもあります。Anthropic の Economic Index によると、開発者や企業が API を通じて Claude を自社のシステムに組み込んだ使い方では、約4分の3が作業を AI に任せる「自動化」型でした（2025年11月のデータ）<sup class="cite"><a href="#ref9">[9]</a></sup>。消費者向けの Claude.ai では、人と AI が一緒に作業する「補完」型が約半分です<sup class="cite"><a href="#ref9">[9]</a></sup>。これは会話のパターンの分類で、雇用が置き換わったかどうかを測ったものではありません。</p>
+          <p>アモデイも、先のエッセイでこの分かれ目に触れています。</p>
+          <blockquote>
+            <p>企業は多くの場合、「コスト削減」（同じことをより少ない人数で行う）と「イノベーション」（同じ人数でより多くのことを行う）のどちらかを選べる。<sup class="cite"><a href="#ref2">[2]</a></sup></p>
+            <cite>Dario Amodei「The Adolescence of Technology」（2026年1月）の訳</cite>
+          </blockquote>
+          <p>そのうえで、可能な場面では企業をイノベーションの側へ導く余地があるかもしれない、と続けています<sup class="cite"><a href="#ref2">[2]</a></sup>。</p>
+
+          <h2 id="sec4">データに表れていることとまだ表れていないこと</h2>
+          <h3 id="sec4-1">成長を大きく支えているのは AI 関連の投資</h3>
+          <aside class="column column-sm">
+            <p class="column-title">用語：実質 GDP・成長への寄与・連邦準備銀行</p>
+            <ul>
+              <li><strong>実質 GDP</strong>：国内で生み出されたものやサービスの価値の合計（GDP）から、物価の変動の影響を除いたもの。経済の大きさを測る代表的な数字。</li>
+              <li><strong>成長への寄与</strong>：GDP の伸びのうち、ある項目の伸びがどれだけを占めたか。全体が2%伸び、そのうち1%分がある項目の伸びなら、その項目の寄与は伸びの半分になる。</li>
+              <li><strong>連邦準備銀行（連銀）</strong>：米国の中央銀行の制度を構成する12の地区の銀行。それぞれが経済の調査や分析を公表している。</li>
+            </ul>
+          </aside>
+          <p>米国では、経済成長のかなりの部分を AI 向けの投資が占めています。セントルイス連邦準備銀行の推計では、2025年1〜9月の実質 GDP の伸びのうち39%が、情報処理機器・ソフトウェア・研究開発・データセンター建設の4項目によるものでした<sup class="cite"><a href="#ref10">[10]</a></sup>。ドットコム・バブル期の2000年（28%）を上回る水準です。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 160" role="img" aria-labelledby="fig3-t">
+              <title id="fig3-t">実質GDPの伸びのうち、2025年1月から9月はAI関連の4項目が39%を占めた。2000年のドットコム期にIT関連の項目が占めた28%を上回る</title>
+              <text class="t-main" x="10" y="52">2025年1〜9月</text>
+              <rect class="s-band" x="160" y="30" width="380" height="34"/>
+              <rect x="160" y="30" width="148" height="34" style="fill: var(--accent-ink)"/>
+              <text class="t-main" x="234" y="53" text-anchor="middle" style="fill: var(--surface)">39%</text>
+              <text class="t-sub" x="424" y="53" text-anchor="middle">それ以外</text>
+              <text class="t-tiny" x="160" y="82">AI 関連の4項目</text>
+              <text class="t-main" x="10" y="122">2000年</text>
+              <text class="t-tiny" x="10" y="142">ドットコム期</text>
+              <rect class="s-band" x="160" y="100" width="380" height="34"/>
+              <rect x="160" y="100" width="106" height="34" style="fill: var(--accent-ink)"/>
+              <text class="t-main" x="213" y="123" text-anchor="middle" style="fill: var(--surface)">28%</text>
+              <text class="t-sub" x="403" y="123" text-anchor="middle">それ以外</text>
+              <text class="t-tiny" x="160" y="152">IT 関連の項目</text>
+            </svg>
+            <figcaption><span class="fig-no">図3</span>米国の実質 GDP の伸びのうち AI 関連の投資が占めた割合（セントルイス連邦準備銀行の推計、2026年1月）<sup class="cite"><a href="#ref10">[10]</a></sup>。帯の全体はその期間の実質 GDP の伸び。4項目は情報処理機器・ソフトウェア・研究開発・データセンター建設</figcaption>
+          </figure>
+          <p>ただし、統計に「AI」という分類はなく、4項目には AI 以外の投資も含まれます<sup class="cite"><a href="#ref11">[11]</a></sup>。機器の多くは輸入なので、国内の成長への正味の寄与は見かけより小さいという指摘もあります<sup class="cite"><a href="#ref12">[12]</a></sup>。</p>
+          <p>半導体・データセンター・電力といった AI 関連の産業では、需要がはっきり伸びています。少なくともこの分野では豊かさが生まれています。問題は、それが AI 関連の産業の外にどこまで広がるかです。</p>
+
+          <h3 id="sec4-2">仕事への影響は若年層の採用に表れ始めている</h3>
+          <aside class="column column-sm">
+            <p class="column-title">用語：AI の影響を受けやすい職種</p>
+            <p>研究では「AI への露出（exposure）」と呼びます。職種ごとの作業を、生成 AI でこなせそうかどうかで点数にし、職種単位にまとめた指標です。研究によって測り方は違います。露出が高いのは「AI でこなせそうな作業が多い」という意味で、その仕事がなくなるという意味ではありません。</p>
+          </aside>
+          <p>スタンフォード大学のエリック・ブリニョルフソン（Erik Brynjolfsson）らは、米国の大手給与計算会社のデータを分析しています。2026年8月の改訂版では、AI の影響を受けやすい職種の22〜25歳の雇用が、影響を受けにくい職種と同じペースで伸びた場合より19%低くなっていました<sup class="cite"><a href="#ref13">[13]</a></sup>。経験のある働き手には、同じ差は見られません。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 240" role="img" aria-labelledby="fig4-t">
+              <title id="fig4-t">22歳から25歳の雇用は、2022年11月から2026年6月に、AIの影響を受けやすい職種で約11%減り、受けにくい職種で約10%増えた</title>
+              <line class="s-axis" x1="80" y1="110" x2="500" y2="110"/>
+              <text class="t-tiny" x="72" y="114" text-anchor="end">0</text>
+              <rect x="150" y="110" width="100" height="66" style="fill: var(--hot-ink)"/>
+              <text class="t-hot" x="200" y="198" text-anchor="middle">約 −11%</text>
+              <rect x="330" y="50" width="100" height="60" style="fill: var(--accent-ink)"/>
+              <text class="t-main" x="380" y="40" text-anchor="middle">約 +10%</text>
+              <text class="t-sub" x="200" y="228" text-anchor="middle">影響を受けやすい職種</text>
+              <text class="t-sub" x="380" y="228" text-anchor="middle">影響を受けにくい職種</text>
+            </svg>
+            <figcaption><span class="fig-no">図4</span>米国の22〜25歳の雇用の増減（2022年11月から2026年6月。Brynjolfsson ほか、2026年8月の改訂版）<sup class="cite"><a href="#ref13">[13]</a></sup>。受けやすい職種は露出の指標の上位5分の2、受けにくい職種は下位5分の3。データに見られる傾向で、因果関係の推定ではない</figcaption>
+          </figure>
+          <p>減ったのは、解雇が増えたからではなく、採用が減ったためでした<sup class="cite"><a href="#ref13">[13]</a></sup>。また、AI が人を補う形で使われている職種では、若年層の雇用は横ばいか増えています。AI に作業を任せる使い方が多い職種で減り、人を補う使い方が多い職種では減っていない。この点は、ここまでの話と合っています。ただし著者たちは、これは因果関係を推定したものではなく、データに見られる傾向を記述したものだとしています<sup class="cite"><a href="#ref13">[13]</a></sup>。</p>
+
+          <h3 id="sec4-3">失業への影響は中長期の問題</h3>
+          <p>米国の失業率は2026年10月に4.1%で、3月以降は4.1〜4.3%の範囲にあります<sup class="cite"><a href="#ref14">[14]</a></sup>。ただし足元の失業率は、景気をはじめ AI 以外の要因で動いています。この数字から、AI の影響の有無を読み取るのは難しいところです。</p>
+          <p>AI に絞った分析でも、経済全体への影響はまだ見えていません。イェール大学の Budget Lab は、2026年10月の更新で「AI の利用の指標は、雇用や失業の変化と関係が見られない」としています<sup class="cite"><a href="#ref15">[15]</a></sup>。ダラス連邦準備銀行は、若年層の雇用の減少がすべて失業になったとしても、全体の失業率の上昇は0.1ポイントにとどまると試算しました<sup class="cite"><a href="#ref16">[16]</a></sup>。</p>
+          <p>そもそも AI による失業は、中長期の問題として語られてきました。アモデイが書いたのも「1〜5年のうちに」という時間軸でした<sup class="cite"><a href="#ref2">[2]</a></sup>。前の節で見た若年層の採用の減少は、その兆しかもしれません。解雇ではなく採用が減る形なら、影響は新しく働き始める世代から順に表れます。経済全体の数字に出るまでには時間がかかると考えられます。</p>
+
+          <figure class="fig">
+            <ol class="flow">
+              <li class="flow-step is-trusted">
+                <span class="flow-badge">いま見えている段階</span>
+                <span class="flow-name">企業が新しく人を採らなくなる</span>
+                <span class="flow-desc">今いる人を辞めさせるのではなく、AI でこなせる作業のための採用を減らす。若年層の採用の減少として表れる</span>
+              </li>
+              <li class="flow-step is-untrusted">
+                <span class="flow-name">新しく働き始める世代が別の仕事に回る</span>
+                <span class="flow-desc">入れなかった職種の代わりに、ほかの職種や仕事を探す。すぐに失業率が上がるとは限らない</span>
+              </li>
+              <li class="flow-step is-untrusted">
+                <span class="flow-name">その世代が働く人の中で増えていく</span>
+                <span class="flow-desc">採用が減った職種では、年をとって辞める人の分が補われず、人数が少しずつ減る</span>
+              </li>
+              <li class="flow-step is-untrusted">
+                <span class="flow-name">経済全体の数字に表れる</span>
+                <span class="flow-desc">別の仕事で吸収しきれなければ、失業率や賃金に出てくる</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図5</span>採用が減る形の影響が経済全体に表れるまでの流れ（筆者の整理による模式図。点線はまだ確かめられていない段階）</figcaption>
+          </figure>
+          <p>この記事も「すでにそうなっている」と主張するものではありません。<strong>いまの使われ方が続けば、中長期には作れる量が伸びても仕事は広がりにくい</strong>という話です。</p>
+
+          <h2 id="sec5">なぜ経済と産業政策の問題なのか</h2>
+          <p>作れる量が増えたとき、それが多くの人の仕事と所得につながるかは、増えた分が誰の手に渡り何に使われるかで決まります。</p>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 560 270" role="img" aria-labelledby="fig6-t">
+              <title id="fig6-t">効率化で浮いた費用の行き先は3つ。値下げに回れば買う量が増え、人手はあまり減らないことがある。利益やAIへの投資に回れば、伸びる需要はAI関連の産業に偏る。賃金や新しい事業に回れば、ほかの需要も増える</title>
+              <defs><marker id="lmp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--muted)"/></marker></defs>
+              <rect class="s-band" x="10" y="105" width="140" height="60" rx="6"/>
+              <text class="t-main" x="80" y="131" text-anchor="middle">効率化で</text>
+              <text class="t-main" x="80" y="153" text-anchor="middle">浮いた費用</text>
+              <line class="s-lead" x1="150" y1="135" x2="222" y2="44" style="stroke-width: 2" marker-end="url(#lmp-arrow)"/>
+              <line class="s-lead" x1="150" y1="135" x2="222" y2="135" style="stroke-width: 2" marker-end="url(#lmp-arrow)"/>
+              <line class="s-lead" x1="150" y1="135" x2="222" y2="226" style="stroke-width: 2" marker-end="url(#lmp-arrow)"/>
+              <rect class="s-strip" x="230" y="14" width="320" height="62" rx="6"/>
+              <text class="t-main" x="244" y="40">値下げ</text>
+              <text class="t-tiny" x="244" y="62">買う量が大きく増えれば人手はあまり減らない</text>
+              <rect class="s-strip" x="230" y="104" width="320" height="62" rx="6"/>
+              <text class="t-main" x="244" y="130">利益・さらなる AI への投資</text>
+              <text class="t-hot" x="244" y="153" style="font-size: 13px">伸びる需要は AI 関連の産業に偏る</text>
+              <rect class="s-strip" x="230" y="194" width="320" height="62" rx="6"/>
+              <text class="t-main" x="244" y="220">賃金・新しい事業</text>
+              <text class="t-tiny" x="244" y="242">AI 関連以外のものやサービスの需要も増える</text>
+            </svg>
+            <figcaption><span class="fig-no">図6</span>効率化で浮いた費用の3つの行き先と、需要が伸びる場所（筆者の整理）</figcaption>
+          </figure>
+
+          <p>値下げに回った場合は、何が安くなったかで結果が分かれます。値下がりで買われる量が大きく増えるものなら、効率化しても必要な人手はあまり減りません。過去にはそうした例がいくつもあります。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>例</th><th>何が安くなったか</th><th>買われる量と仕事はどうなったか</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">米国の ATM と銀行の窓口係（1988〜2004年）</th><td data-label="何が安くなったか">支店の運営。都市部の1支店あたりの窓口係は20人から13人に減った</td><td data-label="買われる量と仕事">支店の数が43%増え、窓口係の仕事はなくならなかった<sup class="cite"><a href="#ref17">[17]</a></sup></td></tr>
+                <tr><th scope="row">19世紀の繊維産業</th><td data-label="何が安くなったか">力織機で、布1ヤードを織る手間が98%減った</td><td data-label="買われる量と仕事">布が安くなって需要が伸び、工場の織工の仕事は増えた。のちに需要が満たされると、雇用は減っていった<sup class="cite"><a href="#ref17">[17]</a></sup></td></tr>
+                <tr><th scope="row">LLM の利用料（2022〜2026年）</th><td data-label="何が安くなったか">100万トークンあたりの単価が、GPT-3（Davinci）の60ドルから、GPT-6 Luna の入力0.10ドル・出力0.50ドルへ<sup class="cite"><a href="#ref18">[18]</a></sup></td><td data-label="買われる量と仕事">Google の全サービスで処理するトークン数は、月9.7兆（2024年）から月3,200兆超（2026年5月）に増えた<sup class="cite"><a href="#ref19">[19]</a></sup>。仕事への影響はわからない</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図7</span>値下がりで買われる量が増えた例。ATM と繊維は J. Bessen（IMF『Finance &amp; Development』2015年3月号）、LLM の単価はコンテンツ「AI サービスのトークン単価」、トークン数は Google の公表値による。LLM の2つのモデルは性能も規模も違う</figcaption>
+          </figure>
+
+          <p>繊維の例が示すように、買われる量が増え続けるとは限りません。買われる量があまり変わらないものなら、人手はそのまま減ります。LLM 自体も、値下がりと利用の増加が同時に起きている例です。ただし、どちらが原因かまでは言えず、利用の増加がそのまま雇用の増加を意味するわけでもありません。単価の推移は、コンテンツ「<a href="../../contents/token-pricing/">AI サービスのトークン単価</a>」にまとめています<sup class="cite"><a href="#ref18">[18]</a></sup>。</p>
+          <p>浮いた費用の行き先とは別に、これまでなかった製品やサービスが売れれば、図1の3段目のように買われる量そのものが増えます。</p>
+
+          <h3 id="sec5-1">生産性が上がった分は働く人にどれだけ回っているか</h3>
+          <p>浮いた費用や増えた利益が働く人にどれだけ回っているかを示すデータは、まだ多くありません。デンマークの研究の初版（2025年5月）は、生成 AI のチャットボットで上がった生産性のうち、収入の増加に回ったのは3〜7%にとどまると推計しました<sup class="cite"><a href="#ref20">[20]</a></sup>。2026年3月の改訂版でも、導入した人が申告した収入への影響は0〜0.5%で、節約した時間より1桁小さいとしています<sup class="cite"><a href="#ref20">[20]</a></sup>。どちらも働き手の自己申告にもとづく値で、著者も慎重に読むよう断っています。</p>
+          <aside class="column column-sm">
+            <p class="column-title">用語：労働分配率</p>
+            <p>企業などが生み出した付加価値のうち、賃金として働く人に支払われた割合です。残りは利益や設備の費用などに回ります。この割合が下がると、経済が大きくなっても働く人の取り分は伸びにくくなります。</p>
+          </aside>
+          <p>米国全体では、非農業部門の労働分配率が2026年7〜9月期に53.0%となり、1947年に統計を取り始めて以来の最低になりました<sup class="cite"><a href="#ref21">[21]</a></sup>。同じ期の企業利益は年率4.9兆ドルで、前の期より2,060億ドル増えました<sup class="cite"><a href="#ref22">[22]</a></sup>。ただし、これを AI と結びつけた実証は見つかっておらず、AI ブームより前からの傾向だという見方もあります<sup class="cite"><a href="#ref23">[23]</a></sup>。</p>
+          <h3 id="sec5-2">効率化で浮いた費用の行き先を決めるのは企業の誘因と政策</h3>
+          <p>浮いた費用が値下げ・利益・賃金のどこへ回るかは、技術の性能だけでは決まりません。アセモグルとレストレポは、米国で1987年以降に置換効果が強まった理由として、技術の限界よりも誘因の変化を挙げました<sup class="cite"><a href="#ref3">[3]</a></sup>。設備への税の優遇、大手テック企業の自動化志向、政府の研究支援の縮小です。アセモグルはデイビッド・オーター（David Autor）やサイモン・ジョンソン（Simon Johnson）との2026年の論文でも、働く人を補う AI への投資は市場任せでは足りなくなりがちだとしています<sup class="cite"><a href="#ref24">[24]</a></sup>。</p>
+          <p>そう考えると、政策で打てる手は2つに分けられます。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>政策の手</th><th>ねらい</th><th>主な手段</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">需要の側（マクロ経済政策と分配）</th><td data-label="ねらい">増えた供給能力に見合う需要と所得を保つ</td><td data-label="主な手段">政府の支出や税、金利、税や社会保障による所得の分配</td></tr>
+                <tr><th scope="row">方向の側（産業政策）</th><td data-label="ねらい">AI を新しい製品や仕事を生む使い方に向ける</td><td data-label="主な手段">研究への支援、公共調達、設備と人への課税の見直し</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図8</span>増えた供給能力を仕事と所得につなげるための政策の2つの手（筆者の整理）</figcaption>
+          </figure>
+
+          <aside class="column column-sm">
+            <p class="column-title">用語：マクロ経済政策・産業政策・公共調達</p>
+            <ul>
+              <li><strong>マクロ経済政策</strong>：経済全体の需要や物価を整える政策。政府の支出や税を動かす財政政策と、中央銀行が金利などを動かす金融政策がある。</li>
+              <li><strong>産業政策</strong>：特定の産業や技術が育つ方向を、政府が後押しする政策。補助金、研究への支援、税の優遇などを使う。</li>
+              <li><strong>公共調達</strong>：国や自治体がものやサービスを買うこと。何を買うかで、企業が何を作るかを後押しできる。</li>
+            </ul>
+          </aside>
+
+          <h3 id="sec5-3">人手不足の日本では問いの形が少し違う</h3>
+          <p>日本では働き手が減り続けています。そのため、供給能力を増やす使い方そのものに大きな意味があります。国の中小企業省力化投資補助金も、人手不足に悩む中小企業がデジタル技術を使った設備を入れる費用を補助する制度です<sup class="cite"><a href="#ref25">[25]</a></sup>。日本で問われるのは失業そのものより、増えた供給能力が賃金の上がる仕事や新しい需要につながるかどうかでしょう。</p>
+          <p>実際の使い道を見ても、日本企業の AI は効率化の側に寄っています。図9の上は、上場企業などの IT 部門長に、言語系の生成 AI を入れるときの目的を聞いた調査です。下は、AI を入れて効果があった企業に、どんな効果が出たかを聞いた調査です。</p>
+
+          <figure class="fig">
+            <div class="hbars">
+              <p class="hbars-title">上：言語系の生成 AI を入れるときの目的（JUAS、複数回答）<sup class="cite"><a href="#ref26">[26]</a></sup></p>
+              <p class="hbars-meta">2025年9〜10月、上場企業などの IT 部門長、n=507。薄い棒は前年度（n=647）</p>
+              <ul class="hbars-legend"><li>効率化・人手不足</li><li style="--sw: color-mix(in srgb, var(--accent) 35%, var(--surface))">既存の製品・事業の改善</li><li style="--sw: var(--hot-ink)">新しい製品・事業</li></ul>
+                <div class="hbar"><span class="hbar-label">生産性向上（業務改善等）</span><span class="hbar-track"><span class="hbar-fill" style="--v: 88.4"></span><span class="hbar-fill is-prev" style="--v: 90.1"></span></span><span class="hbar-val">88.4%<small>前年度 90.1%</small></span></div>
+                <div class="hbar"><span class="hbar-label">人材不足解消</span><span class="hbar-track"><span class="hbar-fill" style="--v: 54.8"></span><span class="hbar-fill is-prev" style="--v: 38.6"></span></span><span class="hbar-val">54.8%<small>前年度 38.6%</small></span></div>
+                <div class="hbar"><span class="hbar-label">既存製品・サービスの価値向上</span><span class="hbar-track"><span class="hbar-fill is-mid" style="--v: 32.7"></span><span class="hbar-fill is-prev is-mid" style="--v: 18.5"></span></span><span class="hbar-val">32.7%<small>前年度 18.5%</small></span></div>
+                <div class="hbar"><span class="hbar-label">ビジネスモデルの変革</span><span class="hbar-track"><span class="hbar-fill is-mid" style="--v: 32.1"></span><span class="hbar-fill is-prev is-mid" style="--v: 17.8"></span></span><span class="hbar-val">32.1%<small>前年度 17.8%</small></span></div>
+                <div class="hbar"><span class="hbar-label">新規の製品・サービスの創出</span><span class="hbar-track"><span class="hbar-fill is-hot" style="--v: 29.2"></span><span class="hbar-fill is-prev is-hot" style="--v: 15.1"></span></span><span class="hbar-val">29.2%<small>前年度 15.1%</small></span></div>
+                <div class="hbar"><span class="hbar-label">新規事業創出</span><span class="hbar-track"><span class="hbar-fill is-hot" style="--v: 29.0"></span><span class="hbar-fill is-prev is-hot" style="--v: 15.5"></span></span><span class="hbar-val">29.0%<small>前年度 15.5%</small></span></div>
+            </div>
+            <div class="hbars">
+              <p class="hbars-title">下：AI を入れて実際に出た効果（IPA）<sup class="cite"><a href="#ref27">[27]</a></sup></p>
+              <p class="hbars-meta">2026年4〜6月、AI を導入・試験利用して効果があった企業、n=853</p>
+                <div class="hbar"><span class="hbar-label">業務が効率化したり迅速化した</span><span class="hbar-track"><span class="hbar-fill" style="--v: 91.6"></span></span><span class="hbar-val">91.6%</span></div>
+                <div class="hbar"><span class="hbar-label">企画提案等の品質や速さが向上した</span><span class="hbar-track"><span class="hbar-fill" style="--v: 48.9"></span></span><span class="hbar-val">48.9%</span></div>
+                <div class="hbar"><span class="hbar-label">残業時間の削減につながった</span><span class="hbar-track"><span class="hbar-fill" style="--v: 29.2"></span></span><span class="hbar-val">29.2%</span></div>
+                <div class="hbar"><span class="hbar-label">製品やサービスの開発や提供が迅速化した</span><span class="hbar-track"><span class="hbar-fill is-mid" style="--v: 10.9"></span></span><span class="hbar-val">10.9%</span></div>
+                <div class="hbar"><span class="hbar-label">既存製品やサービスの品質や付加価値が向上した</span><span class="hbar-track"><span class="hbar-fill is-mid" style="--v: 10.6"></span></span><span class="hbar-val">10.6%</span></div>
+                <div class="hbar"><span class="hbar-label">新たな製品やサービスの開発や提供につながった</span><span class="hbar-track"><span class="hbar-fill is-hot" style="--v: 7.4"></span></span><span class="hbar-val">7.4%</span></div>
+                <div class="hbar"><span class="hbar-label">売上や利益が向上した</span><span class="hbar-track"><span class="hbar-fill is-hot" style="--v: 3.9"></span></span><span class="hbar-val">3.9%</span></div>
+            </div>
+            <figcaption><span class="fig-no">図9</span>日本企業の AI の目的と実際の効果。選択肢の名前は調査票のまま。一部の選択肢を抜き出した（JUAS は12項目のうち6、IPA は14項目のうち7）。JUAS は回答者が大企業に偏る。IPA の割合は効果があった企業に対するもので、合計が100%を超える</figcaption>
+          </figure>
+
+          <p>どちらも効率化が9割前後を占めます。新しい製品・サービスや新規事業は、目的としては3割弱、実際の効果としては1割に届きません。IPA の報告書も、効果の中心は業務の効率化や迅速化といった「内向き」の領域にとどまっていると書いています<sup class="cite"><a href="#ref27">[27]</a></sup>。目的では人材不足解消が38.6%から54.8%に増え、人手不足を補う使い方が目立ちます<sup class="cite"><a href="#ref26">[26]</a></sup>。</p>
+          <p>一方で、新規の製品・サービスの創出や新規事業創出を目的に挙げた企業は、1年で約15%から約29%に増えました。ただし同じ年に、ほかの目的もそろって増えています。1社が挙げる目的の数が増えた面もあると考えられますが、需要を生む側の使い方も目的としては広がり始めています<sup class="cite"><a href="#ref26">[26]</a></sup>。生成 AI について聞いた図2でも、日本の企業だけが「質の向上」より「効率化」を多く挙げていました<sup class="cite"><a href="#ref8">[8]</a></sup>。</p>
+
+          <h2 id="sec6">需要を生むのはどんな新しさか</h2>
+          <p>では、需要を生む側で AI を使うとは、具体的にどういうことでしょうか。手がかりになるのが、イノベーションの統計で使われている区別です。</p>
+          <p>OECD と Eurostat（EU の統計局）は、企業のイノベーションを調べるための国際的な手引き『オスロ・マニュアル（Oslo Manual）』を作っています。2018年の第4版では、イノベーションを次の2種類に分けています。市場に出す製品やサービスの新しさ（プロダクト・イノベーション）と、社内の仕事の進め方の新しさ（ビジネス・プロセス・イノベーション）です<sup class="cite"><a href="#ref28">[28]</a></sup>。いまの AI の使い方の多くは、後者に当たると考えられます。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>種類</th><th>何が新しいか</th><th>AI を使った例</th><th>主に増やすもの</th><th>日本で実現した企業</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">プロダクト・イノベーション</th><td data-label="何が新しいか">市場に出す製品やサービス</td><td data-label="AI を使った例">AI を組み込んだ新しいサービスを売り出す</td><td data-label="主に増やすもの">需要</td><td data-label="日本で実現した企業">12%</td></tr>
+                <tr><th scope="row">ビジネス・プロセス・イノベーション</th><td data-label="何が新しいか">社内の仕事の進め方</td><td data-label="AI を使った例">議事録やメールの作成を AI に手伝わせる</td><td data-label="主に増やすもの">供給能力</td><td data-label="日本で実現した企業">32%</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図10</span>オスロ・マニュアル第4版のイノベーションの2つの種類。「主に増やすもの」は筆者の整理。割合は全国イノベーション調査2024年調査（2021〜2023年に実現した企業の割合）<sup class="cite"><a href="#ref29">[29]</a></sup></figcaption>
+          </figure>
+          <p>2つのうち、雇用を生みやすいのはどちらでしょうか。欧州4か国の約2万社を調べた研究（Harrison ほか、2014年）の結論は次のとおりです。工程の改善による生産性の伸びは、同じ量を作るのに必要な人手を減らす。ただし、既存の製品の需要が伸びて、その減少を上回ることが多い。そして、雇用を生む最も強い力は新しい製品への需要の伸びだった<sup class="cite"><a href="#ref30">[30]</a></sup>。一方で同じ研究は、新しい製品で生まれた雇用の最大3分の1は、他社から客を奪った分だと推計しています<sup class="cite"><a href="#ref30">[30]</a></sup>。社会全体で見れば、その分はほかの会社の雇用の減少と相殺されます。ほかの研究をまとめたメタ分析（同じ問いを調べた多くの研究の結果を集めて統計的にまとめる方法）では、イノベーションの雇用への効果は「正だが小さく、ばらつきが大きい」とされています<sup class="cite"><a href="#ref31">[31]</a></sup>。新しい製品が必ず雇用を生むとまでは言い切れません。</p>
+
+          <h3 id="sec6-1">新しさには3つの段階がある</h3>
+          <p>オスロ・マニュアルの2005年の第3版では、新しさの程度を3つの段階で定義していました<sup class="cite"><a href="#ref32">[32]</a></sup>。第4版もこの3つを挙げたうえで、調査では主に「市場にとって新しいか」を尋ねるよう勧めています<sup class="cite"><a href="#ref28">[28]</a></sup>。日本の全国イノベーション調査の呼び方に合わせると、次のようになります。</p>
+
+          <figure class="fig">
+            <div class="stages">
+              <div class="stage">
+                <p class="stage-head"><span class="stage-no">1</span>自社にとってのみ新しい</p>
+                <p class="stage-text">他社がすでに出している製品や使っている方法と同じか、よく似たものを自社に取り入れる。イノベーションの最低条件はこの段階で、<strong>模倣も含む</strong></p>
+              </div>
+              <div class="stage">
+                <p class="stage-head"><span class="stage-no">2</span>市場にとっても新しい</p>
+                <p class="stage-text">自社の市場で、どの競合もまだ出していないものを<strong>最初に出す</strong>。「市場」の範囲は地域のこともある</p>
+              </div>
+              <div class="stage">
+                <p class="stage-head"><span class="stage-no">3</span>世界初</p>
+                <p class="stage-text">国内外の<strong>どの市場と産業でも最初</strong>に出す。市場にとって新しいものより、質的に一段上の新しさとされる</p>
+              </div>
+            </div>
+            <figcaption><span class="fig-no">図11</span>新しさの3つの段階（オスロ・マニュアル第3版 205〜210段落。呼び方は全国イノベーション調査に合わせた）<sup class="cite"><a href="#ref32">[32]</a></sup></figcaption>
+          </figure>
+
+          <p>図10の12%（プロダクト・イノベーションを実現した企業）の内訳も、全国イノベーション調査で見ておきます。このうち市場にとっても新しいものを出したのは41%で、全企業に対しては約5%です。世界初の製品を出したのは、このうちの10%でした<sup class="cite"><a href="#ref29">[29]</a></sup>。</p>
+          <p>この物差しで見ると、議事録やメールの作成を AI に手伝わせるような使い方は、ビジネス・プロセスの段階1に当たります。他社がすでにしていることを自社でも始める、という新しさです。図1の3段目のように社会全体で買われる量を増やすには、少なくとも自社の市場にまだないものを出すことが近道になると考えられます。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：AI で発明を速めて新しい産業を作れば需要は増えるか</p>
+            <p>需要を生む道は、もう1つ考えられます。AI で研究や発明そのものを速め、自動車や半導体のように、それまでなかった産業を生む道です。新しさの段階でいえば、段階3の世界初に当たります。オスロ・マニュアル第3版も、新しい市場を作ったり既存の製品を時代遅れにしたりする「急進的（radical）」なイノベーションを、新しさとは別の物差しとして挙げています<sup class="cite"><a href="#ref32">[32]</a></sup>。</p>
+            <p>新しい産業は、作る仕事だけでなく、使う・売る・直す仕事まで生みます。自動車でいえば、車を作る工場の仕事に加えて、運送・販売・整備といった仕事が広がりました。AI が研究を手伝う例は、このブログでも「<a href="../riemann-hypothesis-2026/">AI はリーマン予想を解いたのか</a>」や「<a href="../quantum-gravity-null-cone-2026/">AI は量子重力の理論を作ったのか</a>」で取り上げてきました。</p>
+            <p>ただし、AI は発明を速めるだけでなく、新しい産業で生まれる仕事までこなせるかもしれません。そうなると、新しい産業ができても人の仕事が増えるとは限りません。産業が育つまでには時間もかかります。論点が広がるので、この記事ではここまでにとどめます。AI による発明の加速が新しい産業と需要をどこまで生めるかは、別の記事で掘り下げたいと考えています。</p>
+          </aside>
+          <p>ただし、注意点が2つあります。1つ目は、段階1を軽く見てよいわけではないことです。オスロ・マニュアル第3版は、イノベーションの経済への主な影響は、最初のイノベーションが他社に広まることから来るとしています<sup class="cite"><a href="#ref32">[32]</a></sup>。2つ目は、新しさの段階と雇用の関係について、研究によって結果が割れていることです。さらに、AI の使い方を「自社にとってのみ新しいか」「市場にとって新しいか」で分けて測った研究はまだない、という指摘もあります（2026年11月の査読前の論文）<sup class="cite"><a href="#ref33">[33]</a></sup>。</p>
+          <p>それでも、3つの段階は問いの立て方を変える手がかりになります。「AI で何人分の作業を減らせるか」ではなく、「AI でどの段階の新しさを生み出せるか」と問うのです。</p>
+
+          <h2 id="sec7">Language Model は社会を豊かにするか</h2>
+          <p>LLM をはじめとする AI には、作れる量を増やす力がすでにあります。その意味では、社会を豊かにできる技術です。</p>
+          <p>ただし、それが多くの人の仕事と所得に結びつくかは別の問題です。すでにあるものを少ない人手で作ることだけに使えば、作れる量は増えても買われる量は増えず、仕事は広がりません。新しい製品やサービスを生む方向にも使えば、買われる量そのものが増えます。どちらに使うかを決めるのは企業の誘因で、その誘因を形づくるのが経済や産業の政策です。</p>
+          <p>「AIで豊かになる」と「AIで失業者が増える」のどちらが実現するかは、AI の性能がどこまで伸びるかでは決まりません。増えた供給能力に見合う需要を、どの産業でどう生み出すか。経済と産業のかじ取りの問題だと筆者は考えています。</p>
+
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月28日。引用の日本語は筆者の訳です。本文の [番号] は下の一覧の番号に対応し、各項目の「本文：」に、その出典を使った主張を書いています。</p>
+            <ol class="ref-list">
+              <li id="ref1">Dario Amodei「<a href="https://www.darioamodei.com/essay/machines-of-loving-grace" rel="noopener" target="_blank">Machines of Loving Grace</a>」（2024年10月）<span class="ref-use">本文：「圧縮された21世紀」と途上国の年20%成長</span></li>
+              <li id="ref2">Dario Amodei「<a href="https://www.darioamodei.com/essay/the-adolescence-of-technology" rel="noopener" target="_blank">The Adolescence of Technology</a>」（2026年1月）<span class="ref-use">本文：経済成長の押し上げ、エントリーレベルの仕事の50%、移行期の痛み、「コスト削減」と「イノベーション」、1〜5年という時間軸</span></li>
+              <li id="ref3">D. Acemoglu, P. Restrepo「<a href="https://www.aeaweb.org/articles?id=10.1257/jep.33.2.3" rel="noopener" target="_blank">Automation and New Tasks: How Technology Displaces and Reinstates Labor</a>」Journal of Economic Perspectives 33(2), 2019<span class="ref-use">本文：3つの力、1987〜2017年の置換効果と復元効果、置換効果が強まった理由</span></li>
+              <li id="ref4">M. Webb「<a href="https://www.michaelwebb.co/webb_ai.pdf" rel="noopener" target="_blank">The Impact of Artificial Intelligence on the Labor Market</a>」（2020年1月）<span class="ref-use">本文：ロボットは低賃金、ソフトウェアは中くらいの賃金の職種の作業</span></li>
+              <li id="ref5">T. Eloundou, S. Manning, P. Mishkin, D. Rock「<a href="https://arxiv.org/abs/2303.10130" rel="noopener" target="_blank">GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models</a>」arXiv:2303.10130（2023年。Science 384, 2024 に掲載）<span class="ref-use">本文：LLM がこなしうる作業は賃金の高い職種ほど多い</span></li>
+              <li id="ref6">P. Restrepo「<a href="https://www.nber.org/papers/w31910" rel="noopener" target="_blank">Automation: Theory, Evidence, and Outlook</a>」NBER Working Paper 31910（2023年。Annual Review of Economics 16, 2024 に掲載）<span class="ref-use">本文：これまでの自動化は賃金分布の下と中、LLM は高賃金の働き手が影響を受けやすく見える</span></li>
+              <li id="ref7">Anthropic「<a href="https://www.anthropic.com/news/the-anthropic-economic-index" rel="noopener" target="_blank">The Anthropic Economic Index</a>」（2025年2月10日）<span class="ref-use">本文：実際の利用は中〜高賃金の職種に多く、両端で少ない</span></li>
+              <li id="ref8">総務省『<a href="https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r08/html/nd121150.html" rel="noopener" target="_blank">令和8年版 情報通信白書</a>』第Ⅰ部第2章第1節、図表Ⅰ-2-1-10（<a href="https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r08/csv/f00037.csv" rel="noopener" target="_blank">CSV</a>）<span class="ref-use">本文：図2の4か国比較</span></li>
+              <li id="ref9">Anthropic「<a href="https://www.anthropic.com/research/anthropic-economic-index-january-2026-report" rel="noopener" target="_blank">Anthropic Economic Index report</a>」（2026年1月）<span class="ref-use">本文：API の使い方の約4分の3が自動化型、Claude.ai は補完型が約半分</span></li>
+              <li id="ref10">H. Rubinton, B. A. Patro「<a href="https://www.stlouisfed.org/on-the-economy/2026/jan/tracking-ai-contribution-gdp-growth" rel="noopener" target="_blank">Tracking AI's Contribution to GDP Growth</a>」Federal Reserve Bank of St. Louis（2026年1月12日）<span class="ref-use">本文：実質 GDP の伸びの39%と2000年の28%（図3）</span></li>
+              <li id="ref11">V. Arora「<a href="https://bea.gov/news/blog/2026-06-08/how-does-ai-drive-growth-explore-our-integrated-industry-level-production" rel="noopener" target="_blank">How Does AI Drive Growth?</a>」BEA Wire（2026年6月8日）<span class="ref-use">本文：統計に「AI」という分類がない</span></li>
+              <li id="ref12">Carpinelli, Natoli, Taboga「<a href="https://arxiv.org/abs/2601.11196" rel="noopener" target="_blank">Artificial Intelligence and the US Economy: An Accounting Perspective on Investment and Production</a>」arXiv:2601.11196（2026年1月）<span class="ref-use">本文：輸入の分だけ国内の成長への正味の寄与は小さい</span></li>
+              <li id="ref13">E. Brynjolfsson, B. Chandar, R. Chen「<a href="https://digitaleconomy.stanford.edu/news/canariesaug26/" rel="noopener" target="_blank">Canaries in the Coal Mine?</a>」Stanford Digital Economy Lab（2026年8月の改訂版）<span class="ref-use">本文：22〜25歳の雇用が19%低い、採用の減少、補完型の職種、記述的な傾向（図4）</span></li>
+              <li id="ref14">U.S. Bureau of Labor Statistics「<a href="https://www.bls.gov/news.release/archives/empsit_11062026.htm" rel="noopener" target="_blank">The Employment Situation — October 2026</a>」（2026年11月6日）<span class="ref-use">本文：失業率4.1%</span></li>
+              <li id="ref15">The Budget Lab at Yale「<a href="https://budgetlab.yale.edu/research/tracking-impact-ai-labor-market" rel="noopener" target="_blank">Tracking the Impact of AI on the Labor Market</a>」（2026年10月14日更新）<span class="ref-use">本文：AI の利用の指標と雇用・失業の関係が見られない</span></li>
+              <li id="ref16">T. Atkinson, S. Yamco「<a href="https://www.dallasfed.org/research/economics/2026/0106" rel="noopener" target="_blank">Young workers' employment drops in occupations with high AI exposure</a>」Federal Reserve Bank of Dallas（2026年1月6日）<span class="ref-use">本文：失業率の上昇は0.1ポイントにとどまる</span></li>
+              <li id="ref17">J. Bessen「<a href="https://www.imf.org/external/pubs/ft/fandd/2015/03/bessen.htm" rel="noopener" target="_blank">Toil and Technology</a>」Finance &amp; Development 52(1), IMF（2015年3月）<span class="ref-use">本文：ATM と窓口係、19世紀の繊維産業（図7）</span></li>
+              <li id="ref18">XLM開発会議 城北支部「<a href="../../contents/token-pricing/">AI サービスのトークン単価</a>」<span class="ref-use">本文：LLM の単価の推移（図7）</span></li>
+              <li id="ref19">Google「<a href="https://blog.google/innovation-and-ai/sundar-pichai-io-2026/" rel="noopener" target="_blank">Sundar Pichai の Google I/O 2026 の基調講演</a>」（2026年5月19日）<span class="ref-use">本文：Google の全サービスで処理するトークン数（図7）</span></li>
+              <li id="ref20">A. Humlum, E. Vestergaard「<a href="https://www.nber.org/papers/w33777" rel="noopener" target="_blank">Still Waters, Rapid Currents: Early Labor Market Transformation under Generative AI</a>」NBER Working Paper 33777（初版は2025年5月の「Large Language Models, Small Labor Market Effects」、改訂版は2026年3月）<span class="ref-use">本文：収入に回ったのは3〜7%、改訂版の0〜0.5%</span></li>
+              <li id="ref21">U.S. Bureau of Labor Statistics「<a href="https://www.bls.gov/news.release/prod2.nr0.htm" rel="noopener" target="_blank">Productivity and Costs — Third Quarter 2026, Preliminary</a>」（2026年11月5日）<span class="ref-use">本文：労働分配率53.0%</span></li>
+              <li id="ref22">U.S. Bureau of Economic Analysis「<a href="https://www.bea.gov/news/2026/gdp-second-estimate-and-corporate-profits-3rd-quarter-2026" rel="noopener" target="_blank">GDP (Second Estimate) and Corporate Profits, 3rd Quarter 2026</a>」（2026年11月25日）<span class="ref-use">本文：企業利益4.9兆ドル</span></li>
+              <li id="ref23">E. Roytburg「<a href="https://fortune.com/2026/09/04/ai-productivity-labor-share/" rel="noopener" target="_blank">'I don't think there's a floor': Workers' share of America's income is at a record low before the AI boom even begins</a>」Fortune（2026年9月4日）<span class="ref-use">本文：労働分配率の低下は AI ブームより前からの傾向という見方（EY-Parthenon のエコノミストの見方を伝える報道）</span></li>
+              <li id="ref24">D. Acemoglu, D. Autor, S. Johnson「<a href="https://www.nber.org/papers/w34854" rel="noopener" target="_blank">Building Pro-Worker Artificial Intelligence</a>」NBER Working Paper 34854, 2026<span class="ref-use">本文：働く人を補う AI への投資は市場任せでは足りなくなりがち</span></li>
+              <li id="ref25">中小企業庁「<a href="https://www.chusho.meti.go.jp/koukai/yosan/r6/shoryokuka.pdf" rel="noopener" target="_blank">中小企業省力化投資補助事業</a>」<span class="ref-use">本文：中小企業省力化投資補助金</span></li>
+              <li id="ref26">一般社団法人 日本情報システム・ユーザー協会『<a href="https://juas.or.jp/cms/media/2026/04/JUAS_IT2026.pdf" rel="noopener" target="_blank">企業IT動向調査報告書2026</a>』（2026年4月）図表8-3-7<span class="ref-use">本文：生成 AI を入れるときの目的、新規の製品・サービスの創出と新規事業創出が約15%から約29%、人材不足解消の増加（図9の上）</span></li>
+              <li id="ref27">独立行政法人 情報処理推進機構『<a href="https://www.ipa.go.jp/digital/chousa/dx-trend/rcu1hd0000017uk8-att/dx-trend-2026.pdf" rel="noopener" target="_blank">DX動向2026</a>』（2026年7月）図表3-14、p.35<span class="ref-use">本文：AI を入れて実際に出た効果、効果の中心は「内向き」の領域（図9の下）</span></li>
+              <li id="ref28">OECD/Eurostat『<a href="https://doi.org/10.1787/9789264304604-en" rel="noopener" target="_blank">Oslo Manual 2018, 4th Edition</a>』2018（1.31段落、3.56〜3.59段落）<span class="ref-use">本文：イノベーションの2つの種類、「市場にとって新しいか」を尋ねる勧め</span></li>
+              <li id="ref29">文部科学省 科学技術・学術政策研究所『<a href="https://doi.org/10.15108/nr207" rel="noopener" target="_blank">全国イノベーション調査2024年調査統計報告</a>』NISTEP REPORT No.207（2025年9月）<span class="ref-use">本文：実現した企業12%・32%（図10）、市場新規41%・世界初10%</span></li>
+              <li id="ref30">R. Harrison, J. Jaumandreu, J. Mairesse, B. Peters「<a href="https://doi.org/10.1016/j.ijindorg.2014.06.001" rel="noopener" target="_blank">Does innovation stimulate employment?</a>」International Journal of Industrial Organization 35, 2014<span class="ref-use">本文：新しい製品への需要が雇用を生む最も強い力、他社から奪った分は最大3分の1</span></li>
+              <li id="ref31">M. Ugur, S. Awaworyi Churchill, E. Solomon「<a href="https://doi.org/10.1111/joes.12187" rel="noopener" target="_blank">Technological innovation and employment in derived labour demand models</a>」Journal of Economic Surveys 32(1), 2018<span class="ref-use">本文：メタ分析の「正だが小さく、ばらつきが大きい」</span></li>
+              <li id="ref32">OECD/Eurostat『<a href="https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/oslo" rel="noopener" target="_blank">Oslo Manual, 3rd Edition</a>』2005（205〜211段落、38段落）<span class="ref-use">本文：新しさの3つの段階（図11）、経済への主な影響は普及から来る、新しい市場を作る急進的なイノベーション</span></li>
+              <li id="ref33">F. Castellacci「<a href="https://arxiv.org/abs/2611.15371" rel="noopener" target="_blank">From the firm- to the application-level: A new typology of AI use in organisations</a>」arXiv:2611.15371（2026年11月、査読前）<span class="ref-use">本文：AI の使い方を新しさの段階で分けて測った研究はまだない</span></li>
+            </ol>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。本文で引いたダリオ・アモデイは Anthropic の CEO で、[7] と [9] は Anthropic の分析です。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>Claude は Valiant 予想を証明したのか ―― VP ≠ VNP の主張をどこまで確かめられたかで読む | XLM開発会議 城北支部</title>
+  <meta name="description" content="2026年11月23日、Anthropic と OpenAI が相次いで「VP ≠ VNP（Valiant 予想）を証明した」とする AI の論文と Lean の証明を公開しました。何が主張され、何が確かめられ、何がまだ確かめられていないのかを整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Claude は Valiant 予想を証明したのか | XLM開発会議 城北支部">
+  <meta property="og:description" content="AI が書いた VP ≠ VNP の証明を、「Lean で検証済み」の3つの層に分けて読みます（2026年11月26日時点）。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/vp-vnp-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-vp-vnp-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="Claude は Valiant 予想を証明したのか ―― VP ≠ VNP の主張をどこまで確かめられたかで読む">
+  <meta property="article:published_time" content="2026-11-26">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/vp-vnp-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false})"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-26">2026.11.26</time><span class="content-tag">解説</span></p>
+            <h1>Claude は Valiant 予想を証明したのか ―― VP ≠ VNP の主張をどこまで確かめられたかで読む</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>2026年11月23日、Anthropic が GitHub に1本の論文を置きました。題は「VP ≠ VNP over every field」で、著者の欄には「Claude」とだけ書かれています。計算の難しさを扱う分野で47年間解かれていなかった予想を、AI が証明したという主張です。その約3時間半後には、OpenAI も同じ結論の論文を公開しました。</p>
+          <p>報道では「P ≠ NP の代数版が解けた」と紹介されています。この記事では、まずこの予想がどんな問題なのかを説明します。そのうえで、主張されたこと・確かめられたこと・まだ確かめられていないことを整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>Anthropic と OpenAI がそれぞれ、<strong>AI の書いた論文と Lean の証明</strong>で「VP と VNP は異なる」と主張した。<strong>P ≠ NP が解けたわけではない</strong>。</li>
+              <li>Lean の検査は通っている。これは「書かれた主張がきちんと証明されている」ことの強い証拠になる。</li>
+              <li>ただし、<strong>書かれた主張が本当に Valiant の予想なのか</strong>を、人間の専門家はまだ確かめていない。両社とも「人間は証明を確かめていない」と自ら書いている。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月26日時点の情報です。</p>
+
+          <h2>Valiant 予想とはどんな問題か</h2>
+          <p>まず、計算の手間をどう測るかから説明します。</p>
+
+          <h3>足し算と掛け算だけの回路で多項式を計算する</h3>
+          <p>この予想で使う計算の模型は<strong>算術回路</strong>です。算術回路は変数と定数から始めて、足し算と掛け算を繰り返して1つの多項式を作ります。1回の足し算や掛け算を1つの<strong>ゲート</strong>と数え、ゲートの数を計算の手間とみなします。</p>
+          <p>たとえば \((x+y)^{2}\) は \(x+y\) を1回計算し、それを自分自身と掛ければ作れます。展開した \(x^{2}+2xy+y^{2}\) をそのまま計算するより、ゲートが少なくて済みます。どんなにうまく組んでも何個のゲートが要るか。それがこの分野の問いです。</p>
+
+          <h3>行列式と permanent は符号しか違わない</h3>
+          <p>ここで、よく似た2つの多項式を比べます。正方行列の<strong>行列式</strong>と <strong>permanent</strong> です。permanent は行列式の式から、項につく符号（プラスとマイナス）を取り去ったものです。</p>
+
+          <figure class="fig">
+            <div class="eq">
+              \[ \det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc \qquad \operatorname{perm} \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad + bc \]
+              \[ \begin{aligned} \det \begin{pmatrix} a & b & c \\ d & e & f \\ g & h & i \end{pmatrix} &= aei + bfg + cdh - ceg - bdi - afh \\ \operatorname{perm} \begin{pmatrix} a & b & c \\ d & e & f \\ g & h & i \end{pmatrix} &= aei + bfg + cdh + ceg + bdi + afh \end{aligned} \]
+              <p class="eq-note">どちらも「各行から1つずつ、列が重ならないように選んで掛けたもの」を全部足す。行列式は半分の項にマイナスがつき、permanent はすべてプラス。</p>
+            </div>
+            <figcaption><span class="fig-no">図1</span>2×2 と 3×3 の行列式と permanent。違うのは符号だけ</figcaption>
+          </figure>
+
+          <p>n×n の行列では、どちらも項が n! 個あります。n が30なら約 \(2.65 \times 10^{32}\) 個で、すべての項を並べて足すことはできません。</p>
+          <p>行列式には、この項を並べずに済む速い計算法があります。ある行に別の行の定数倍を足しても行列式の値は変わらないので、ガウスの消去法のように行列を簡単な形に変えてから計算できます。手間は n の多項式で収まります。</p>
+          <p>permanent には、こうした便利な性質が知られていません。知られている最速の方法でも、手間は n について指数的に増えます。1979年、計算機科学者の Leslie Valiant は「permanent は多項式サイズの算術回路では計算できないだろう」と予想しました。これが <strong>Valiant 予想</strong>です。</p>
+
+          <h3>VP と VNP</h3>
+          <p>Valiant 予想は2つのクラス（多項式の集まり）の言葉で書かれます。</p>
+          <ul>
+            <li><strong>VP</strong>：変数の数と次数に対して、多項式サイズの算術回路で計算できる多項式の族。行列式はここに入ります。</li>
+            <li><strong>VNP</strong>：VP の多項式を、補助の変数に 0 と 1 を入れたすべての場合について足し合わせて得られる族。足し合わせる場合の数は指数個になりえます。permanent はここに入り、しかも VNP の中でいちばん難しい多項式の1つです（VNP 完全）。</li>
+          </ul>
+          <p>VP は VNP に含まれます。そのうえで「VP と VNP は等しくない」というのが Valiant 予想です。permanent が VNP 完全なので、これは「permanent は多項式サイズの回路で計算できない」と言っても同じです。</p>
+
+          <aside class="column column-sm">
+            <p class="column-title">コラム：「少なくともこれだけ要る」を示す難しさ</p>
+            <p>速い計算法を1つ見つければ「これだけあれば計算できる」（上界）は示せます。反対に「どんな回路でも少なくともこれだけ要る」（<strong>下界</strong>）を示すには、ありとあらゆる回路を相手にしなければなりません。そのため下界はとても難しく、形に制限のない算術回路では、これまで「変数の数×対数」程度の下界しか知られていませんでした。今回の論文によると、m×m の permanent（変数は \(m^{2}\) 個）について知られていた最良の下界も \(m^{2}\log m\) 程度でした。</p>
+          </aside>
+
+          <h2>11月23日に何が公開されたのか</h2>
+          <p>公開の経緯を、確かめられた事実だけで並べます。時刻は協定世界時（UTC）です。</p>
+
+          <figure class="fig">
+            <ul class="timeline">
+              <li><b>11月23日 20:04</b>Anthropic の公開リポジトリ <code>anthropics/formal-math</code> に、<code>vp-vnp/</code> を追加するコミットが作られた（作成者は Thomas Steinke）。中身は70ページの論文と Lean の証明。</li>
+              <li><b>11月23日 21:43</b>この変更がリポジトリの本流にマージされた。自動検査（CI）は通っている。日本時間では24日の朝6時43分。</li>
+              <li><b>11月24日 01:14</b>OpenAI が自社のリポジトリ <code>openai/math</code> に、論文「VP and VNP are different」と Lean の証明を追加した。</li>
+              <li><b>11月24日</b>計算量理論の研究者 Lance Fortnow と Scott Aaronson が、それぞれのブログでこの結果を取り上げた（後述）。第三者による Lean の再検査も始まった。</li>
+              <li><b>11月25日 00:04</b>OpenAI がリポジトリに論文を9本追加し、そのうち2本が11月23日の論文の結果を含むと更新履歴に書いた。</li>
+            </ul>
+            <figcaption><span class="fig-no">図2</span>公開の経緯。どちらの会社も、公式サイトでの発表は2026年11月26日時点で見当たらない</figcaption>
+          </figure>
+
+          <h3>Anthropic の論文が主張していること</h3>
+          <p>論文の主定理は、permanent を計算する算術回路のゲート数に下界を与えます。ある正の定数 \(c\) があり、\(m\) が十分大きければ、m×m の permanent を計算するどの回路も次の数より多くのゲートを要します。</p>
+
+          <div class="eq">
+            \[ m^{\,c\,(\log_{2} m)^{1/3}} \;=\; 2^{\,c\,(\log_{2} m)^{4/3}} \]
+            <p class="eq-note">\(m\) のどんな多項式よりも速く増える（超多項式）。そのため permanent は VP に入らず、VP ≠ VNP が従う。ただし指数関数よりはずっと遅く増える（準多項式）。</p>
+          </div>
+
+          <p>論文はこの下界を、実数だけでなく<strong>すべての体</strong>（足し算・引き算・掛け算・割り算ができる数の体系）について示したと主張しています。標数2の体では permanent が行列式と一致してしまうので、そこでは permanent の代わりに Hamiltonian cycle 多項式という別の VNP 完全な多項式を使います。近似的に計算する回路にも同じ下界が成り立つ、とも主張しています。</p>
+          <p>論文自身、既知の上界（指数的）との差はまだ大きいと書いています。「permanent の計算にちょうど何個のゲートが要るか」がわかったわけではありません。</p>
+
+          <h3>README と論文が自ら書いていること</h3>
+          <p>リポジトリの説明文（README）には、次の2文があります。</p>
+          <blockquote>
+            <p>この結果は社内の研究用の Claude モデルが発見した。〔中略〕論文と Lean の形式化はどちらも AI モデルが書いたもので、人間の数学者は証明を確かめていない。</p>
+            <cite>anthropics/formal-math「vp-vnp/README.md」の訳</cite>
+          </blockquote>
+          <p>人間がどう関わったのか、どれだけの計算資源と時間を使ったのかは書かれていません。8月に Claude がゼータ関数の零点の研究で成果を出したときは、指示した社員や使ったトークン数まで公表していました（<a href="../riemann-hypothesis-2026/">前の記事</a>）。それと比べると、今回は説明がほとんどありません。</p>
+
+          <h2>同じ日に OpenAI も同じ結論の論文を出した</h2>
+          <p>Anthropic のマージから約3時間半後、OpenAI も「VP and VNP are different」という30ページの論文を公開しました。著者は「OpenAI」です。リポジトリの更新履歴には「この結果は2026年11月6日に得られた」と書かれています。この記事では、どちらが先に得たかを判断しません。</p>
+          <p>2つの論文は結論が同じですが、中身には違いがあります。</p>
+
+          <figure class="fig">
+            <table class="post-table card-table">
+              <thead><tr><th>項目</th><th>Anthropic（Claude）</th><th>OpenAI</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">公開（UTC）</th><td data-label="Anthropic">11月23日 21:43</td><td data-label="OpenAI">11月24日 01:14（結果は11月6日に得たと記載）</td></tr>
+                <tr><th scope="row">論文</th><td data-label="Anthropic">70ページ（本文と文献で16ページ、残りは付録の証明）</td><td data-label="OpenAI">30ページ</td></tr>
+                <tr><th scope="row">下界の形</th><td data-label="Anthropic">\(2^{\Omega((\log m)^{4/3})}\)</td><td data-label="OpenAI">\(\exp(\Omega((\log n)^{5/4}))\)（近似回路を含む）</td></tr>
+                <tr><th scope="row">Lean で形式化した範囲</th><td data-label="Anthropic"><span class="st st-ok">ほぼ全部</span>番号つきの主張のうち1つを除くすべて</td><td data-label="OpenAI"><span class="st st-mid">一部</span>「VP と VNP は異なる」という結論だけ</td></tr>
+                <tr><th scope="row">人間による確認</th><td data-label="Anthropic"><span class="st st-ng">なし</span>README と論文に明記</td><td data-label="OpenAI"><span class="st st-ng">報告なし</span></td></tr>
+                <tr><th scope="row">公式の発表</th><td data-label="Anthropic">見当たらない</td><td data-label="OpenAI">見当たらない</td></tr>
+              </tbody>
+            </table>
+            <figcaption><span class="fig-no">図3</span>2つの主張の比較（2026年11月26日時点）。下界は指数の大きい Anthropic の方が強い</figcaption>
+          </figure>
+
+          <p>OpenAI のリポジトリの README はここに置いた原稿を「磨かれた論文ではなく、生の研究データ」と位置づけています。形式化していない結果には問題がありうる、とも自ら書いています。</p>
+          <p>翌日の更新で、OpenAI はさらに9本の論文を追加しました。更新履歴には、そのうち「階層」と「回路の下界」を扱う2本が11月23日の論文の結果を含む、とあります。2本のうち1本は VP より小さいクラスまで含めた Valiant のクラスの階層全体が真に分かれると主張しています。11月23日の論文はそのまま残されています。</p>
+          <p>もう1つ目につくのは2つの論文の要旨に似た言葉が出てくることです。OpenAI の要旨には「ユークリッド空間で値付けしたテンソルのネットワーク」「回路の計算を配線の予算の中で再現して対角線論法を使う」とあります。Anthropic の論文も、price（値付け）や wire（配線）という言葉を使い、ユークリッド的な場合と対角線論法を使う場合に分けて証明しています。計算機科学者の Scott Aaronson も、ブログで「Anthropic と OpenAI の論文の証明の手法は似て見える」と書いています。</p>
+
+          <h2>P ≠ NP は解けたのか</h2>
+          <p>解けていません。Anthropic の論文は要旨で「これは P ≠ NP という予想の代数版だが、その予想を解決するものではない」と書いています。</p>
+          <p>理由は算術回路とふつうのコンピュータの回路（ブール回路）の違いにあります。算術回路は 0 と 1 だけでなく、体のあらゆる値を入れても正しい多項式を計算しなければなりません。ブール回路は 0 と 1 を入れたときに正しい答えを出せば十分です。0 と 1 では \(x^{2} = x\) なので、ブール回路は \(x^{2}-x\) を何倍して足しても答えが変わりません。この自由がある分、ブール回路は算術回路より強いかもしれず、算術回路の下界はそのままではブール回路の下界になりません。</p>
+          <p>逆向きの関係は知られています。適切な体で VP = VNP なら、ブール回路版の P = NP（P/poly = NP/poly）が従います。しかし VP ≠ VNP から P ≠ NP を導く方法は知られていません。</p>
+          <p>Fortnow はブログをこう結んでいます。</p>
+          <blockquote>
+            <p>というわけで、P と NP の問題を決着させるのは、人間にとっても機械にとっても今のところまだはるか先のことだ。</p>
+            <cite>L. Fortnow「VP ≠ VNP」（2026年11月24日）の訳</cite>
+          </blockquote>
+
+          <h2>「Lean で検証済み」は何を保証しているのか</h2>
+          <p>ここがこの記事でいちばん伝えたいところです。</p>
+          <p><a href="../riemann-hypothesis-2026/">リーマン予想の記事</a>では、「証明された」を3つの層に分けて読みました。<a href="../lean-what-it-checks/">Lean の記事</a>では、Lean が何を確かめ、何を確かめないのかを詳しく見ました。同じ物差しを、今回の Anthropic の主張に当てはめます。</p>
+
+          <figure class="fig">
+            <ol class="layers">
+              <li class="layer is-done">
+                <span class="layer-q">証明は書かれた主張を正しく導いているか</span>
+                <span class="layer-how">Lean の検査が通るか／独立に作られた別の検査器でも通るか／使っている公理は何か</span>
+                <span class="layer-state">済み。独立に作られた別の kernel でも再検査。公理は標準の3つだけ</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">Lean で書いた主張は本当に Valiant 予想か</span>
+                <span class="layer-how">回路・permanent・VP・VNP の定義が教科書どおりか／余計な仮定や抜けがないか</span>
+                <span class="layer-state">まだ。AI による照合はあるが、人間が確かめたという報告はない</span>
+              </li>
+              <li class="layer is-partial">
+                <span class="layer-q">人間はなぜ成り立つのかを説明できるか</span>
+                <span class="layer-how">人が読める証明があるか／専門家が読んで理解し、査読したか</span>
+                <span class="layer-state">一部。証明の文章はあるが、4か所は Lean でしか確かめられないと論文自身が書く</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図4</span>Anthropic の主張を3つの層で見る（2026年11月26日時点）。上の層ほど機械で確かめやすく、下の層ほど人間にしかできない</figcaption>
+          </figure>
+
+          <h3>1つ目の層は強く保証されている</h3>
+          <p>Lean の証明は324ファイル、約7万3千行あります。リポジトリの自動検査では、Lean 本体の kernel に加えて、別の人が独立に書いた2つ目の kernel（nanoda）でも証明を検査しています。使っている公理は Lean の数学で標準の3つ（<code>propext</code>・<code>Classical.choice</code>・<code>Quot.sound</code>）だけです。証明の途中を省略する <code>sorry</code> も、主張を並べた確認用のファイル以外にはありません。</p>
+          <p>公開の翌日には、第三者による再検査も始まりました。Lean の開発を担う非営利団体 Lean FRO の Kim Morrison は証明を新しい版の Lean に移し、さらに別の2つの kernel（con-leche と con-ron）でも検査が通るようにしています。</p>
+          <p>「書かれた主張が、書かれた定義のもとで成り立つ」ことについては、人間の査読よりずっと強い保証だと言えます。</p>
+
+          <h3>2つ目の層はまだ誰も確かめていない</h3>
+          <p>問題は Lean に書かれた主張が本当に Valiant 予想なのかです。主張と定義は <code>Statement.lean</code> という98行のファイルにまとめてあります。README はこの点をはっきり書いています。</p>
+          <blockquote>
+            <p>証明は Lean が検査するが、このファイルが主張どおりのことを言っているかを確かめる機械はない。</p>
+            <cite>anthropics/formal-math「vp-vnp/README.md」の訳</cite>
+          </blockquote>
+          <p>たとえば、算術回路の定義は次のように書かれています。</p>
+
+          <figure class="fig">
+            <ol class="code-map">
+              <li>
+                <pre class="cm-code"><code>def Computes {R : Type u} {V : Type} [CommSemiring R]
+    (f : MvPolynomial V R) (s : ℕ) : Prop :=</code></pre>
+                <p class="cm-text"><strong>何を定める</strong>：「多項式 <code>f</code> は、ゲート <code>s</code> 個以下の回路で計算できる」という性質</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>  ∃ l : ℕ → MvPolynomial V R,</code></pre>
+                <p class="cm-text"><strong>回路</strong>：多項式の列 <code>l 0, l 1, l 2, …</code> がある。列の1つ1つがゲートにあたる</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>    (∀ k &lt; s, (∃ v : V, l k = X v) ∨ (∃ a : R, l k = C a) ∨
+      (∃ i &lt; k, ∃ j &lt; k, l k = l i + l j) ∨
+      (∃ i &lt; k, ∃ j &lt; k, l k = l i * l j)) ∧</code></pre>
+                <p class="cm-text"><strong>ゲートの作り方</strong>：最初の <code>s</code> 個はどれも、変数・定数・それより前の2つの和・それより前の2つの積のどれか</p>
+              </li>
+              <li>
+                <pre class="cm-code"><code>    ∃ k &lt; s, l k = f</code></pre>
+                <p class="cm-text"><strong>出力</strong>：そのどれかが <code>f</code> に等しい</p>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図5</span><code>Statement.lean</code> の算術回路の定義。上から順につなげると1つの定義になる</figcaption>
+          </figure>
+
+          <p>この定義は短く、教科書の算術回路と同じ形に見えます。しかし、こうした定義がわずかにずれていると、Lean は「別の主張」を正しく検証してしまいます。<a href="../lean-what-it-checks/">Lean の記事</a>では、三平方の定理の主張で「平面」を「直線」に書き間違えても、Lean は同じ証明を受理してしまう例を見ました。</p>
+          <p>VP と VNP の定義や近似計算の定義、「すべての体について」という量化も、同じように人間が読み比べる必要があります。リポジトリには11月24日に「人間の数学者は <code>Statement.lean</code> を Valiant の定義と照らし合わせたのか」という問い合わせ（issue #55）が寄せられましたが、11月26日時点で返答はありません。</p>
+          <p>この層を機械で補おうとする試みも出ています。11月24日に公開されたリポジトリ <code>vp-vnp-statement-check</code> では、Valiant の原論文や教科書から主張を書き直したファイルを用意しました。そのうえで、Anthropic の定理から書き直した主張が導けることを Lean で示しています。ただし README によると、書き直しも含めて Lean のコードはすべて Claude のエージェントが書いたものです。「人間はまだ誰も確かめていない。代数的計算量に詳しい人が要る」とも書かれています。</p>
+          <p>確かめる対象は98行なので、量としては専門家が読み切れる範囲です。この層はほかの2つより早く埋まる可能性があります。</p>
+
+          <h3>3つ目の層は一部しか届いていない</h3>
+          <p>Anthropic の論文は70ページあり、本文の後に証明の全体を載せた付録がついています。ところが付録の前書きは証明の文章の完全さにはばらつきがあると断っています。</p>
+          <blockquote>
+            <p>これら4つの主張がまさに主張どおりのことを行うかは、Lean の形式化でしか確かめられない。〔中略〕したがって contracting case は、ひいてはすべての主結果は、これらの点で Lean に依存している。</p>
+            <cite>Claude「VP ≠ VNP over every field」付録の前書き（p.17）の訳</cite>
+          </blockquote>
+          <p>この4つは証明の中で使う機械やプログラムの動作と、その大きさ・実行時間についての主張です。人間が紙の上で追える形には書かれておらず、正しさは Lean に預けられています。計算機科学者の Emanuele Viola も、ブログで「人間が読める部分はとても短く、ほとんどが Lean の形式化を指している」と書いています。</p>
+          <p>ソフトウェア開発にたとえると、いまの状態はこうです。</p>
+          <div class="analogy">
+            <p>7万行のコードは2種類のテストランナーで全部のテストに通った。<br>でも<strong>テストが仕様どおりかをレビューした人はまだいない</strong>。設計書もあるが、肝心の4か所には「詳しくはコードを見てください」と書いてある。</p>
+          </div>
+
+          <h2>専門家はどう見ているか</h2>
+          <p>2026年11月26日時点で、本人の言葉として確かめられた反応を紹介します。</p>
+          <p>Fortnow は11月24日のブログで、この結果を「今のところ、今年いちばん重要な計算量の結果だ。2026年にそう言うのは大変なことだ」と評しました。証明は代数幾何をほとんど使っていないと指摘し、permanent と行列式の問題に代数幾何で挑んできた幾何学的計算量理論（GCT）にとって何を意味するかは「わからない」としています。同時に、VP ≠ VNP はブール回路の分離を導かないことも説明しています。</p>
+          <p>Aaronson は11月24日のブログで2つの論文を比べ、Anthropic の下界の方が強いことを紹介しました。証明については「まだ少ししか理解できていない」としつつ、Lean の証明がついていることを重く見ています。そのうえで「証明に本当の技術的な問題があるなら、専門家から喜んで聞きたい」と書いています。</p>
+          <p>Viola は11月23日のブログで、この結果を歓迎しました。今後は人間が読める部分がさらに短く、大量のコードがついた論文が出てくるだろうとも書いています。</p>
+          <p>3人とも、自分で証明を確かめたとは書いていません。人間の専門家が証明や <code>Statement.lean</code> を確かめたという報告は、11月26日時点で見つかりませんでした。</p>
+
+          <h2>何が起きれば「証明された」と言えるのか</h2>
+          <p>今回の主張は、機械による検査が済んだ状態で公開されたという点で、これまでの数学の大きな主張とは違います。足りないのは、次のような人間の側の確認です。</p>
+          <ul>
+            <li>専門家が <code>Statement.lean</code> を読み、Valiant 予想を正しく表していると確かめること（2つ目の層）。</li>
+            <li>人間が追える形の証明が書かれ、専門家が読んで理解すること（3つ目の層）。</li>
+            <li>そのうえで、論文として査読を経ること。</li>
+          </ul>
+          <p>2つの会社が独立に同じ結論に達したことは、結果が正しいことの傍証にはなりえます。それでも、上の確認の代わりにはなりません。</p>
+
+          <h2>おわりに</h2>
+          <p>この半年で、AI と数学をめぐる主張は「思いつく」から「Lean の検査を通す」ところまで進みました。8月のゼータ関数の零点も11月20日のリーマン予想も、そして今回の VP ≠ VNP も、Lean の証明とともに公開されています。</p>
+          <p>Lean は「書かれたことが証明されているか」を、人間よりはるかに確実に確かめます。残っているのは「何を確かめたことになるのか」を確かめる仕事です。それは今のところ、主張を読む人間にしかできません。今回の件はその仕事の重さを、これまでで最もはっきり見せている例だと思います。</p>
+
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月26日。引用の日本語は筆者の訳です。</p>
+            <ul>
+              <li>Anthropic「<a href="https://github.com/anthropics/formal-math/tree/main/vp-vnp" rel="noopener" target="_blank">anthropics/formal-math: vp-vnp</a>」（README、<code>Statement.lean</code>、Pull Request #51、2026年11月23日）</li>
+              <li>Claude（Anthropic）「<a href="https://github.com/anthropics/formal-math/blob/main/vp-vnp/paper.pdf" rel="noopener" target="_blank">VP ≠ VNP over every field</a>」（2026年11月）</li>
+              <li>OpenAI「<a href="https://github.com/openai/math/tree/main/preprints/VP-and-VNP-are-different-November-23-2026" rel="noopener" target="_blank">VP and VNP are different</a>」（November 23, 2026 edition）、<a href="https://github.com/openai/math" rel="noopener" target="_blank">openai/math</a> の README と <a href="https://github.com/openai/math/blob/main/history.md" rel="noopener" target="_blank">history.md</a>（11月24日の項を含む）</li>
+              <li>L. Fortnow「<a href="https://blog.computationalcomplexity.org/2026/11/vp-vnp.html" rel="noopener" target="_blank">VP ≠ VNP</a>」Computational Complexity（2026年11月24日）</li>
+              <li>S. Aaronson「<a href="https://scottaaronson.blog/?p=10362" rel="noopener" target="_blank">I've been drinking wine in my kitchen</a>」Shtetl-Optimized（2026年11月24日）</li>
+              <li>E. Viola「<a href="https://emanueleviola.wordpress.com/2026/11/23/vp-vnp-i-do-not-complain-the-antelope-falls-with-the-arrow/" rel="noopener" target="_blank">VP != VNP: "I do not complain, the antelope falls with the arrow"</a>」（2026年11月23日）</li>
+              <li>K. Morrison「<a href="https://github.com/kim-em/vp-vnp" rel="noopener" target="_blank">kim-em/vp-vnp</a>」（2026年11月24日）</li>
+              <li>「<a href="https://github.com/2opremio/vp-vnp-statement-check" rel="noopener" target="_blank">An independent statement check for the Lean proof of VP ≠ VNP</a>」（2026年11月24日）</li>
+              <li><a href="https://github.com/anthropics/formal-math/issues/55" rel="noopener" target="_blank">anthropics/formal-math issue #55</a>（2026年11月24日）</li>
+              <li>L. G. Valiant「Completeness classes in algebra」STOC 1979</li>
+            </ul>
+            <p class="post-note">この記事の主題は Anthropic の Claude の主張です。この記事の下調べと下書きにも、Anthropic の Claude を使いました。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

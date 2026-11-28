@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>AI はリーマン予想を解いたのか ―― 2026年11月時点の整理 | XLM開発会議 城北支部</title>
+  <meta name="description" content="2026年8月から11月にかけて、AI はリーマン予想に3つの段階で近づき、ついに「証明した」という主張が出ました。何が確かめられていて何がまだなのかを図とコラムで整理します。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI はリーマン予想を解いたのか ―― 2026年11月時点の整理 | XLM開発会議 城北支部">
+  <meta property="og:description" content="2026年8月から11月にかけて、AI はリーマン予想に3つの段階で近づき、ついに「証明した」という主張が出ました。何が確かめられていて何がまだなのかを整理します。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/riemann-hypothesis-2026/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-riemann-hypothesis-2026.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="AI はリーマン予想を解いたのか ―― 2026年11月時点の整理">
+  <meta property="article:published_time" content="2026-11-24">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/riemann-hypothesis-2026/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <script src="zeta-viz.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false})"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../../contents/">コンテンツ</a>
+        <a href="../" aria-current="page">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <article>
+      <header class="section page-head post-head">
+        <div class="wrap">
+          <div class="post-head-in">
+            <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">ブログ</a></p>
+            <p class="content-meta"><time datetime="2026-11-24">2026.11.24</time><span class="content-tag">解説</span></p>
+            <h1>AI はリーマン予想を解いたのか ―― 2026年11月時点の整理</h1>
+          </div>
+        </div>
+      </header>
+
+      <div class="post-paper">
+      <div class="wrap">
+        <div class="post-body">
+          <p>2026年11月20日に、数学者の Levent Alpöge（アルペーゲ）が「Claude と一緒に、リーマン予想の証明を見つけたと思う」と発表しました。リーマン予想は160年以上解かれていない数学の難問です。</p>
+          <p>実はその前の8月と10月にも、AI がリーマン予想に近づく成果が続いていました。この記事では3つの出来事を順に並べ、何が確かめられていて何がまだなのかを整理します。</p>
+
+          <div class="keypoints">
+            <p class="keypoints-title">この記事のポイント</p>
+            <ul>
+              <li>AI はこの4か月でリーマン予想に<strong>3つの段階</strong>を踏んで近づいた。11月にはついに、予想そのものを証明したという主張が出た。</li>
+              <li>11月に発表された「証明」は、<strong>Lean というソフトウェアによるコンピューターの検査</strong>をほぼ通っている。</li>
+              <li>ただし<strong>人間はまだ誰もその証明を理解していない</strong>。数学の世界が「解けた」と認めるまでには時間がかかる。</li>
+            </ul>
+          </div>
+
+          <p class="post-note">この記事は2026年11月24日時点の情報です。</p>
+
+          <h2>リーマン予想とはどんな問題か</h2>
+          <p>リーマン予想は、1859年に数学者ベルンハルト・リーマンが論文の中で述べた予想です。その論文の題は「与えられた数より小さい素数の個数について」。つまり、もともとは素数についての研究です。</p>
+          <p>主役は「ゼータ関数」という関数です。ゼータ関数 \(\zeta(s)\)（\(\zeta\) はギリシャ文字のゼータ）は、もともとは次の無限和で定義されます。</p>
+          <div class="eq">
+            \[ \begin{aligned} \zeta(s) &= \sum_{n=1}^{\infty} \frac{1}{n^{s}} \\ &= \frac{1}{1^{s}} + \frac{1}{2^{s}} + \frac{1}{3^{s}} + \cdots \end{aligned} \]
+            <p class="eq-note">\(s\) が 1 より大きい実数なら、この和は1つの値に決まる。たとえば \(\zeta(2) = 1 + \frac{1}{4} + \frac{1}{9} + \cdots = \frac{\pi^{2}}{6}\)。</p>
+          </div>
+          <p>この和が本当に1つの値に近づいていくのかを、下の図で確かめられます。スライダーで指数 \(s\) と足す項の数 \(N\) を変えると、和の変化がグラフに描かれます。</p>
+          <figure class="fig viz" data-viz="zeta-real">
+            <canvas class="viz-canvas" role="img" aria-label="級数の和が ζ(s) に近づく様子のグラフ"></canvas>
+            <div class="viz-controls">
+              <label class="viz-ctl"><span class="viz-label">指数 \(s\)</span><input type="range" name="s" min="0.5" max="4" step="0.05" value="2"><output data-out="s">2.00</output></label>
+              <label class="viz-ctl"><span class="viz-label">足す項の数 \(N\)</span><input type="range" name="n" min="1" max="200" step="1" value="10"><output data-out="n">10</output></label>
+            </div>
+            <div class="viz-presets" role="group" aria-label="s の値を選ぶ">
+              <button type="button" data-s="2">s = 2</button>
+              <button type="button" data-s="3">s = 3</button>
+              <button type="button" data-s="1.1">s = 1.1</button>
+              <button type="button" data-s="1">s = 1（調和級数）</button>
+              <button type="button" data-s="0.5">s = 0.5</button>
+            </div>
+            <dl class="viz-readout">
+              <div><dt>\(N\) 項までの和</dt><dd data-out="sum">—</dd></div>
+              <div><dt>\(\zeta(s)\)</dt><dd data-out="zeta">—</dd></div>
+              <div><dt>残りの差</dt><dd data-out="diff">—</dd></div>
+            </dl>
+            <p class="viz-note" data-out="note" aria-live="polite"></p>
+            <noscript><p class="viz-note">この図は JavaScript を有効にすると動きます。</p></noscript>
+            <figcaption><span class="fig-no">図1</span>級数 \(1 + \frac{1}{2^{s}} + \cdots + \frac{1}{N^{s}}\) の和（緑の線）と \(\zeta(s)\) の値（赤い破線）。\(s \gt 1\) なら \(N\) を増やすほど和は \(\zeta(s)\) に近づく。\(s \le 1\) にすると和はいくらでも大きくなる</figcaption>
+          </figure>
+          <p>変数 \(s\) には複素数も入れられます。複素数を \(s = \sigma + it\) と書いたとき、\(\sigma\) を実部、\(t\) を虚部と呼びます。上の和は実部が 1 より大きいところでしか意味を持ちません。リーマンは、ゼータ関数を \(s = 1\) 以外のすべての複素数に自然に広げられることを示しました（解析接続）。</p>
+          <p>ゼータ関数の値が0になる点を「零点」と呼びます。零点には、−2, −4, −6 …… という単純なもの（自明な零点）と、それ以外の「非自明な零点」があります。</p>
+          <p>非自明な零点は、すべて「実部が0から1の間」という帯の中にあることがわかっています。この帯を<strong>臨界帯</strong>と呼びます。リーマン予想はさらに強く、「非自明な零点はすべて、帯のちょうど真ん中にある実部 1/2 の線の上にある」と主張します。この線を<strong>臨界線</strong>と呼びます。</p>
+          <div class="eq">
+            \[ \begin{aligned} &\zeta(\rho) = 0,\ \ \rho \neq -2, -4, -6, \ldots \\ &\Longrightarrow\ \operatorname{Re}(\rho) = \frac{1}{2} \end{aligned} \]
+            <p class="eq-note">リーマン予想を式で書いたもの。「ゼータ関数の値が0で、自明な零点でもない点 \(\rho\) は、実部が 1/2」と読む。非自明な零点は \(\rho\)（ロー）と書く習慣がある。\(\operatorname{Re}(\rho)\) は \(\rho\) の実部。いちばん下の零点は \(\rho = \frac{1}{2} + 14.1347\ldots\, i\)。</p>
+          </div>
+
+          <figure class="fig">
+            <svg class="fig-svg" viewBox="0 0 520 380" role="img" aria-labelledby="fig1-t">
+              <title id="fig1-t">臨界帯と臨界線。非自明な零点は臨界帯の中にあり、これまで見つかったものはすべて臨界線の上に並んでいる</title>
+              <rect class="s-strip" x="150" y="20" width="200" height="310"/>
+              <line class="s-axis" x1="30" y1="330" x2="500" y2="330"/>
+              <line class="s-axis" x1="150" y1="345" x2="150" y2="12"/>
+              <line class="s-crit" x1="250" y1="20" x2="250" y2="330"/>
+              <line class="s-edge" x1="350" y1="20" x2="350" y2="330"/>
+              <g class="s-zero">
+                <circle cx="250" cy="245" r="5"/><circle cx="250" cy="204" r="5"/><circle cx="250" cy="180" r="5"/>
+                <circle cx="250" cy="147" r="5"/><circle cx="250" cy="132" r="5"/><circle cx="250" cy="104" r="5"/>
+                <circle cx="250" cy="84" r="5"/><circle cx="250" cy="70" r="5"/><circle cx="250" cy="42" r="5"/><circle cx="250" cy="31" r="5"/>
+              </g>
+              <text class="t-sub" x="150" y="362" text-anchor="middle">0</text>
+              <text class="t-hot" x="250" y="362" text-anchor="middle">1/2</text>
+              <text class="t-sub" x="350" y="362" text-anchor="middle">1</text>
+              <text class="t-sub" x="500" y="352" text-anchor="end">実部 →</text>
+              <text class="t-sub" x="142" y="24" text-anchor="end">虚部 ↑</text>
+              <text class="t-main" x="365" y="60">臨界帯</text>
+              <text class="t-sub" x="365" y="80">実部が 0〜1</text>
+              <text class="t-hot" x="365" y="150">臨界線</text>
+              <text class="t-sub" x="365" y="170">実部がちょうど 1/2</text>
+              <line class="s-lead" x1="360" y1="158" x2="258" y2="158"/>
+              <text class="t-main" x="365" y="240">非自明な零点</text>
+              <text class="t-sub" x="365" y="260">いちばん下は高さ 約14.13</text>
+              <line class="s-lead" x1="360" y1="245" x2="258" y2="245"/>
+              <text class="t-sub" x="36" y="300">← 自明な零点は</text>
+              <text class="t-sub" x="36" y="318">　 −2, −4, −6 …</text>
+            </svg>
+            <figcaption><span class="fig-no">図2</span>臨界帯と臨界線。点は実際の非自明な零点（下から10個）の位置。上下に無限に続く</figcaption>
+          </figure>
+
+          <p>臨界帯の中の点では、元の級数は収束しません。たとえば \(s = \frac{1}{2} + 14i\) で和をとると、和は渦を巻きながら外へ広がっていきます。ところが、和から \(\frac{N^{1-s}}{1-s}\) という項を引くと、ちゃんと1つの値に近づきます。その行き先が、解析接続で広げたゼータ関数の値です。</p>
+          <div class="eq">
+            \[ \zeta(s) = \lim_{N \to \infty} \left( \sum_{n=1}^{N} \frac{1}{n^{s}} - \frac{N^{1-s}}{1-s} \right) \]
+            <p class="eq-note">実部が 0 より大きく、\(s \neq 1\) のときに成り立つ。実部が 1 より大きいときは引く項が 0 に近づくので、元の級数と同じになる。</p>
+          </div>
+          <p>下の図では、実部 \(\sigma\) と虚部 \(t\) を動かして、この行き先を複素数の平面の上で追えます。\(t\) を 14.13 付近に合わせると、行き先がちょうど原点に来ます。そこがいちばん下の非自明な零点です。</p>
+          <figure class="fig viz" data-viz="zeta-complex">
+            <div class="viz-grid">
+              <canvas class="viz-canvas" data-role="plane" role="img" aria-label="級数の和を複素数の平面に描いた図"></canvas>
+              <div class="viz-side">
+                <div class="viz-controls">
+                  <label class="viz-ctl"><span class="viz-label">実部 \(\sigma\)</span><input type="range" name="sigma" min="0.1" max="0.9" step="0.01" value="0.5"><output data-out="sigma">0.50</output></label>
+                  <label class="viz-ctl"><span class="viz-label">虚部 \(t\)</span><input type="range" name="t" min="0" max="50" step="0.01" value="12"><output data-out="t">12.00</output></label>
+                  <label class="viz-ctl"><span class="viz-label">足す項の数 \(N\)</span><input type="range" name="n" min="10" max="1000" step="10" value="300"><output data-out="n">300</output></label>
+                  <label class="viz-check"><input type="checkbox" name="raw" checked>元の級数の和も表示する（灰色の線）</label>
+                </div>
+                <div class="viz-presets" role="group" aria-label="零点に移動する">
+                  <button type="button" data-t="14.1347" data-sigma="0.5">1番目の零点</button>
+                  <button type="button" data-t="21.0220" data-sigma="0.5">2番目</button>
+                  <button type="button" data-t="25.0109" data-sigma="0.5">3番目</button>
+                  <button type="button" data-t="30.4249" data-sigma="0.5">4番目</button>
+                </div>
+                <dl class="viz-readout">
+                  <div><dt>\(\zeta(s)\)</dt><dd data-out="zeta">—</dd></div>
+                  <div><dt>\(|\zeta(s)|\)</dt><dd data-out="abs">—</dd></div>
+                  <div><dt>\(N\) 項で補正した和</dt><dd data-out="last">—</dd></div>
+                </dl>
+                <p class="viz-note" data-out="note" aria-live="polite"></p>
+              </div>
+            </div>
+            <canvas class="viz-canvas viz-strip" data-role="strip" role="img" aria-label="虚部 t を 0 から 50 まで動かしたときの ζ(s) の絶対値のグラフ。クリックするとその t に移動する"></canvas>
+            <noscript><p class="viz-note">この図は JavaScript を有効にすると動きます。</p></noscript>
+            <figcaption><span class="fig-no">図3</span>上：\(s = \sigma + it\) での級数の和。灰色は元の和、緑は \(\frac{n^{1-s}}{1-s}\) を引いて補正した和、赤い点が \(\zeta(s)\)、黒い丸が原点。下：\(t\) を 0 から 50 まで動かしたときの \(|\zeta(s)|\)（クリックでその \(t\) に移動）。\(\sigma = \frac{1}{2}\) のときだけ、谷が 0 まで届く</figcaption>
+          </figure>
+          <p>計算機では何兆個もの零点が臨界線の上にあることが確かめられています。しかし零点は無限にあるので、いくら計算しても「すべて」は示せません。だから「証明」が必要なのです。</p>
+          <p>リーマン予想は、2000年にクレイ数学研究所が選んだ<strong>ミレニアム懸賞問題</strong>の1つでもあります。賞金は1問100万ドルです。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：零点と素数はなぜつながるのか</p>
+            <p>ゼータ関数と素数をつなぐ最初の式は、オイラーが見つけた次の等式です。</p>
+            <div class="eq">
+              \[ \begin{aligned} \zeta(s) &= \prod_{p \text{ は素数}} \frac{1}{1 - p^{-s}} \\ &= \frac{1}{1 - 2^{-s}} \cdot \frac{1}{1 - 3^{-s}} \cdot \frac{1}{1 - 5^{-s}} \cdots \end{aligned} \]
+              <p class="eq-note">左辺はすべての自然数についての和で、右辺はすべての素数についての積。自然数がただ1通りに素因数分解できることが、この等式の中身になっている。</p>
+            </div>
+            <p>素数は 2, 3, 5, 7, 11 … と不規則に現れます。それでも「\(x\) 以下に素数がおよそ何個あるか」は、なめらかな式でよく近似できます。\(x\) 以下の素数の個数を \(\pi(x)\) と書くと（円周率とは別物です）、次の近似が成り立ちます（素数定理）。</p>
+            <div class="eq">
+              \[ \pi(x) \approx \operatorname{Li}(x) = \int_{2}^{x} \frac{dt}{\log t} \]
+              <p class="eq-note">\(\operatorname{Li}(x)\) は対数積分と呼ばれる関数。大ざっぱには \(\pi(x) \approx x / \log x\) とも書ける。</p>
+            </div>
+            <p>問題は、その近似がどのくらいずれるかです。リーマンは、このずれがゼータ関数の非自明な零点の位置で決まることを示しました。いまの形で書くと、素数を数える関数 \(\psi(x)\) は零点 \(\rho\) をすべて使って次のように表せます（明示公式）。</p>
+            <div class="eq">
+              \[ \begin{aligned} \psi(x) = x &- \sum_{\rho} \frac{x^{\rho}}{\rho} \\ &- \log 2\pi - \frac{1}{2} \log\left(1 - x^{-2}\right) \end{aligned} \]
+              <p class="eq-note">\(\psi(x)\) は、\(x\) 以下の素数とその累乗 \(p^{k}\) について \(\log p\) を足し合わせた関数（チェビシェフ関数）で、\(\pi(x)\) とほぼ同じ情報を持つ。細かい条件は省略した。</p>
+            </div>
+            <p>零点 \(\rho\) の実部を \(\beta\) とすると、和の各項の大きさは \(|x^{\rho}| = x^{\beta}\) です。零点の実部が 1 に近いほど、ずれは大きくなりえます。</p>
+            <p>リーマン予想が正しければ、すべての \(\beta\) が \(\frac{1}{2}\) なので、ずれはおよそ \(\sqrt{x}\) 程度に収まります。式で書くと次のとおりで、逆にこの式が成り立てばリーマン予想も正しいことがわかっています。</p>
+            <div class="eq">
+              \[ \pi(x) = \operatorname{Li}(x) + O\!\left(\sqrt{x}\, \log x\right) \]
+              <p class="eq-note">\(O(\cdots)\) は「定数倍を除いて、この大きさ以下」という意味。</p>
+            </div>
+            <p>これは考えうるかぎり最も小さい部類のずれで、「素数はできるだけ規則正しく散らばっている」と言い換えられます。数学には「リーマン予想が正しいとすると……」と仮定して証明された定理がたくさんあります。予想が証明されれば、それらはまとめて仮定なしの定理になります。</p>
+          </aside>
+
+          <h2>AI の成果を3つの段階に分けて見る</h2>
+          <p>この4か月の出来事は、「零点がどこにあるか」をどこまで絞り込めたかによって3つの段階に分けると、見通しがよくなります。</p>
+
+          <figure class="fig">
+            <div class="stages">
+              <div class="stage">
+                <p class="stage-when">2026年8月</p>
+                <p class="stage-head"><span class="stage-no">1</span>線の上にあると示せる零点の割合を上げる</p>
+                <svg class="fig-svg" viewBox="0 0 200 220" role="img" aria-label="臨界線の上にあると証明できた零点が3分の2になった様子">
+                  <rect class="s-strip" x="40" y="10" width="120" height="200"/>
+                  <line class="s-crit" x1="100" y1="10" x2="100" y2="210"/>
+                  <g class="s-zero"><circle cx="100" cy="195" r="6"/><circle cx="100" cy="170" r="6"/><circle cx="100" cy="120" r="6"/><circle cx="100" cy="95" r="6"/><circle cx="100" cy="45" r="6"/><circle cx="100" cy="20" r="6"/></g>
+                  <g class="s-open"><circle cx="100" cy="145" r="6"/><circle cx="100" cy="70" r="6"/></g>
+                </svg>
+                <p class="stage-text">線の上にあると<strong>証明できた零点の割合</strong>を、約4割から約3分の2へ</p>
+              </div>
+              <div class="stage">
+                <p class="stage-when">2026年10月</p>
+                <p class="stage-head"><span class="stage-no">2</span>零点がある帯を狭める</p>
+                <svg class="fig-svg" viewBox="0 0 200 220" role="img" aria-label="零点が0から1より狭い帯に収まることを示した様子">
+                  <rect class="s-strip" x="40" y="10" width="120" height="200"/>
+                  <rect class="s-band" x="50" y="10" width="100" height="200"/>
+                  <line class="s-crit" x1="100" y1="10" x2="100" y2="210"/>
+                  <text class="t-tiny" x="50" y="206" text-anchor="middle">1/12</text>
+                  <text class="t-tiny" x="150" y="206" text-anchor="middle">11/12</text>
+                </svg>
+                <p class="stage-text">すべての零点が <strong>0〜1 より狭い帯</strong>（1/12〜11/12）に入る＝準リーマン予想</p>
+              </div>
+              <div class="stage">
+                <p class="stage-when">2026年11月</p>
+                <p class="stage-head"><span class="stage-no">3</span>すべての零点が線の上にあると示す</p>
+                <svg class="fig-svg" viewBox="0 0 200 220" role="img" aria-label="すべての零点が臨界線の上にあるという主張">
+                  <rect class="s-strip" x="40" y="10" width="120" height="200"/>
+                  <line class="s-crit s-crit-strong" x1="100" y1="10" x2="100" y2="210"/>
+                  <g class="s-zero"><circle cx="100" cy="195" r="6"/><circle cx="100" cy="170" r="6"/><circle cx="100" cy="145" r="6"/><circle cx="100" cy="120" r="6"/><circle cx="100" cy="95" r="6"/><circle cx="100" cy="70" r="6"/><circle cx="100" cy="45" r="6"/><circle cx="100" cy="20" r="6"/></g>
+                </svg>
+                <p class="stage-text"><strong>すべての零点</strong>が線の上にある＝リーマン予想そのもの（主張）</p>
+              </div>
+            </div>
+            <figcaption><span class="fig-no">図4</span>AI の成果の3つの段階。塗りつぶした点は「線の上にあると証明された零点」、白抜きは「まだ証明できていない零点」を表す</figcaption>
+          </figure>
+
+          <p>以下で1つずつ見ていきます。</p>
+
+          <h2>8月：臨界線の上にあると証明できた零点が3分の2を超えた</h2>
+          <p>8月10日に Anthropic は、「未公開の研究版 Claude が、臨界線の上にあると証明できる零点の割合の下限を 41.6% から 67.2% に引き上げた」と発表しました。</p>
+          <p>「割合」とは、こういうことです。零点は無限にあるので、全部が線の上にあるとはまだ言えません。それでも「少なくとも○割は線の上にある」とは証明できます。この「○割」を上げる研究が100年以上続いてきました。</p>
+          <p>式で書くと次のとおりです。虚部が 0 から \(T\) までの非自明な零点の個数を \(N(T)\)、そのうち臨界線の上にあるものの個数を \(N_{0}(T)\) とします。</p>
+          <div class="eq">
+            \[ \kappa = \liminf_{T \to \infty} \frac{N_{0}(T)}{N(T)} \]
+            <p class="eq-note">\(\liminf\) は、\(T\) をどこまで大きくしても比がこの値を下回り続けることはない、という意味の「下側の極限」。零点の個数はおよそ \(N(T) \approx \frac{T}{2\pi} \log \frac{T}{2\pi} - \frac{T}{2\pi}\) で増えるので、零点は上に行くほど密に並ぶ。</p>
+          </div>
+          <p>この \(\kappa\)（カッパ）が「臨界線の上にある零点の割合」です。リーマン予想が正しければ \(\kappa = 1\) になります。今回の論文は、線の上にあって単純な零点（下のコラム）だけを数えても \(\kappa \geq \frac{2}{3}\) になることを示しました。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：臨界線の上にあると証明できた零点の割合はどう伸びてきたか</p>
+            <ul class="record-list">
+              <li><span>1914年</span>ハーディ：臨界線の上に零点が<strong>無限個</strong>あることを証明</li>
+              <li><span>1940年代</span>セルバーグ：全体の<strong>正の割合</strong>（ごくわずかでも0ではない）が線の上にあることを証明</li>
+              <li><span>1974年</span>レビンソン：<strong>3分の1</strong>以上</li>
+              <li><span>1989年</span>コンリー：<strong>5分の2</strong>以上</li>
+              <li><span>2026年8月</span>Claude：<strong>3分の2</strong>以上</li>
+            </ul>
+            <p>表の「割合」は、どれも上の \(\kappa\) についての記録です。「単純」とは、零点が重なっていない（\(\zeta'(\rho) \neq 0\)）ことを指します。</p>
+            <p>1989年に記録を作ったブライアン・コンリーは、今回 Claude の論文を確認した外部の数学者の1人です。</p>
+            <p>なお Anthropic の発表は「67.2%」で、論文の題は「3分の2以上」です。数え方（重なった零点を何個と数えるか、どの補助的な道具を使うか）で数字が少し変わるためで、どちらも同じ成果を指しています。</p>
+          </aside>
+
+          <p>論文は Alpöge と Ralph Furman（どちらも Anthropic の数学者）の名前で arXiv に出ました。証明は Lean（後のコラムで説明します）で形式的に検証済みです。社外の数学者2人（Brian Conrey と Dan Goldston）も内容を確認しました。</p>
+          <p>この成果は進め方も話題になりました。</p>
+
+          <ul class="timeline">
+            <li><b>1回目のセッション</b>Claude は650個のアイデアを出したが、どれもうまくいかなかった。</li>
+            <li><b>2回目のセッション</b>約60の <strong>subagent</strong> を約1日半動かし、2,400回のシェルコマンドと数百の Python スクリプトを実行して結果にたどり着いた。</li>
+            <li><b>人間の役割</b>指示したのは数学者ではない社員で、主にやったのは励ますことだった。</li>
+          </ul>
+
+          <aside class="column column-sm">
+            <p class="column-title">用語：subagent とは</p>
+            <p>AI エージェントが、仕事を分けて別の AI エージェントに任せる仕組みです。任された側を subagent と呼びます。「この方針で計算してみて」「この補題を確かめて」と並行して試せるので、人間の研究チームのように多くの道を同時に探れます。</p>
+          </aside>
+
+          <p>興味深いのは、Anthropic がこのとき「Claude が使った手法でリーマン予想が証明できるとは考えていない」と書いていたことです。その3か月後に話は大きく動きます。</p>
+
+          <h2>10月：OpenAI が弱い形のリーマン予想（準リーマン予想）を証明した</h2>
+          <p>10月6日、OpenAI が未公開のモデルによる数学の論文を数百本まとめて公開しました。その中に<strong>準リーマン予想</strong>の証明がありました。</p>
+          <p>準リーマン予想は、「零点はすべて 0〜1 の帯より<strong>少しでも狭い帯</strong>に収まる」という主張です。零点が線の上にあるとまでは言わないものの、帯の端には寄りつかないということです（図4の②）。</p>
+          <div class="eq">
+            \[ \begin{aligned} &\text{ある } \theta \lt 1 \text{ があって、} \\ &\operatorname{Re}(s) \gt \theta \ \Longrightarrow\ \zeta(s) \neq 0 \end{aligned} \]
+            <p class="eq-note">零点は臨界線をはさんで左右対称に並ぶ（\(\rho\) が零点なら \(1 - \overline{\rho}\) も零点）。右側に実部 \(\theta\) の壁があれば、左側にも実部 \(1 - \theta\) の壁がある。OpenAI の論文は \(\theta = \frac{7}{8}\) と \(\theta = \frac{11}{12}\) を示した。</p>
+          </div>
+          <table class="post-table">
+            <thead><tr><th>版</th><th>示した帯</th><th>長さ</th><th>検証</th></tr></thead>
+            <tbody>
+              <tr><td>9月30日付</td><td>1/8〜7/8</td><td>199ページ</td><td>Lean で形式検証済み</td></tr>
+              <tr><td>10月5日付</td><td>1/12〜11/12</td><td>49ページ</td><td>形式検証はまだ。公開された論文の中で唯一人の手が入った</td></tr>
+            </tbody>
+          </table>
+          <p>数学者の評価は高いものでした。Quanta Magazine の記事（10月19日）によると、専門家はおおむね正しいとみています。</p>
+          <blockquote>
+            <p>AI と数学の成果として、これまでで群を抜いて重要なもの。</p>
+            <cite>Jared Duker Lichtman（スタンフォード大学）の発言の訳</cite>
+          </blockquote>
+          <p>ニューヨーク大学の Maksym Radziwiłł は「リーマン予想から導かれる結果の大半は、準リーマン予想からすでに導ける」と話しています。一方で「論文はひどい書き方で、数学の雑誌ならすぐに不採択になる」とも言っています。プリンストン大学の Peter Sarnak は、人間が細部まで確認して理解するまでは「定理」とは呼ばない立場です。</p>
+          <p>マンチェスター大学の Thomas Bloom の言葉は、11月を予告するようでした。</p>
+          <blockquote>
+            <p>数週間前なら、準リーマン予想についても「まだ遠い」と言っていただろう。いまはもう、何が起きても驚かない。</p>
+            <cite>Thomas Bloom の発言の訳（Quanta Magazine）</cite>
+          </blockquote>
+
+          <h2>11月：リーマン予想そのものを証明したという主張が出た</h2>
+          <p>11月20日に Alpöge は、自分のウェブサイトに4ページの覚え書きを公開しました。Alpöge は8月の論文の著者で、Anthropic の社員です。</p>
+          <blockquote>
+            <p>I believe I have, working with Claude, discovered a proof of the Riemann hypothesis.<br>（Claude と一緒に、リーマン予想の証明を見つけたと思う）</p>
+            <cite>Levent Alpöge の覚え書きより（AFP の報道による）</cite>
+          </blockquote>
+          <p>この主張には、これまでの数学の証明とは違う点が3つあります。</p>
+          <ol>
+            <li><strong>人が読む形の証明がない。</strong>公開されたのは Lean で書かれた証明だけです。報道によると Lean のコードで1,700万行を超えます。英語で説明しようとすると25万ページを超えるそうです。</li>
+            <li><strong>本人もまだ全部は理解していない。</strong>Alpöge は「議論がとてつもなく長い」として、まず Lean の証明だけを公開しました。文章の証明はあとできちんと書くと述べています。</li>
+            <li><strong>一般化リーマン予想も含む。</strong>リーマン予想を広げた主張（一般化リーマン予想）の一部も、同時に証明したとしています（下のコラム）。</li>
+          </ol>
+
+          <aside class="column">
+            <p class="column-title">コラム：Lean と「形式検証」とは何か</p>
+            <p>Lean は、数学の証明をプログラムのように書いてコンピューターに1行ずつ検査させるソフトウェアです（proof assistant、日本語では証明支援系と呼ぶ）。Lean の中心には「kernel」という小さな検査器があり、すべての推論がルールどおりかを確かめます。</p>
+            <p>大学で学ぶ程度の定義や定理は、<strong>Mathlib</strong> という共有ライブラリにまとめられています。リーマン予想の主張そのものも、Mathlib に次のように定義されています。</p>
+            <pre><code>def RiemannHypothesis : Prop :=
+  ∀ (s : ℂ) (_ : riemannZeta s = 0) (_ : ¬∃ n : ℕ, s = -2 * (n + 1)) (_ : s ≠ 1),
+    s.re = 1 / 2</code></pre>
+            <p>「ゼータ関数の値が0で、−2, −4, −6 … のどれでもなく、1 でもない複素数 s は、実部が 1/2 である」と読めます。前に出てきたリーマン予想の式を Lean で書いたものです。s ≠ 1 の条件は、Mathlib が s = 1 でのゼータ関数の値も便宜上決めているために入っています。</p>
+            <p>人間の書いた論文は査読者が読んで確かめます。Lean の証明はコンピューターが確かめます。何万ページあっても検査できるのが強みです。</p>
+          </aside>
+
+          <h3>Lean によるコンピューターの検査はほぼ通っている</h3>
+          <p>発表の翌日、Lean の開発団体（Lean FRO）と Mathlib Initiative が共同声明を出しました。</p>
+          <blockquote>
+            <p>Alpöge のリーマン予想の証明が正しいと、全面的に確信している。主張と証明の両方が正しいことをここに認める。</p>
+            <cite>Lean FRO と Mathlib Initiative の共同声明（11月21日）の訳</cite>
+          </blockquote>
+          <p>MIT の数学者 Andrew Sutherland は、検査の結果を一覧にして公開しています（11月23日時点）。</p>
+          <ul>
+            <li>17万5,187個のファイルがすべてエラーなくコンパイルできた</li>
+            <li>Lean の kernel に加えて、<strong>別の開発者が独立に作った検査器</strong>（nanoda や lean4lean など）も証明を受け入れた</li>
+            <li>証明が頼っている公理は Lean で標準的に使われる3つだけだった</li>
+            <li>主張には Mathlib のゼータ関数の定義が使われている</li>
+          </ul>
+          <p>ただし、いちばん厳しい設定での検査など一部はまだ実行中です。Sutherland はこの検査を Claude Code で動かしたと書いています。AI が作った証明を AI を使って検査する時代になっています。</p>
+
+          <h3>証明の中身を理解した人間はまだいない</h3>
+          <p>機械の検査が通っても数学者たちは慎重です。</p>
+          <blockquote>
+            <p>(1) Lean で形式化された証明は、きわめて高い確率で正しい。(2) まだ誰もそれを理解していない。</p>
+            <cite>数学者 Daniel Litt の発言の訳（The Conversation）</cite>
+          </blockquote>
+          <p>Lean の第一人者であるインペリアル・カレッジ・ロンドンの Kevin Buzzard は「いまのところ、なぜ定理が成り立つのかさえわからない」と話しています。2022年のフィールズ賞受賞者 James Maynard は「完全に確認されれば、数学の歴史的な節目だ」としたうえで、「Lean の検証を確かめるだけでも時間がかかる」と述べています。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：一般化リーマン予想とは何か</p>
+            <p>ゼータ関数には、よく似た性質をもつ「親戚」の関数がたくさんあります（L 関数と呼びます）。「親戚たちの零点も、すべて臨界線の上にある」という主張が<strong>一般化リーマン予想</strong>です。</p>
+            <p>代表的な親戚が<strong>ディリクレ L 関数</strong>です。ゼータ関数の和の各項に、重み \(\chi(n)\) をかけたものです。</p>
+            <div class="eq">
+              \[ L(s, \chi) = \sum_{n=1}^{\infty} \frac{\chi(n)}{n^{s}} \]
+              <p class="eq-note">重み \(\chi\)（カイ）はディリクレ指標と呼ばれ、\(n\) をある数で割った余りで値が決まる。</p>
+            </div>
+            <p>たとえば、4 で割って 1 余る \(n\) に \(+1\)、3 余る \(n\) に \(-1\)、偶数に 0 をかけると次の関数になります。</p>
+            <div class="eq">
+              \[ L(s, \chi) = 1 - \frac{1}{3^{s}} + \frac{1}{5^{s}} - \frac{1}{7^{s}} + \cdots \]
+              <p class="eq-note">この関数の零点の位置が、「4 で割ると 1 余る素数」と「3 余る素数」の散らばり方を決める。</p>
+            </div>
+            <p>Alpöge が証明したと主張しているのは、親戚のうち「ディリクレ L 関数」と呼ばれる種類についての一般化リーマン予想です。Sutherland の検査ページは、それ以外の種類（保型 L 関数など）は含まれていないと明記しています。</p>
+            <p>一般化リーマン予想は多くの結果の前提になってきました。たとえば「等差数列の中の素数」（4 で割ると 1 余る素数など）の分布や、暗号で使う素数判定にかかる計算量の評価です。</p>
+          </aside>
+
+          <h3>同じ日に AI を使わずに書かれた証明も発表された</h3>
+          <p>発表の数時間後に、アメリカ数学会の会長でスタンフォード大学の Ravi Vakil が「同じ学科のポスドクが、独立にリーマン予想の証明を投稿した」と表明しました。The Conversation によれば、これは Alessandro Maria Masullo による940ページの原稿で AI を使っていないとされます。ただし公開から数時間で、問題になりうる点が指摘されています。</p>
+
+          <h2>Lean の検査が通れば「証明された」と言えるのか</h2>
+          <p>ここがこの記事でいちばん伝えたいところです。</p>
+          <p>Lean の検査が通ったことは、とても強い証拠です。それでも、数学の世界が「リーマン予想は解けた」と認めるにはまだ確かめることがあります。Lean のコミュニティで広く読まれているブログ記事（Xena Project の11月12日の記事）は、「Lean で検証済み」という主張を読むときの問いを4つ挙げています。それをもとに、検証を3つの層に分けてみます。</p>
+
+          <figure class="fig">
+            <ol class="layers">
+              <li class="layer is-done">
+                <span class="layer-q">証明は主張を正しく導いているか</span>
+                <span class="layer-how">コンパイルできるか／kernel と別の検査器で再検査して通るか／使っている公理は何か</span>
+                <span class="layer-state">ほぼ済み（一部の検査は実行中）</span>
+              </li>
+              <li class="layer is-partial">
+                <span class="layer-q">Lean で書いた主張は本当にリーマン予想か</span>
+                <span class="layer-how">Mathlib の定義を使っているか／余計な仮定が入っていないか／中身のない主張になっていないか</span>
+                <span class="layer-state">Mathlib の定義を使用。Lean のコミュニティは正しいと声明</span>
+              </li>
+              <li class="layer is-open">
+                <span class="layer-q">人間はなぜ成り立つのかを説明できるか</span>
+                <span class="layer-how">人が読める形の証明／専門家による理解と査読</span>
+                <span class="layer-state">まだ。人が読める証明は公開されていない</span>
+              </li>
+            </ol>
+            <figcaption><span class="fig-no">図5</span>「証明された」を3つの層に分ける。上の層ほど機械で確かめやすく、下の層ほど人間にしかできない</figcaption>
+          </figure>
+
+          <p>ソフトウェア開発にたとえると、いまの状態はこうです。</p>
+          <div class="analogy">
+            <p>CI のテストは全部通った。テストが仕様どおりかは、何人かのレビュアーが確認した。<br>でも<strong>1,700万行のコードを読んで「なぜ動くのか」を説明できる人はまだいない</strong>。</p>
+          </div>
+          <p>ソフトウェアなら「テストが通れば出荷」で済むかもしれません。けれど数学の証明は、「正しいことの保証」であると同時に「なぜ正しいのかの説明」でもあります。リーマン予想の証明が待ち望まれてきたのは、素数について何か新しいことがわかるはずだからです。説明のない証明では、その期待の半分しか満たされません。</p>
+
+          <aside class="column">
+            <p class="column-title">コラム：ミレニアム懸賞の賞金はもらえるのか</p>
+            <p>クレイ数学研究所の規則では、懸賞の対象になるには少なくとも次の条件が要ります。</p>
+            <ul>
+              <li>査読のある数学の雑誌などに<strong>出版</strong>されていること</li>
+              <li>出版から<strong>2年以上</strong>たっていること</li>
+              <li>数学界で<strong>一般に受け入れられて</strong>いること</li>
+            </ul>
+            <p>今回の主張はまだ論文として出版されていないので、どんなに早くても数年先の話です。なお OpenAI は、9月に発表したナビエ–ストークス方程式（同じくミレニアム懸賞問題の1つ）の成果について賞金は請求しないと表明しています。</p>
+          </aside>
+
+          <p>言語モデルの視点から見ると、この4か月で起きたのは「<strong>ボトルネックの移動</strong>」です。証明を見つけて書くコストは劇的に下がりました。けれど、それを確かめるコストはほとんど下がっていません。とくに、人間が理解するためのコストはそのままです。Radziwiłł の「ひどい書き方」という評価も、Buzzard の「なぜ成り立つのかわからない」という言葉も、同じ問題を指しています。</p>
+
+          <h2>3つの出来事はそれぞれどこまで確かめられたか</h2>
+          <table class="post-table status-table">
+            <thead><tr><th>出来事</th><th>コンピューターによる検証</th><th>数学者の評価</th><th>人が読める形の証明</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">8月<br>零点の3分の2以上が線の上（Anthropic）</th><td><span class="st st-ok">済み</span>Lean で検証済み</td><td><span class="st st-ok">確認済み</span>社外の数学者2人が確認</td><td><span class="st st-ok">あり</span>論文として公開</td></tr>
+              <tr><th scope="row">10月<br>準リーマン予想（OpenAI）</th><td><span class="st st-ok">済み</span>1/8〜7/8 の版を Lean で検証済み</td><td><span class="st st-ok">おおむね正しい</span>専門家の多くが正しいとみている</td><td><span class="st st-mid">あり</span>論文はあるが、書き方がひどく読みにくい</td></tr>
+              <tr><th scope="row">11月<br>リーマン予想（Alpöge と Claude）</th><td><span class="st st-ok">ほぼ済み</span>一部の検査はまだ実行中</td><td><span class="st st-mid">これから</span>Lean の開発団体は「正しい」と声明。数学者による確認はこれから</td><td><span class="st st-ng">まだない</span>公開されたのは Lean の証明だけ</td></tr>
+            </tbody>
+          </table>
+
+          <h2>おわりに</h2>
+          <p>「AI がリーマン予想を解いた」と言い切れるかどうかはまだわかりません。それでも、AI はたった4か月で「線の上にある零点の割合」から「零点がある帯」へ、そして「すべての零点」へと段階を上がってきました。そのこと自体が数学の歴史に残る出来事です。</p>
+          <p>次に注目したいのは、次の3点です。</p>
+          <ul>
+            <li>人が読める形の証明は出てくるか</li>
+            <li>Lean で書かれた主張と検査の中身を専門家がどう評価するか</li>
+            <li>論文として出版されて査読を通るか</li>
+          </ul>
+          <p>私たちの新刊『言素 vol.1』の「AI for Science」の記事では、OpenAI がナビエ–ストークス方程式を解いたと発表した件を取り上げています。AI による証明をどう検証してどう受け止めるかを考えた記事です。この記事と合わせて読んでいただけるとうれしいです。</p>
+
+          <hr>
+          <section class="sources">
+            <h2>出典</h2>
+            <p class="post-note">確認日はすべて2026年11月24日。引用の日本語は筆者の訳です。</p>
+            <ul>
+              <li>Anthropic「<a href="https://www.anthropic.com/research/riemann-zeta" rel="noopener" target="_blank">Learning more about Claude's mathematical capabilities</a>」（2026年8月10日、8月13日更新）</li>
+              <li>L. Alpöge, R. Furman「<a href="https://arxiv.org/abs/2608.13637" rel="noopener" target="_blank">More than two thirds of the zeta zeros are simple and on the critical line</a>」arXiv:2608.13637（2026年8月）</li>
+              <li>Quanta Magazine「<a href="https://www.quantamagazine.org/ai-proved-the-quasi-riemann-hypothesis-what-happens-now-20261019/" rel="noopener" target="_blank">AI Proved the Quasi-Riemann Hypothesis. What Happens Now?</a>」（2026年10月19日）</li>
+              <li>L. Alpöge「<a href="https://alpo.ge/remark.pdf" rel="noopener" target="_blank">Remark</a>」（2026年11月20日）</li>
+              <li>phys.org / AFP「<a href="https://phys.org/news/2026-11-anthropic-claude-math-greatest-riddle.html" rel="noopener" target="_blank">Anthropic researcher says he and Claude proved the Riemann hypothesis</a>」（2026年11月20日）</li>
+              <li>IBM Think「<a href="https://www.ibm.com/think/news/anthropic-claude-riemann-hypothesis-math-proof" rel="noopener" target="_blank">Anthropic mathematician claims AI helped solve a 167-year-old math mystery</a>」（2026年11月20日）</li>
+              <li>Al Jazeera「<a href="https://www.aljazeera.com/news/2026/11/21/riemann-hypothesis-has-the-worlds-most-famous-maths-problem-been-cracked" rel="noopener" target="_blank">Riemann hypothesis: Has the world's most famous maths problem been cracked?</a>」（2026年11月21日）</li>
+              <li>Lean FRO, Mathlib Initiative「<a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis/" rel="noopener" target="_blank">Lean verification of the Riemann Hypothesis</a>」（2026年11月21日）</li>
+              <li>A. Sutherland「<a href="https://math.mit.edu/~drew/grh/" rel="noopener" target="_blank">Verification files for the Lean proof of the Riemann Hypothesis</a>」（2026年11月23日更新）</li>
+              <li>The Conversation「<a href="https://theconversation.com/the-sacred-object-in-mathematics-the-riemann-hypothesis-ai-and-a-proof-no-human-can-read-297276" rel="noopener" target="_blank">'The sacred object in mathematics': the Riemann hypothesis, AI and a proof no human can read</a>」（2026年11月23日）</li>
+              <li>Xena Project「<a href="https://xenaproject.wordpress.com/2026/11/12/and-the-proof-is-checked-in-lean/" rel="noopener" target="_blank">…and the proof is checked in Lean</a>」（2026年11月12日）</li>
+              <li>Clay Mathematics Institute「<a href="https://www.claymath.org/wp-content/uploads/2022/03/millennium_prize_rules_0.pdf" rel="noopener" target="_blank">Rules for the Millennium Prize Problems</a>」</li>
+            </ul>
+            <p class="post-note">この記事の下調べと下書きには、Anthropic の Claude を使いました。</p>
+          </section>
+        </div>
+
+        <footer class="post-foot">
+          <a href="../">← ブログの記事一覧へ</a>
+        </footer>
+      </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

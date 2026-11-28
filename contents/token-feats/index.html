@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>何トークンで何ができたか | XLM開発会議 城北支部</title>
+  <meta name="description" content="数学の証明、物理の理論、コンパイラや OS の開発、ベンチマークまで。AI を使った成果のうち、使ったトークン数が公表されたものを集め、どれくらいのトークンで何ができたかを図と表にしました。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="何トークンで何ができたか | XLM開発会議 城北支部">
+  <meta property="og:description" content="AI を使った成果と、公表された使用トークン数の一覧。数え方の違いも図で見分けられます。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/contents/token-feats/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/contents-token-feats.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="何トークンで何ができたか">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/contents/token-feats/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="data/feats.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../" aria-current="page">コンテンツ</a>
+        <a href="../../blog/">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section page-head tf-head">
+      <div class="wrap">
+        <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">コンテンツ</a><span aria-hidden="true"> / </span>何トークンで何ができたか</p>
+        <h1 class="section-title"><span class="en">Tokens &amp; Feats</span>何トークンで何ができたか</h1>
+        <p class="page-lead">AI を使った成果の発表には、「何トークン使ったか」が書かれることが増えてきました。数学の証明、物理の理論、コンパイラや OS の開発、ベンチマークまで、使ったトークン数が公表された成果を集めて1つの図に並べました。ただし数え方は発表ごとに違い、出力だけの数字もあれば、キャッシュからの読み直しを含む数字もあります。図では数え方を点の形で見分けられるようにしています。</p>
+
+        <section class="tf-keyfigs" aria-label="収録の概要">
+          <div class="tf-fig"><span class="tf-fig-num" id="kfTokens">—<span class="unit">件</span></span><span class="tf-fig-cap">トークン数が公表された成果</span></div>
+          <div class="tf-fig"><span class="tf-fig-num" id="kfCosts">—<span class="unit">件</span></span><span class="tf-fig-cap">費用（ドル）だけが公表された成果</span></div>
+          <div class="tf-fig"><span class="tf-fig-num" id="kfNone">—<span class="unit">件</span></span><span class="tf-fig-cap">数字が公表されていない主な成果</span></div>
+          <div class="tf-fig"><span class="tf-fig-num tf-fig-date" id="kfAsOf">—</span><span class="tf-fig-cap">確かめた日</span></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="chartH">
+      <div class="wrap">
+        <h2 class="section-title" id="chartH"><span class="en">Map</span>トークン数と成果の地図</h2>
+        <figure class="tf-figure" aria-labelledby="chartTitle">
+          <div>
+            <p class="tf-fig-label">図1</p>
+            <p class="tf-fig-title" id="chartTitle">公表されたトークン数（横軸は対数目盛）</p>
+            <p class="tf-fig-sub">1行が1つの成果です。同じ成果で複数の数字が公表されているときは、線でつないで並べています。</p>
+          </div>
+          <div class="tf-chart-ctl">
+            <div class="tf-seg" role="group" aria-label="並べ方">
+              <button type="button" class="tf-seg-btn" data-sort="group" aria-pressed="true">分野ごと</button>
+              <button type="button" class="tf-seg-btn" data-sort="size" aria-pressed="false">大きい順</button>
+              <button type="button" class="tf-seg-btn" data-sort="date" aria-pressed="false">日付順</button>
+            </div>
+            <div class="tf-legend" id="legend" role="group" aria-label="表示する数字の種類"></div>
+          </div>
+          <div class="tf-chart-box" id="chartBox">
+            <svg class="tf-chart" id="chart" role="img" aria-labelledby="chartTitle"></svg>
+          </div>
+          <figcaption class="tf-fig-cap-long">凡例のボタンで、数字の種類ごとに表示を切り替えられます。点に触れると数字が出ます。成果の名前を押すと、下の表の詳しい説明に移ります。<strong>数え方が違う数字どうしは、横に並んでいても同じ物差しでは比べられません。</strong>たとえば「出力」だけの数字と「キャッシュの読み出しを含む合計」は、桁が2つ違うこともあります。</figcaption>
+        </figure>
+
+        <div class="tf-findings">
+          <div class="tf-finding">
+            <h3>出力だけでも4桁の幅がある</h3>
+            <p>出力の数字が公表された数学の成果だけでも、指数時間仮説の反証の約1,400万から Navier–Stokes 方程式の約1,300億まで、約1万倍の開きがあります。</p>
+          </div>
+          <div class="tf-finding">
+            <h3>合計の大半はキャッシュの読み直し</h3>
+            <p>内訳が公表された開発の事例では、合計の9割以上がキャッシュからの読み出しです。GitHub Copilot の移植では約1,363億のうち約1,306億がそうでした。</p>
+          </div>
+          <div class="tf-finding">
+            <h3>数字のない成果も多い</h3>
+            <p>OpenAI の数学の成果の多くや、Claude の VP ≠ VNP の証明など、話題になった成果でもトークン数が公表されていないものが少なくありません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="listH">
+      <div class="wrap">
+        <h2 class="section-title" id="listH"><span class="en">List</span>トークン数が公表された成果</h2>
+        <p class="tf-lead">公表された数字は、足し合わせたり換算したりせず、そのままの形で載せています。原文は「出典」の欄で開いて読めます。</p>
+        <div class="tf-controls" role="group" aria-label="表の絞り込み">
+          <label class="tf-ctl"><span class="tf-ctl-l">分野</span><select id="fGroup"><option value="">すべて</option></select></label>
+          <label class="tf-ctl tf-ctl-q"><span class="tf-ctl-l">キーワード</span><input type="search" id="fQ" placeholder="例：Lean、Claude、移植" autocomplete="off" enterkeyhint="search"></label>
+          <span class="tf-count" id="tokenCount" aria-live="polite"></span>
+        </div>
+        <div class="tf-table-wrap" tabindex="0" role="region" aria-labelledby="listH">
+          <table class="tf-table" id="tokenTable">
+            <thead>
+              <tr>
+                <th scope="col">成果</th>
+                <th scope="col">日付</th>
+                <th scope="col">誰が・モデル</th>
+                <th scope="col">公表されたトークン数</th>
+                <th scope="col">費用</th>
+                <th scope="col">確かめられ方</th>
+                <th scope="col">出典</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <noscript><p class="tf-noscript">表の表示には JavaScript を使っています。ブラウザの設定で JavaScript を有効にしてください。</p></noscript>
+        </div>
+        <p class="tf-empty" id="tokenEmpty" hidden>条件に合う成果はありません。</p>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="costH">
+      <div class="wrap">
+        <h2 class="section-title" id="costH"><span class="en">Cost</span>費用（ドル）だけが公表された成果</h2>
+        <p class="tf-lead">ベンチマークやセキュリティの分野では、トークン数ではなく費用で公表するのがふつうです。単位（1問あたり、1回あたり、合計）も発表ごとに違います。</p>
+        <div class="tf-table-wrap" tabindex="0" role="region" aria-labelledby="costH">
+          <table class="tf-table" id="costTable">
+            <thead>
+              <tr>
+                <th scope="col">成果</th>
+                <th scope="col">日付</th>
+                <th scope="col">誰が</th>
+                <th scope="col">公表された費用</th>
+                <th scope="col">中身と注記</th>
+                <th scope="col">出典</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="noneH">
+      <div class="wrap">
+        <h2 class="section-title" id="noneH"><span class="en">Unknown</span>数字が公表されていない主な成果</h2>
+        <p class="tf-lead">話題になった成果のうち、トークン数も費用も見つからなかったものです。「見つからなかった」であって、どこにも書かれていないと確かめたわけではありません。</p>
+        <ul class="tf-none" id="noneList"></ul>
+      </div>
+    </section>
+
+    <section class="section section-alt" aria-labelledby="notesH">
+      <div class="wrap">
+        <h2 class="section-title" id="notesH"><span class="en">Notes</span>読み方の注意</h2>
+        <ul class="tf-note-list">
+          <li>トークン数は発表した本人や組織の数字です。第三者が計測したものではありません。二次情報でしか確かめられなかったものには「二次情報」の印をつけました。</li>
+          <li>「出力」「キャッシュ以外の入力」「キャッシュの読み出し」「合計」は、出典がそう書いているものだけをその種類として載せました。キャッシュを含むかどうかが書かれていない数字は、別の形（◇）で示しています。数え方の違いは、ブログ「<a href="../../blog/token-accounting-2026/">AI の「使ったトークン数」の数え方</a>」で説明しています。</li>
+          <li>モデルが違えばトークナイザーも違うので、同じ文章でもトークン数は変わります。単価は「<a href="../token-pricing/">AI サービスのトークン単価</a>」を見てください。</li>
+          <li>成果が正しいかどうかは、この一覧では判断していません。「確かめられ方」の欄に、Lean などでの検査や査読の有無を出典のとおりに書きました。</li>
+          <li id="asOfNote">2026年11月27日時点の情報です。</li>
+        </ul>
+        <p class="note">誤りや、載せるべき成果に気付かれた方は、X（<a href="https://x.com/xlm_dev" rel="noopener" target="_blank">@xlm_dev</a>）までお知らせください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

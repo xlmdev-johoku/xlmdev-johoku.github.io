@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>ブログ | XLM開発会議 城北支部</title>
+  <meta name="description" content="技術同人誌サークル「XLM開発会議 城北支部」のブログ。イベント出展のお知らせや参加レポート、本づくりの裏側、言語モデルにまつわる話題などを書いていきます。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ブログ | XLM開発会議 城北支部">
+  <meta property="og:description" content="イベント出展のお知らせや参加レポート、本づくりの裏側、言語モデルにまつわる話題などを書いていきます。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/blog/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/blog-index.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="XLM開発会議 城北支部のブログ">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/blog/">
+  <link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../#event">出展情報</a>
+        <a href="../#books">頒布物</a>
+        <a href="../#novelty">〇LM大全</a>
+        <a href="../contents/">コンテンツ</a>
+        <a href="./" aria-current="page">ブログ</a>
+        <a href="../#about">サークルについて</a>
+        <a href="../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section page-head">
+      <div class="wrap">
+        <p class="breadcrumb"><a href="../">ホーム</a><span aria-hidden="true"> / </span>ブログ</p>
+        <h1 class="section-title"><span class="en">Blog</span>ブログ</h1>
+        <p class="page-lead">イベント出展のお知らせや参加レポート、本づくりの裏側、言語モデルにまつわる話題などを書いていきます。</p>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="wrap">
+        <!--
+          記事を追加するときは <li class="post-item"> を1つ、いちばん上（新しい順）に足す。
+          記事ページは blog/<スラッグ>/index.html に置き、href="<スラッグ>/" でリンクする。
+        -->
+        <ul class="post-list">
+          <li class="post-item">
+            <a href="lm-prosperity-2026/">
+              <span class="content-meta"><time datetime="2026-11-28">2026.11.28</time><span class="content-tag">考察</span></span>
+              <span class="post-title">Language Model は社会を豊かにするか ―― 「AIで豊かになる」と「AIで失業者が増える」を供給と需要に分けて考える</span>
+              <span class="post-excerpt">一見矛盾する2つの話を、作れる量（供給能力）と買われる量（需要）に分けて考えます。いまの AI がどちらに使われているかをデータで確かめ、分かれ目が経済や産業の政策にあることと、需要を生む「新しさ」の段階を整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="es-at-scale-2026/">
+              <span class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></span>
+              <span class="post-title">強化学習の代わりに「進化」で LLM を鍛える ―― 30個の候補で数十億の重みを動かした論文を読む</span>
+              <span class="post-excerpt">勾配を使わない進化戦略（ES）で、数十億パラメータの LLM を追加学習した論文（ICML 2026）。仕組みと結果、そして計算量の比べ方など、どこまで言えるのかを整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="token-accounting-2026/">
+              <span class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></span>
+              <span class="post-title">AI の「使ったトークン数」の数え方</span>
+              <span class="post-excerpt">論文の「約4億トークン」は多いのか少ないのか。キャッシュ・推論・出力のどれを数えるかで何十倍も変わるトークン数の数え方を、Anthropic・OpenAI・Claude Code の仕様と筆者の30日分の内訳から整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="quantum-gravity-null-cone-2026/">
+              <span class="content-meta"><time datetime="2026-11-27">2026.11.27</time><span class="content-tag">解説</span></span>
+              <span class="post-title">AI は量子重力の理論を作ったのか ―― GPT-6 Astra と作った提案を何で確かめるかで読む</span>
+              <span class="post-excerpt">Stanford の物理学者が GPT-6 Astra と作った量子重力の提案を arXiv に投稿しました。証明ではなく提案であるこの論文が何を主張し、それを何で確かめられるのかを、VP ≠ VNP の主張と比べながら整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="vp-vnp-2026/">
+              <span class="content-meta"><time datetime="2026-11-26">2026.11.26</time><span class="content-tag">解説</span></span>
+              <span class="post-title">Claude は Valiant 予想を証明したのか ―― VP ≠ VNP の主張をどこまで確かめられたかで読む</span>
+              <span class="post-excerpt">Anthropic と OpenAI が相次いで「VP ≠ VNP を証明した」とする AI の論文と Lean の証明を公開しました。P ≠ NP との関係と、「Lean で検証済み」が何を保証し、何をまだ保証していないのかを整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="lean-what-it-checks/">
+              <span class="content-meta"><time datetime="2026-11-24">2026.11.24</time><span class="content-tag">解説</span></span>
+              <span class="post-title">Lean とは何か ―― 「Lean で検証済み」は何を確かめているのか</span>
+              <span class="post-excerpt">数学の証明をプログラムとして書き、kernel に検査させる Lean。三平方の定理を例にした使い方と、「Lean で検証済み」が保証することと保証しないことを、コード例と操作できる図で整理します。</span>
+            </a>
+          </li>
+          <li class="post-item">
+            <a href="riemann-hypothesis-2026/">
+              <span class="content-meta"><time datetime="2026-11-24">2026.11.24</time><span class="content-tag">解説</span></span>
+              <span class="post-title">AI はリーマン予想を解いたのか ―― 2026年11月時点の整理</span>
+              <span class="post-excerpt">2026年8月から11月にかけて、AI はリーマン予想に3つの段階で近づき、ついに「証明した」という主張が出ました。何が確かめられていて何がまだなのかを、動かせる図とコラムで整理します。</span>
+            </a>
+          </li>
+          <!-- 例:
+          <li class="post-item">
+            <a href="example/">
+              <span class="content-meta"><time datetime="2026-11-24">2026.11.24</time><span class="content-tag">お知らせ</span></span>
+              <span class="post-title">タイトル</span>
+              <span class="post-excerpt">概要を1〜2行で。</span>
+            </a>
+          </li>
+          -->
+        </ul>
+        <p class="content-empty">記事は準備中です。公開したら X（<a href="https://x.com/xlm_dev" rel="noopener" target="_blank">@xlm_dev</a>）でお知らせします。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>

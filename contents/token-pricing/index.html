@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ja" class="content-paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/analytics.js" async></script>
+  <title>AI サービスのトークン単価 | XLM開発会議 城北支部</title>
+  <meta name="description" content="OpenAI・Anthropic・Google をはじめ、LLM を API で使うときのトークン単価を一覧にしました。2020年の GPT-3 からの値下がりの推移も図と表で載せています。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI サービスのトークン単価 | XLM開発会議 城北支部">
+  <meta property="og:description" content="主な AI サービスの API のトークン単価の一覧と、2020年からの推移。">
+  <meta property="og:url" content="https://xlmdev-johoku.github.io/contents/token-pricing/">
+  <meta property="og:image" content="https://xlmdev-johoku.github.io/images/og/contents-token-pricing.png">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="420">
+  <meta property="og:image:alt" content="AI サービスのトークン単価">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xlm_dev">
+  <link rel="canonical" href="https://xlmdev-johoku.github.io/contents/token-pricing/">
+  <link rel="icon" type="image/svg+xml" href="../../images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="data/pricing.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../" aria-label="XLM開発会議 城北支部 トップへ">
+        <img class="circle-logo" src="../../images/circle-logo-dark.svg" width="760" height="290" alt="">
+      </a>
+      <nav class="site-nav" aria-label="サイト内リンク">
+        <a href="../../#event">出展情報</a>
+        <a href="../../#books">頒布物</a>
+        <a href="../../#novelty">〇LM大全</a>
+        <a href="../" aria-current="page">コンテンツ</a>
+        <a href="../../blog/">ブログ</a>
+        <a href="../../#about">サークルについて</a>
+        <a href="../../#contact">お問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 見出しと数字のまとめ -->
+    <section class="section page-head tp-head">
+      <div class="wrap">
+        <p class="breadcrumb"><a href="../../">ホーム</a><span aria-hidden="true"> / </span><a href="../">コンテンツ</a><span aria-hidden="true"> / </span>AI サービスのトークン単価</p>
+        <h1 class="section-title"><span class="en">Pricing</span>AI サービスのトークン単価</h1>
+        <p class="page-lead">LLM を API で使うと、読ませた文章と書かせた文章の量に応じて料金がかかります。量は「トークン」という単位で数えます。トークンは単語や文字のかけらです。OpenAI は2021年の料金ページで、1,000トークンを英語のおよそ750語分と説明していました。各社が公開しているトークン単価を1つの表にまとめ、2020年の GPT-3 からの推移も図にしました。月額制のサブスクリプションとの比べ方も載せています。</p>
+
+        <section class="tp-keyfigs" aria-label="収録の概要">
+          <div class="tp-fig"><span class="tp-fig-num" id="kfModels">—<span class="unit">本</span></span><span class="tp-fig-cap">現在の単価を載せたモデル</span></div>
+          <div class="tp-fig"><span class="tp-fig-num" id="kfProviders">—<span class="unit">社</span></span><span class="tp-fig-cap">API の提供元（直販）</span></div>
+          <div class="tp-fig"><span class="tp-fig-num" id="kfHistory">—<span class="unit">件</span></span><span class="tp-fig-cap">推移に載せた発表と価格改定</span></div>
+          <div class="tp-fig"><span class="tp-fig-num tp-fig-date" id="kfAsOf">—</span><span class="tp-fig-cap">現在の単価を確かめた日</span></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- 現在の単価（主役） -->
+    <section class="section section-alt" aria-labelledby="currentH">
+      <div class="wrap">
+        <h2 class="section-title" id="currentH"><span class="en">Now</span>現在のトークン単価</h2>
+        <p class="tp-lead" id="currentLead">100万トークンあたりの米ドルです。入力は読ませた分、出力は書かせた分の単価です。キャッシュ入力は、前と同じ入力をくり返し送ったときに安くなる分の単価です。</p>
+
+        <div class="tp-controls" role="group" aria-label="表の絞り込みと並べ替え">
+          <label class="tp-ctl"><span class="tp-ctl-l">提供元</span><select id="fProvider"><option value="">すべて</option></select></label>
+          <label class="tp-ctl"><span class="tp-ctl-l">区分</span><select id="fTier"><option value="">すべて</option></select></label>
+          <label class="tp-ctl"><span class="tp-ctl-l">並べ替え</span>
+            <select id="fSort">
+              <option value="provider">提供元ごと</option>
+              <option value="output-asc">出力の安い順</option>
+              <option value="output-desc">出力の高い順</option>
+              <option value="input-asc">入力の安い順</option>
+              <option value="input-desc">入力の高い順</option>
+            </select>
+          </label>
+          <label class="tp-ctl tp-ctl-q"><span class="tp-ctl-l">キーワード</span><input type="search" id="fQ" placeholder="例：Claude、mini、Flash" autocomplete="off" enterkeyhint="search"></label>
+          <span class="tp-count" id="currentCount" aria-live="polite"></span>
+        </div>
+
+        <div class="tp-table-wrap" tabindex="0" role="region" aria-labelledby="currentH">
+          <table class="tp-table" id="currentTable">
+            <thead>
+              <tr>
+                <th scope="col">提供元</th>
+                <th scope="col">モデル</th>
+                <th scope="col">区分</th>
+                <th scope="col" class="num">入力</th>
+                <th scope="col" class="num">キャッシュ入力</th>
+                <th scope="col" class="num">出力</th>
+                <th scope="col">条件と注記</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <noscript><p class="tp-noscript">表の表示には JavaScript を使っています。ブラウザの設定で JavaScript を有効にしてください。</p></noscript>
+        </div>
+        <p class="tp-empty" id="currentEmpty" hidden>条件に合うモデルはありません。</p>
+        <p class="note tp-legend-note"><span class="tp-badge">未確認</span> は、公式の資料で値を確かめられなかったものです。<span class="tp-dash">—</span> は単価が公開されていないか、その区分の料金が無いものです。</p>
+      </div>
+    </section>
+
+    <!-- サブスクリプションとの比べ方 -->
+    <section class="section" aria-labelledby="subsH">
+      <div class="wrap">
+        <h2 class="section-title" id="subsH"><span class="en">Subscription</span>サブスクリプションと比べる</h2>
+        <p class="tp-lead">ChatGPT や Claude などの月額制のプランは、使った量ではなく月額で払います。上限の多くはトークン数ではなく「Pro の5倍」のような書き方で示されているため、1トークンあたりの単価には直せません。そこで、月額が API なら何トークン分にあたるかを目安として出しました。</p>
+
+        <h3 class="sub-title" id="beH">月額が API で何トークン分にあたるか</h3>
+        <p class="tp-lead" id="beLead">入力と出力の比を 3:1 と仮定した平均の単価で割っています。月にこれより多く使うならサブスクリプションが、少ないなら API が割安という目安です。</p>
+        <div class="tp-table-wrap" tabindex="0" role="region" aria-labelledby="beH">
+          <table class="tp-table tp-be" id="beTable">
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="note tp-legend-note">単位は「万トークン」です。API の単価は上の表の値です。チャットでは会話が長くなるほど入力が増えるので、実際の比は使い方で大きく変わります。</p>
+
+        <h3 class="sub-title" id="plansH">主なプランの月額と上限の書き方</h3>
+        <div class="tp-controls" role="group" aria-label="プランの表の絞り込み">
+          <label class="tp-ctl"><span class="tp-ctl-l">提供元</span><select id="fPlanProvider"><option value="">すべて</option></select></label>
+          <span class="tp-count" id="planCount" aria-live="polite"></span>
+        </div>
+        <div class="tp-table-wrap" tabindex="0" role="region" aria-labelledby="plansH">
+          <table class="tp-table" id="planTable">
+            <thead>
+              <tr>
+                <th scope="col">提供元とサービス</th>
+                <th scope="col">プラン</th>
+                <th scope="col" class="num">月額（月払い）</th>
+                <th scope="col">上限の書き方（公式の記述の要約）</th>
+                <th scope="col">API との関係</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="note tp-legend-note">月額は米ドルの月払いの価格です。日本円の価格が公式に出ているものは、月額の下に元の表記のまま載せました。年払いの割引や税の扱いはプランごとに違います。上限の書き方は公式の記述を短くまとめたもので、詳しくは各プランの出典を見てください。</p>
+      </div>
+    </section>
+
+    <!-- 推移 -->
+    <section class="section section-alt" aria-labelledby="historyH">
+      <div class="wrap">
+        <h2 class="section-title" id="historyH"><span class="en">History</span>トークン単価の推移</h2>
+
+        <figure class="tp-figure" aria-labelledby="chartTitle">
+          <div>
+            <p class="tp-fig-label">図1</p>
+            <p class="tp-fig-title" id="chartTitle">トークン単価の推移</p>
+            <p class="tp-fig-sub" id="chartSub">各モデルの発表時と価格改定時の単価（100万トークンあたりの米ドル、縦軸は対数目盛）</p>
+          </div>
+          <div class="tp-chart-ctl">
+            <div class="tp-seg" role="group" aria-label="縦軸に使う単価">
+              <button type="button" class="tp-seg-btn" data-metric="output" aria-pressed="true">出力の単価</button>
+              <button type="button" class="tp-seg-btn" data-metric="input" aria-pressed="false">入力の単価</button>
+            </div>
+            <div class="tp-chips" id="providerChips" role="group" aria-label="強調する提供元"></div>
+          </div>
+          <div class="tp-chart-box" id="chartBox">
+            <svg class="tp-chart" id="chart" role="img" aria-labelledby="chartTitle chartSub" tabindex="0" focusable="true"></svg>
+            <div class="tp-tip" id="tip" hidden>
+              <span class="tp-tip-val" id="tipVal"></span>
+              <span class="tp-tip-model" id="tipModel"></span>
+              <span class="tp-tip-meta" id="tipMeta"></span>
+            </div>
+          </div>
+          <figcaption class="tp-fig-cap-long">点はモデルの発表と価格改定です。同じモデルの改定は階段状の線でつないでいます。提供元のボタンを押すと、その提供元の点と線を強調します。点に触れるか、図を選んで左右キーを押すと、モデル名と単価が出ます。同じ値は下の表でも読めます。</figcaption>
+        </figure>
+
+        <details class="tp-details">
+          <summary>推移の表を開く（<span id="historyCount">—</span>件）</summary>
+          <div class="tp-table-wrap" tabindex="0" role="region" aria-label="トークン単価の推移の表">
+            <table class="tp-table" id="historyTable">
+              <thead>
+                <tr>
+                  <th scope="col">日付</th>
+                  <th scope="col">提供元</th>
+                  <th scope="col">モデル</th>
+                  <th scope="col">出来事</th>
+                  <th scope="col" class="num">入力</th>
+                  <th scope="col" class="num">出力</th>
+                  <th scope="col">元の表記と注記</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </details>
+
+        <div class="tp-findings" id="findings"></div>
+      </div>
+    </section>
+
+    <!-- クラウド経由 -->
+    <section class="section" aria-labelledby="cloudH">
+      <div class="wrap">
+        <h2 class="section-title" id="cloudH"><span class="en">Cloud</span>クラウド経由で使うときの単価</h2>
+        <p class="tp-lead">Amazon Bedrock・Microsoft Azure・Google Cloud の Vertex AI でも、各社のモデルを使えます。直販と同じ単価のものも、リージョンによって割高になるものもあります。</p>
+        <div class="tp-table-wrap" tabindex="0" role="region" aria-labelledby="cloudH">
+          <table class="tp-table" id="cloudTable">
+            <thead>
+              <tr>
+                <th scope="col">サービス</th>
+                <th scope="col">モデル</th>
+                <th scope="col">リージョン</th>
+                <th scope="col" class="num">入力</th>
+                <th scope="col" class="num">出力</th>
+                <th scope="col">直販との違い</th>
+                <th scope="col">注記</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 国内 -->
+    <section class="section section-alt" aria-labelledby="japanH">
+      <div class="wrap">
+        <h2 class="section-title" id="japanH"><span class="en">Japan</span>国内の LLM API</h2>
+        <p class="tp-lead">国内の事業者の LLM は、単価を公開していないものが多くあります。公開しているものは元の表記（円など）のまま載せ、米ドルには換算していません。</p>
+        <div class="tp-table-wrap" tabindex="0" role="region" aria-labelledby="japanH">
+          <table class="tp-table" id="japanTable">
+            <thead>
+              <tr>
+                <th scope="col">事業者</th>
+                <th scope="col">サービスとモデル</th>
+                <th scope="col">単価（元の表記）</th>
+                <th scope="col">注記</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 注記と参照先 -->
+    <section class="section tp-notes" aria-labelledby="notesH">
+      <div class="wrap">
+        <h2 class="section-title" id="notesH"><span class="en">Notes</span>読み方の注意と参照先</h2>
+        <ul class="tp-note-list">
+          <li>トークンの数え方はモデルごとに違います。同じ日本語の文でも、モデルによってトークン数が変わります。単価だけで実際の料金は比べられません。</li>
+          <li>推論モデルが答えの前に内部で考えた分も、多くの場合は出力トークンとして課金されます。</li>
+          <li>キャッシュ、まとめて処理する Batch の割引、長い入力の割増、無料枠などの条件で、実際の料金は変わります。条件は表の注記に書きました。</li>
+          <li>税は含みません。円や人民元の単価は米ドルに換算していません。</li>
+          <li>1000トークンあたりで公開されていた時代の単価は、100万トークンあたりに直しました。元の表記は推移の表に残しています。</li>
+          <li id="asOfNote">2026年11月27日時点の情報です。</li>
+        </ul>
+        <h3 class="sub-title">参照先</h3>
+        <ul class="tp-refs" id="refs"></ul>
+        <p class="note">誤りに気付かれた方は、X（<a href="https://x.com/xlm_dev" rel="noopener" target="_blank">@xlm_dev</a>）までお知らせください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span class="brand-name">XLM開発会議 <b>城北支部</b></span>
+      <a class="footer-x" href="https://x.com/xlm_dev" rel="noopener" target="_blank"><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1 2h6.4l4.4 5.8L18.9 2Zm-1.1 18.1h1.7L6.3 3.8H4.5l13.3 16.3Z"/></svg><span>@xlm_dev</span></a>
+      <a class="footer-contact" href="https://docs.google.com/forms/d/e/1FAIpQLSfa0vMUp9T4L2N7PCdQwbP4U8q5azS8LR5XxJe7ykYqs90m5w/viewform" rel="noopener" target="_blank">お問い合わせ</a>
+      <small class="footer-note">このサイトはアクセスの集計に Google アナリティクス（Cookie を使用）を利用しています。</small>
+      <small>&copy; 2026 XLM開発会議 城北支部</small>
+    </div>
+  </footer>
+</body>
+</html>
